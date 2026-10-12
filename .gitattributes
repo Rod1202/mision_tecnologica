@@ -1,0 +1,14 @@
+# Fin de línea normalizado a LF en el repositorio.
+# Evita diferencias falsas entre Windows (CRLF) y Linux (Netlify / VPS).
+* text=auto eol=lf
+
+# Binarios: nunca convertir
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico  binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary

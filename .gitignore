@@ -1,0 +1,40 @@
+# dependencias
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# entorno (nunca subir secretos)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Supabase CLI
+/supabase/.temp
+/supabase/.branches
+
+# Netlify
+.netlify
+
+# logs y SO
+npm-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# pruebas
+/test-results/
+/playwright-report/
+/coverage

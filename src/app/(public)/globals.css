@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/*
+ * Sistema de diseño — Misión Tecnológica
+ * Basado en el Brandbook 2023. Color principal indicado por el equipo: #0066FF.
+ * Los colores complementarios del brandbook (#5D20D1, #FF8721, #EA54D6, #14003B, #BFBF4B)
+ * se reservan para casos muy puntuales y no forman parte de la paleta de la web.
+ */
+
+@theme {
+  /* Marca */
+  --color-brand-blue: #0066ff;
+  --color-brand-blue-700: #0052cc;
+  --color-brand-blue-800: #003f9e;
+  --color-brand-blue-100: #dbe8ff;
+  --color-brand-blue-50: #eef4ff;
+  --color-brand-teal: #00cdc5;
+  --color-brand-teal-700: #00857f; /* turquesa oscurecido: texto pequeño sobre blanco con contraste AA */
+  --color-brand-teal-50: #e5faf9;
+
+  /* Neutros (tintados hacia el azul de marca) */
+  --color-ink: #0b1a33;
+  --color-ink-soft: #4a5873;
+  --color-ink-faint: #7a879e;
+  --color-surface: #f4f7fc;
+  --color-line: #e1e7f1;
+  --color-deep: #011a47; /* sombra profunda del azul de marca, solo para el pie de página */
+
+  /* shadcn/ui */
+  --color-background: #ffffff;
+  --color-foreground: var(--color-ink);
+  --color-primary: var(--color-brand-blue);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--color-brand-blue-50);
+  --color-secondary-foreground: var(--color-brand-blue-800);
+  --color-muted: var(--color-surface);
+  --color-muted-foreground: var(--color-ink-soft);
+  --color-accent: var(--color-brand-teal-50);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: #d92d20;
+  --color-border: var(--color-line);
+  --color-input: #cbd5e4;
+  --color-ring: var(--color-brand-blue);
+
+  /* Tipografía */
+  --font-sans: "Urbanist Variable", "Urbanist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Radios: las formas de soporte siempre redondeadas (brandbook) */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 2.5rem;
+
+  --shadow-soft: 0 1px 2px rgb(11 26 51 / 0.04), 0 8px 24px -12px rgb(11 26 51 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 102 255 / 0.35);
+
+  --animate-pill-in: pill-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes pill-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    @apply text-pretty;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-blue;
+  }
+
+  ::selection {
+    background: var(--color-brand-teal);
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Animaciones del panel lateral (menú móvil y cotización).
+   Deben existir en el CSS global: Radix espera el fin de la animación de cierre para desmontar el panel. */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes sheet-in {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+@keyframes sheet-out {
+  from { transform: none; }
+  to { transform: translateX(100%); }
+}
+
+@layer components {
+  .container-mt {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-y {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+}
+
+@utility bg-brand-gradient {
+  background-image: linear-gradient(90deg, var(--color-brand-teal) 0%, var(--color-brand-blue) 100%);
+}
+
+/* Variante para fondos con texto blanco encima: predomina el azul (contraste AA)
+   y el turquesa solo aparece hacia la esquina inferior derecha. */
+@utility bg-brand-gradient-deep {
+  background-image: linear-gradient(150deg, var(--color-brand-blue) 0%, var(--color-brand-blue) 50%, #00a3d9 85%, var(--color-brand-teal) 130%);
+}
+
+@utility text-brand-gradient {
+  background-image: linear-gradient(90deg, var(--color-brand-teal) 0%, var(--color-brand-blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
