@@ -4,6 +4,7 @@ import { Challenges } from "@/components/marketing/challenges";
 import { ContactCta } from "@/components/marketing/contact-cta";
 import { Hero } from "@/components/marketing/hero";
 import { Innovation } from "@/components/marketing/innovation";
+import { PartnersStrip } from "@/components/marketing/partners-strip";
 import { PrintingSpotlight } from "@/components/marketing/printing-spotlight";
 import { PublicationsTeaser } from "@/components/marketing/publications-teaser";
 import { Sectors } from "@/components/marketing/sectors";
@@ -22,6 +23,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <PartnersStrip />
       <Challenges />
       <SolutionsGrid />
       <PrintingSpotlight />

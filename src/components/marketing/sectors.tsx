@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 import { Icon } from "@/components/brand/icon";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { PendingBadge } from "@/components/ui/pending-badge";
+import { ClientLogo } from "@/components/clients/client-logo";
 import { sectors } from "@/lib/content/sectors";
 import { showUnverifiedContent } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 export function Sectors() {
   const preview = showUnverifiedContent();
   const visible = sectors.map((s) => ({ ...s, clients: s.clients.filter((c) => c.verified || preview) }));
-  const hasPending = visible.some((s) => s.clients.some((c) => !c.verified));
 
   return (
     <section aria-labelledby="sectores-title" className="section-y bg-surface">
@@ -32,13 +31,6 @@ export function Sectors() {
             <ArrowRight aria-hidden className="size-4" />
           </Link>
         </div>
-
-        {hasPending ? (
-          <div className="mt-8 flex flex-wrap items-center gap-3 rounded-2xl border border-dashed border-amber-500/60 bg-amber-50/70 px-5 py-3 text-sm text-amber-900">
-            <PendingBadge />
-            Referencias de clientes pendientes de autorización. Solo se muestran en desarrollo y pruebas.
-          </div>
-        ) : null}
 
         <ul className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-6 lg:gap-6">
           {visible.map((sector, index) => (
@@ -60,19 +52,10 @@ export function Sectors() {
               <p className="mt-4 leading-relaxed text-ink-soft">{sector.summary}</p>
 
               {sector.clients.length > 0 ? (
-                <ul aria-label={`Clientes de ${sector.title}`} className="mt-6 flex flex-wrap gap-2">
+                <ul aria-label={`Clientes de ${sector.title}`} className={cn("mt-6 grid grid-cols-3 gap-3 sm:grid-cols-4", index < 2 ? "lg:grid-cols-4" : "lg:grid-cols-3")}>
                   {sector.clients.map((client) => (
-                    <li
-                      key={client.name}
-                      title={client.verified ? undefined : client.note}
-                      className={cn(
-                        "rounded-full px-3.5 py-1.5 text-sm font-semibold",
-                        client.verified
-                          ? "bg-surface text-ink"
-                          : "border border-dashed border-amber-500/60 bg-amber-50/60 text-ink",
-                      )}
-                    >
-                      {client.name}
+                    <li key={client.name}>
+                      <ClientLogo client={client} size="sm" />
                     </li>
                   ))}
                 </ul>

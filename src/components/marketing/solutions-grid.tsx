@@ -13,7 +13,7 @@ export function SolutionsGrid() {
   const [featured, ...rest] = [...solutions].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
   return (
-    <section aria-labelledby="soluciones-title" className="section-y bg-surface">
+    <section aria-labelledby="soluciones-title" className="section-y bg-white">
       <div className="container-mt">
         <SectionHeading
           id="soluciones-title"
@@ -32,7 +32,7 @@ export function SolutionsGrid() {
             </li>
           ))}
           <li>
-            <div className="flex h-full flex-col justify-between rounded-3xl border border-dashed border-brand-blue/35 bg-white/60 p-7 lg:p-8">
+            <div className="flex h-full flex-col justify-between rounded-3xl border border-dashed border-brand-blue/35 bg-brand-blue-50/60 p-7 lg:p-8">
               <div>
                 <h3 className="text-xl font-bold text-ink">¿No sabes por dónde empezar?</h3>
                 <p className="mt-3 leading-relaxed text-ink-soft">

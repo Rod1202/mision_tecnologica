@@ -4,6 +4,10 @@ import type { Client, IconName } from "./types";
  * Sectores y clientes — futura colección `Sectors` + `Clients` de Payload.
  * Los clientes se muestran en desarrollo/pruebas; en producción solo los que tengan `verified: true`
  * (autorización de uso de nombre y logotipo confirmada).
+ *
+ * LOGOS: guardar el archivo en /public/clients/ (SVG o PNG con fondo transparente) y agregar la ruta:
+ *   { name: "Caja Trujillo", logo: "/clients/caja-trujillo.svg", verified: true }
+ * Sin `logo`, se muestra un espacio reservado con el nombre de la empresa.
  */
 
 export type Sector = {

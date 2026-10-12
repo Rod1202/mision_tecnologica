@@ -71,7 +71,7 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
 
 /**
  * Contenido pendiente de validación (clientes, modelos HP, hito 2026):
- * - En desarrollo (`pnpm dev`) se muestra siempre, con una etiqueta "Por validar".
+ * - En desarrollo (`pnpm dev`) se muestra siempre (sin etiquetas visibles).
  * - En builds (Netlify, VPS) solo se muestra si SHOW_UNVERIFIED_CONTENT=true.
  */
 export function showUnverifiedContent() {

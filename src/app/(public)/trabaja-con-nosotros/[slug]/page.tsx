@@ -8,7 +8,6 @@ import { ApplicationForm } from "@/components/forms/application-form";
 import { PageIntro } from "@/components/layout/page-intro";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
-import { PendingBadge } from "@/components/ui/pending-badge";
 import { visibleJobs } from "@/lib/careers";
 import { jobHref } from "@/lib/content/jobs";
 import { siteConfig } from "@/lib/site";
@@ -84,7 +83,6 @@ export default async function JobPage({ params }: Props) {
       <section className="section-y bg-white">
         <div className="container-mt grid grid-cols-1 [&>*]:min-w-0 gap-14 lg:grid-cols-12">
           <div className="space-y-12 lg:col-span-5">
-            {job.example ? <PendingBadge label="Convocatoria de ejemplo" note="Reemplazar por una convocatoria real." /> : null}
             <List title="Responsabilidades" items={job.responsibilities} />
             <List title="Requisitos" items={job.requirements} />
             {job.niceToHave?.length ? <List title="Deseable" items={job.niceToHave} /> : null}

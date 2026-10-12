@@ -7,7 +7,7 @@ import { challenges } from "@/lib/content/home";
 /** 02 · El desafío: lo que el cliente reconoce como propio. */
 export function Challenges() {
   return (
-    <section aria-labelledby="desafio-title" className="section-y bg-white">
+    <section aria-labelledby="desafio-title" className="section-y bg-surface">
       <div className="container-mt">
         <SectionHeading
           id="desafio-title"

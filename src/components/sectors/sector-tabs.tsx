@@ -6,7 +6,7 @@ import { ArrowRight, Check } from "lucide-react";
 
 import { Icon } from "@/components/brand/icon";
 import { IsoStrokes } from "@/components/brand/pills";
-import { PendingBadge } from "@/components/ui/pending-badge";
+import { ClientLogo } from "@/components/clients/client-logo";
 import type { Sector } from "@/lib/content/sectors";
 import { cn } from "@/lib/utils";
 
@@ -118,29 +118,13 @@ export function SectorTabs({ sectors }: { sectors: Sector[] }) {
 
             {/* Clientes */}
             <div className="rounded-[2rem] border border-line bg-white p-7 shadow-soft sm:p-10 lg:col-span-7">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h4 className="text-xl font-bold text-ink">Empresas que trabajan con nosotros</h4>
-                {s.clients.some((c) => !c.verified) ? <PendingBadge note="Confirmar autorización de uso de nombres y logotipos." /> : null}
-              </div>
+              <h4 className="text-xl font-bold text-ink">Empresas que trabajan con nosotros</h4>
 
               {s.clients.length > 0 ? (
-                <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
                   {s.clients.map((c) => (
-                    <li
-                      key={c.name}
-                      title={c.verified ? undefined : c.note}
-                      className={cn(
-                        "flex items-center gap-4 rounded-2xl p-4",
-                        c.verified ? "bg-surface" : "border border-dashed border-amber-500/50 bg-amber-50/40",
-                      )}
-                    >
-                      <span
-                        aria-hidden
-                        className="inline-flex h-11 w-14 shrink-0 items-center justify-center rounded-full bg-white text-brand-blue ring-1 ring-line"
-                      >
-                        <Icon name={s.icon} className="size-5" />
-                      </span>
-                      <span className="font-semibold leading-snug text-ink">{c.name}</span>
+                    <li key={c.name}>
+                      <ClientLogo client={c} />
                     </li>
                   ))}
                 </ul>

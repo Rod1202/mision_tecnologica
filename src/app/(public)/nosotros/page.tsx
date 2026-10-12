@@ -6,7 +6,6 @@ import { Eyebrow, IsoStrokes } from "@/components/brand/pills";
 import { CtaBand, PageIntro } from "@/components/layout/page-intro";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { Button } from "@/components/ui/button";
-import { PendingBadge } from "@/components/ui/pending-badge";
 import { about, certifications, coverage, hpPartnership, leaders, qualityStandards } from "@/lib/content/company";
 import { solutionHref } from "@/lib/content/solutions";
 import { pageMetadata } from "@/lib/seo";
@@ -152,7 +151,6 @@ export default function NosotrosPage() {
           <div className="container-mt">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <SectionHeading id="liderazgo-title" eyebrow="Liderazgo" title="Nuestro equipo directivo." />
-              {team.some((l) => !l.verified) ? <PendingBadge label="Datos por completar" note="Completar nombres, fotografías y biografías aprobadas." /> : null}
             </div>
             <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {team.map((l) => (

@@ -66,6 +66,8 @@ En `src/lib/content/`:
 
 - `company.ts`: nombres, fotografías y biografías aprobadas de los gerentes, y el alcance exacto de cada certificado ISO.
 - `jobs.ts`: reemplazar las 3 convocatorias de ejemplo por las reales, con `example: false`.
+- `sectors.ts`: logos de clientes. Guarda el archivo en `public/clients/` (SVG o PNG con fondo transparente) y agrega `logo: "/clients/nombre.svg"` al cliente. Sin logo, se muestra un espacio reservado con el nombre.
+- `partners.ts`: marcas aliadas de la franja del Inicio. HP está confirmado. Hay 4 espacios reservados (`placeholder: true`) que solo se ven en desarrollo y pruebas: reemplázalos por las marcas reales con su logo en `public/partners/`.
 - `products.ts`: ficha técnica oficial de HP de cada modelo (`specs`). Los precios (`price`) son **de demostración** y se muestran rotulados así. Reemplázalos por precios referenciales reales con `priceIsDemo: false`, o elimínalos para mostrar "A cotizar".
 - `solutions.ts`: confirmar con el área comercial el alcance de cada servicio.
 

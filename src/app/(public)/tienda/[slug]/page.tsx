@@ -10,10 +10,8 @@ import { ProductPrice } from "@/components/catalog/product-price";
 import { ProductVisual } from "@/components/catalog/product-visual";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
-import { PendingBadge } from "@/components/ui/pending-badge";
 import { getProduct, productHref, products } from "@/lib/content/products";
 import { solutionHref } from "@/lib/content/solutions";
-import { showUnverifiedContent } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -57,7 +55,6 @@ export default async function ProductPage({ params }: Props) {
               <div className="flex flex-wrap gap-2">
                 <Badge>{product.category}</Badge>
                 <Badge variant="teal">{product.family}</Badge>
-                {showUnverifiedContent() && !product.verified ? <PendingBadge note={product.note} /> : null}
               </div>
               <h1 className="mt-5 text-3xl leading-tight font-extrabold text-ink sm:text-4xl lg:text-5xl">{product.name}</h1>
               <p className="mt-5 text-lg leading-relaxed text-ink-soft">{product.summary}</p>

@@ -7,7 +7,6 @@ import { PageIntro } from "@/components/layout/page-intro";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PendingBadge } from "@/components/ui/pending-badge";
 import { visibleJobs } from "@/lib/careers";
 import { jobHref } from "@/lib/content/jobs";
 import { pageMetadata } from "@/lib/seo";
@@ -42,9 +41,6 @@ export default function TrabajaConNosotrosPage() {
         <div className="container-mt">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <SectionHeading id="convocatorias-title" eyebrow="Convocatorias" title="Puestos disponibles." />
-            {openings.some((j) => j.example) ? (
-              <PendingBadge label="Convocatorias de ejemplo" note="Reemplazar por las convocatorias reales en src/lib/content/jobs.ts" />
-            ) : null}
           </div>
 
           {openings.length > 0 ? (

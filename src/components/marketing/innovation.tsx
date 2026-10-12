@@ -4,7 +4,6 @@ import { ArrowRight } from "lucide-react";
 import { Dash } from "@/components/brand/pills";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { Badge } from "@/components/ui/badge";
-import { PendingBadge } from "@/components/ui/pending-badge";
 import { featuredMilestone } from "@/lib/content/home";
 import { showUnverifiedContent } from "@/lib/site";
 
@@ -46,7 +45,6 @@ export function Innovation() {
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="brand">{milestone.category}</Badge>
               <Badge variant="teal">{milestone.year}</Badge>
-              {!milestone.verified ? <PendingBadge note={milestone.note} /> : null}
             </div>
             <h3 className="mt-6 text-2xl leading-tight font-bold sm:text-3xl">{milestone.title}</h3>
             <p className="mt-4 text-lg leading-relaxed text-ink-soft">{milestone.summary}</p>

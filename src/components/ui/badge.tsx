@@ -11,7 +11,6 @@ const badgeVariants = cva(
         brand: "bg-brand-blue-50 text-brand-blue-800",
         teal: "bg-brand-teal-50 text-brand-teal-700",
         onBlue: "bg-white/15 text-white ring-1 ring-white/25 ring-inset",
-        pending: "border border-dashed border-amber-500/70 bg-amber-50 text-amber-800",
       },
     },
     defaultVariants: { variant: "brand" },
