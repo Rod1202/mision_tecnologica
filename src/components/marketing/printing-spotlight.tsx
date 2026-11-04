@@ -10,7 +10,7 @@ import { solutionHref } from "@/lib/content/solutions";
 
 /** 04 · Especialización: impresión empresarial, conectada con el catálogo. */
 export function PrintingSpotlight() {
-  const models = products;
+  const models = products.filter((p) => p.generation === "lanzamiento");
 
   return (
     <section aria-labelledby="impresion-title" className="section-y relative isolate overflow-hidden bg-brand-blue text-white">

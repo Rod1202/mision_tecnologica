@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ArrowRight, Mail, Menu, MessageCircle } from "lucide-react";
+import { ArrowRight, Calculator, Mail, Menu, MessageCircle } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,20 @@ export function MobileNav() {
         </nav>
 
         <div className="space-y-3 border-t border-line p-5">
+          <SheetClose asChild>
+            <Button asChild variant="outline" size="lg" className="w-full">
+              <Link
+                href="/cotizador"
+                onClick={(e) => {
+                  toTopIfSamePage("/cotizador", 300)(e);
+                  setOpen(false);
+                }}
+              >
+                <Calculator aria-hidden />
+                Cotizar proyecto
+              </Link>
+            </Button>
+          </SheetClose>
           <SheetClose asChild>
             <Button asChild size="lg" className="w-full">
               <Link href="/#contacto">Solicitar asesoría</Link>

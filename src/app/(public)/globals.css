@@ -16,6 +16,7 @@
   --color-brand-blue-50: #eef4ff;
   --color-brand-teal: #00cdc5;
   --color-brand-teal-700: #00857f; /* turquesa oscurecido: texto pequeño sobre blanco con contraste AA */
+  --color-brand-teal-800: #006b66; /* texto pequeño sobre turquesa claro (teal-50) con contraste AA */
   --color-brand-teal-50: #e5faf9;
 
   /* Neutros (tintados hacia el azul de marca) */
@@ -55,6 +56,18 @@
   --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 102 255 / 0.35);
 
   --animate-pill-in: pill-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-panel-in: panel-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 
   @keyframes pill-in {
     from {
@@ -142,6 +155,87 @@
 
   .section-y {
     @apply py-16 sm:py-20 lg:py-28;
+  }
+}
+
+/* Control deslizante del cotizador: pista redondeada con relleno en degradé de marca (--fill = % recorrido). */
+@layer components {
+  .range-mt {
+    @apply h-11 w-full cursor-pointer appearance-none bg-transparent;
+    --fill: 0%;
+  }
+  .range-mt::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background:
+      linear-gradient(90deg, var(--color-brand-teal), var(--color-brand-blue)) 0 / var(--fill) 100% no-repeat,
+      var(--color-line);
+  }
+  .range-mt::-moz-range-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--color-line);
+  }
+  .range-mt::-moz-range-progress {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--color-brand-teal), var(--color-brand-blue));
+  }
+  .range-mt::-webkit-slider-thumb {
+    @apply appearance-none rounded-full border-4 border-brand-blue bg-white;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: -0.5rem;
+    box-shadow: 0 4px 12px -4px rgb(0 102 255 / 0.6);
+    transition: transform 150ms ease-out;
+  }
+  .range-mt::-moz-range-thumb {
+    @apply rounded-full border-4 border-brand-blue bg-white;
+    width: 1rem;
+    height: 1rem;
+    box-shadow: 0 4px 12px -4px rgb(0 102 255 / 0.6);
+  }
+  .range-mt:active::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+  .range-mt:focus-visible {
+    outline: none;
+  }
+  .range-mt:focus-visible::-webkit-slider-thumb {
+    @apply outline-2 outline-offset-2 outline-brand-blue;
+  }
+  .range-mt:focus-visible::-moz-range-thumb {
+    @apply outline-2 outline-offset-2 outline-brand-blue;
+  }
+}
+
+/* Comparador: columna de etiquetas + una columna por equipo. En móvil la etiqueta va encima de los valores. */
+@layer components {
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(8.5rem, 1fr));
+  }
+  @media (min-width: 48rem) {
+    .compare-grid {
+      grid-template-columns: minmax(10rem, 14rem) repeat(3, minmax(0, 1fr));
+    }
+  }
+  /* Cabecera de modelos fija al bajar, solo en pantallas con alto suficiente (con zoom ocuparía media pantalla). */
+  @media (min-width: 48rem) and (min-height: 50rem) {
+    .compare-sticky {
+      position: sticky;
+      top: 5rem;
+      z-index: 10;
+      background: var(--color-surface);
+      padding-top: 0.5rem;
+    }
+  }
+  /* Mientras la bandeja del comparador está visible, el foco y el final de la página no quedan debajo de ella. */
+  html.has-compare-tray {
+    scroll-padding-bottom: 7rem;
+  }
+  html.has-compare-tray footer {
+    padding-bottom: 6rem;
   }
 }
 

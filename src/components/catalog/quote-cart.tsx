@@ -157,7 +157,7 @@ function QuoteCartSheet() {
                 if (!p) return null;
                 return (
                   <li key={line.slug} className="flex gap-4 py-5">
-                    <ProductVisual model={p.model} size="sm" className="w-20 shrink-0" />
+                    <ProductVisual model={p.model} kind={p.kind} size="sm" className="w-20 shrink-0" />
                     <div className="min-w-0 flex-1">
                       <Link
                         href={productHref(p.slug)}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calculator } from "lucide-react";
 
 import { IsoStrokes } from "@/components/brand/pills";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,17 @@ export function Hero() {
               <Link href="/soluciones">Explorar soluciones</Link>
             </Button>
           </div>
+
+          <Link
+            href="/cotizador"
+            className="group mt-8 inline-flex items-center gap-3 rounded-full py-1 pr-2 font-semibold text-white"
+          >
+            <span aria-hidden className="inline-flex size-10 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25 ring-inset transition-colors group-hover:bg-white group-hover:text-brand-blue">
+              <Calculator className="size-5" />
+            </span>
+            <span className="underline-offset-4 group-hover:underline">Cotiza tu proyecto de cómputo, impresión o digitalización</span>
+            <ArrowRight aria-hidden className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
       </div>
     </section>

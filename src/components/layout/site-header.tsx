@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Calculator } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { QuoteCartButton } from "@/components/catalog/quote-cart";
@@ -64,6 +65,21 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <QuoteCartButton />
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className={cn(
+              "hidden sm:inline-flex lg:h-11 lg:px-5 lg:text-[0.95rem]",
+              pathname === "/cotizador" && "border-brand-blue bg-brand-blue-50",
+            )}
+          >
+            <Link href="/cotizador" onClick={toTopIfSamePage("/cotizador")} aria-current={pathname === "/cotizador" ? "page" : undefined}>
+              <Calculator aria-hidden />
+              <span className="lg:hidden xl:inline">Cotizar proyecto</span>
+              <span className="hidden lg:inline xl:hidden">Cotizar</span>
+            </Link>
+          </Button>
           <Button asChild size="sm" className="hidden sm:inline-flex lg:h-11 lg:px-6 lg:text-[0.95rem]">
             <Link href="/#contacto">Solicitar asesoría</Link>
           </Button>

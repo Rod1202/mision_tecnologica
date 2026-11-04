@@ -122,10 +122,10 @@ export default async function SolutionPage({ params }: Props) {
               </Link>
             </div>
             <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((p) => (
+              {products.filter((p) => p.generation === "lanzamiento").map((p) => (
                 <li key={p.slug}>
                   <Link href={productHref(p.slug)} className="group block rounded-3xl border border-line bg-white p-4 shadow-soft transition-shadow hover:shadow-lift">
-                    <ProductVisual model={p.model} />
+                    <ProductVisual model={p.model} kind={p.kind} />
                     <p className="mt-5 px-2 text-sm font-semibold text-ink-soft">{p.family}</p>
                     <h3 className="mt-1 px-2 pb-2 text-lg font-bold text-ink group-hover:text-brand-blue">{p.name}</h3>
                   </Link>
@@ -198,7 +198,12 @@ export default async function SolutionPage({ params }: Props) {
         </div>
       </section>
 
-      <CtaBand />
+      <CtaBand
+        secondary={{
+          label: "Cotizar proyecto",
+          href: isPrinting ? "/cotizador?servicio=impresion" : solution.slug === "outsourcing-tecnologico" ? "/cotizador?servicio=computo" : "/cotizador",
+        }}
+      />
 
       <JsonLd
         data={[

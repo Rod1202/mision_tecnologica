@@ -8,9 +8,12 @@ import { DemoNotice } from "@/components/catalog/demo-notice";
 import { ProductCard } from "@/components/catalog/product-card";
 import { ProductPrice } from "@/components/catalog/product-price";
 import { ProductVisual } from "@/components/catalog/product-visual";
+import { CompareToggle, CompareWithLink } from "@/components/compare/compare-toggle";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
-import { getProduct, productHref, products } from "@/lib/content/products";
+import { specRows } from "@/lib/content/compare";
+import { getProduct, predecessorsOf, printColorOf, productHref, products, upgradesFor } from "@/lib/content/products";
+import { showUnverifiedContent } from "@/lib/site";
 import { solutionHref } from "@/lib/content/solutions";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -39,6 +42,14 @@ export default async function ProductPage({ params }: Props) {
   const product = getProduct(slug);
   if (!product) notFound();
   const others = products.filter((p) => p.slug !== product.slug);
+  // Ficha: datos ya validados, o los de la hoja de datos pública mientras se validan (solo donde se permite contenido no validado).
+  const showSpecs = product.verified || showUnverifiedContent();
+  const specs = [
+    ...product.specs,
+    ...(showSpecs
+      ? specRows[product.kind].flatMap((r) => (product.specValues?.[r.key] ? [{ label: r.label, value: product.specValues[r.key]! }] : []))
+      : []),
+  ];
 
   return (
     <>
@@ -48,7 +59,7 @@ export default async function ProductPage({ params }: Props) {
 
           <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-6">
-              <ProductVisual model={product.model} size="lg" className="rounded-[2rem]" />
+              <ProductVisual model={product.model} kind={product.kind} size="lg" className="rounded-[2rem]" />
             </div>
 
             <div className="lg:col-span-6">
@@ -76,6 +87,7 @@ export default async function ProductPage({ params }: Props) {
                 <p className="mt-2 text-sm text-ink-soft">El precio final se confirma en la cotización según cantidad, servicio y sede.</p>
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <AddToQuoteButton slug={product.slug} name={product.name} size="lg" className="flex-1" />
+                  <CompareToggle slug={product.slug} name={product.name} className="h-13 px-5" />
                   <Link
                     href={solutionHref("impresion-empresarial")}
                     className="inline-flex h-13 items-center justify-center rounded-full px-6 font-semibold text-brand-blue hover:bg-white"
@@ -96,15 +108,49 @@ export default async function ProductPage({ params }: Props) {
             <h2 id="ficha-title" className="text-2xl font-bold text-ink sm:text-3xl">
               Ficha técnica
             </h2>
-            {product.specs.length > 0 ? (
-              <dl className="mt-6 divide-y divide-line overflow-hidden rounded-3xl border border-line">
-                {product.specs.map((s) => (
-                  <div key={s.label} className="grid gap-1 px-6 py-4 sm:grid-cols-3">
-                    <dt className="font-semibold text-ink">{s.label}</dt>
-                    <dd className="text-ink-soft sm:col-span-2">{s.value}</dd>
-                  </div>
-                ))}
-              </dl>
+            {specs.length > 0 ? (
+              <>
+                {!product.verified ? (
+                  <p className="mt-4 inline-flex rounded-full border border-dashed border-amber-500/70 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+                    Datos de la hoja de datos pública del fabricante, por validar
+                  </p>
+                ) : null}
+                <dl className="mt-6 divide-y divide-line overflow-hidden rounded-3xl border border-line">
+                  {specs.map((s) => (
+                    <div key={s.label} className="grid gap-1 px-6 py-4 sm:grid-cols-3">
+                      <dt className="font-semibold text-ink">{s.label}</dt>
+                      <dd className="text-ink-soft sm:col-span-2">{s.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                  <CompareWithLink slug={product.slug} className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+                    Comparar con otros equipos
+                    <ArrowRight aria-hidden className="size-4" />
+                  </CompareWithLink>
+                  {upgradesFor(product.slug).length || printColorOf(product.slug) === "color" ? (
+                    <Link
+                      href={`/tienda/comparar?actual=${product.slug}#upgrade`}
+                      className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
+                    >
+                      ¿Ya tienes este equipo? Mira sus opciones de upgrade
+                      <ArrowRight aria-hidden className="size-4" />
+                    </Link>
+                  ) : null}
+                  {predecessorsOf(product.slug)
+                    .filter((old) => old.verified || showUnverifiedContent())
+                    .map((old) => (
+                    <Link
+                      key={old.slug}
+                      href={`/tienda/comparar?modelos=${old.slug},${product.slug}`}
+                      className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
+                    >
+                      Salto de generación desde el {old.model}
+                      <ArrowRight aria-hidden className="size-4" />
+                    </Link>
+                  ))}
+                </div>
+              </>
             ) : (
               <div className="mt-6 flex items-start gap-4 rounded-3xl border border-dashed border-line bg-surface p-6">
                 <FileSearch aria-hidden className="mt-0.5 size-6 shrink-0 text-brand-blue" />

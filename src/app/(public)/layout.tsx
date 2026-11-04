@@ -3,6 +3,7 @@ import "@fontsource-variable/urbanist";
 import "./globals.css";
 
 import { QuoteCartProvider } from "@/components/catalog/quote-cart";
+import { CompareProvider } from "@/components/compare/compare-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { WhatsAppFloat } from "@/components/layout/whatsapp-float";
@@ -53,10 +54,12 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           Saltar al contenido
         </a>
         <QuoteCartProvider>
-          <SiteHeader />
-          <main id="contenido">{children}</main>
-          <SiteFooter />
-          <WhatsAppFloat />
+          <CompareProvider>
+            <SiteHeader />
+            <main id="contenido">{children}</main>
+            <SiteFooter />
+            <WhatsAppFloat />
+          </CompareProvider>
         </QuoteCartProvider>
         <script
           type="application/ld+json"

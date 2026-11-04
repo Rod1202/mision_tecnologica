@@ -16,6 +16,8 @@ export type IconName =
   | "user-cog"
   | "network"
   | "printer"
+  | "laptop"
+  | "scan"
   | "rocket"
   | "life-buoy"
   | "graduation-cap"

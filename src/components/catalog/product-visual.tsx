@@ -1,13 +1,25 @@
-import { Printer } from "lucide-react";
+import { Laptop, Printer } from "lucide-react";
 
 import { IsoStrokes } from "@/components/brand/pills";
+import type { ProductKind } from "@/lib/content/compare";
 import { cn } from "@/lib/utils";
 
 /**
  * Visual de producto mientras no haya fotografías oficiales autorizadas:
  * fondo de marca con franjas del isotipo + ícono y código de modelo.
  */
-export function ProductVisual({ model, size = "md", className }: { model: string; size?: "sm" | "md" | "lg"; className?: string }) {
+export function ProductVisual({
+  model,
+  kind = "impresora",
+  size = "md",
+  className,
+}: {
+  model: string;
+  kind?: ProductKind;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) {
+  const Glyph = kind === "laptop" ? Laptop : Printer;
   return (
     <div
       aria-hidden
@@ -25,7 +37,7 @@ export function ProductVisual({ model, size = "md", className }: { model: string
             size === "sm" ? "size-10" : size === "lg" ? "size-28" : "size-20",
           )}
         >
-          <Printer className={size === "sm" ? "size-5" : size === "lg" ? "size-12" : "size-9"} strokeWidth={1.6} />
+          <Glyph className={size === "sm" ? "size-5" : size === "lg" ? "size-12" : "size-9"} strokeWidth={1.6} />
         </span>
         {size !== "sm" ? (
           <span className={cn("font-bold tracking-wide", size === "lg" ? "text-xl" : "text-base")}>{model}</span>
