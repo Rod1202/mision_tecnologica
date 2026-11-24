@@ -1,59 +1,76 @@
-import Link from "next/link";
-import { ArrowRight, Calculator } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 import { IsoStrokes } from "@/components/brand/pills";
 import { Button } from "@/components/ui/button";
+import { heroPillars, heroVideo } from "@/lib/content/home";
+import { cn } from "@/lib/utils";
 
 /**
- * 01 · Hero: propuesta de valor + dos CTA.
- * Fondo #0066FF con las franjas translúcidas inclinadas del isotipo (mismo recurso que la tarjeta de Outsourcing).
+ * 01 · Hero: video de fondo (cuando exista), propuesta de valor, los 3 pilares y un solo botón,
+ * "Conoce más", que baja a Soluciones para iniciar el recorrido (storyline) de la página.
+ * Sin video: fondo azul de marca #003D99 con las franjas translúcidas del isotipo.
  */
 export function Hero() {
+  const hasVideo = !!heroVideo.src;
+
   return (
-    <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-brand-blue text-white">
-      <IsoStrokes className="top-[-30%] right-[-45%] -z-10 h-[160%] w-[95%] opacity-[0.09] sm:right-[-20%] sm:w-[70%] lg:right-[-4%] lg:w-[46%]" />
+    <section aria-labelledby="hero-title" className={cn("relative isolate overflow-hidden text-white", hasVideo ? "bg-deep" : "bg-brand-blue")}>
+      {hasVideo ? (
+        <>
+          {/* Con "reducir movimiento" el video no se reproduce: queda la imagen de respaldo. */}
+          <video
+            aria-hidden
+            className="absolute inset-0 -z-20 size-full object-cover motion-reduce:hidden"
+            src={heroVideo.src}
+            poster={heroVideo.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          />
+          {heroVideo.poster ? (
+            // eslint-disable-next-line @next/next/no-img-element -- respaldo decorativo del video
+            <img aria-hidden alt="" src={heroVideo.poster} className="absolute inset-0 -z-30 size-full object-cover" />
+          ) : null}
+          {/* Capa oscura al 65 % para garantizar contraste AA del texto blanco */}
+          <div aria-hidden className="absolute inset-0 -z-10 bg-deep/65" />
+        </>
+      ) : (
+        <IsoStrokes className="top-[-30%] right-[-45%] -z-10 h-[160%] w-[95%] opacity-[0.09] sm:right-[-20%] sm:w-[70%] lg:right-[-4%] lg:w-[46%]" />
+      )}
 
-      <div className="container-mt pt-14 pb-16 sm:pt-20 sm:pb-20 lg:pt-28 lg:pb-32">
+      <div className="container-mt pt-14 pb-16 sm:pt-20 sm:pb-20 lg:pt-28 lg:pb-28">
         <div className="max-w-3xl">
-          <p className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/20 ring-inset">
-            <span aria-hidden className="size-2 rounded-full bg-brand-teal" />
-            Outsourcing tecnológico · Impresión empresarial
-          </p>
-
-          <h1
-            id="hero-title"
-            className="mt-6 text-[2.5rem] leading-[1.04] font-extrabold tracking-[-0.03em] sm:text-6xl lg:text-7xl"
-          >
+          <h1 id="hero-title" className="text-[2.5rem] leading-[1.04] font-extrabold tracking-[-0.03em] sm:text-6xl lg:text-7xl">
             Tecnología que impulsa las operaciones de tu empresa.
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl">
             Soluciones de outsourcing tecnológico e impresión empresarial diseñadas para optimizar recursos, mejorar el
             servicio y acompañar el crecimiento de tu organización.
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Button asChild variant="inverse" size="lg">
-              <Link href="/#contacto">
-                Solicitar asesoría
-                <ArrowRight aria-hidden />
-              </Link>
-            </Button>
-            <Button asChild variant="outline-inverse" size="lg">
-              <Link href="/soluciones">Explorar soluciones</Link>
-            </Button>
+          <div className="mt-9">
+            <p className="text-sm font-bold tracking-[0.08em] text-white/80 uppercase">Te ofrecemos</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {heroPillars.map((p) => (
+                <li key={p} className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 font-semibold ring-1 ring-white/25 ring-inset">
+                  <span aria-hidden className="size-2 rounded-full bg-brand-teal" />
+                  {p}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <Link
-            href="/cotizador"
-            className="group mt-8 inline-flex items-center gap-3 rounded-full py-1 pr-2 font-semibold text-white"
-          >
-            <span aria-hidden className="inline-flex size-10 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25 ring-inset transition-colors group-hover:bg-white group-hover:text-brand-blue">
-              <Calculator className="size-5" />
-            </span>
-            <span className="underline-offset-4 group-hover:underline">Cotiza tu proyecto de cómputo, impresión o digitalización</span>
-            <ArrowRight aria-hidden className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          {/* Un solo llamado: invita a recorrer la página (storyline) en lugar de pedir una acción de entrada.
+              Cotizar y contactar siguen disponibles en el encabezado y en "Encuentra tu solución". */}
+          <Button asChild variant="inverse" size="lg" className="group mt-10">
+            <a href="#soluciones">
+              Conoce más
+              <ArrowDown aria-hidden className="transition-transform group-hover:translate-y-0.5 motion-safe:animate-bounce" />
+            </a>
+          </Button>
         </div>
       </div>
     </section>

@@ -8,15 +8,16 @@ import { ProductVisual } from "@/components/catalog/product-visual";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { getProduct, productHref } from "@/lib/content/products";
-import { siteConfig } from "@/lib/site";
-import { cn, whatsappLink } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 /**
- * Carrito de COTIZACIÓN (sin precios ni pagos). Se guarda en el navegador del visitante
- * y genera un mensaje de WhatsApp con los equipos y cantidades.
+ * Carrito de COTIZACIÓN (sin precios ni pagos). Se guarda en el navegador del visitante.
+ * Los equipos elegidos viajan con la solicitud del cotizador (/cotizador), que exige los datos B2B
+ * (correo corporativo, empresa, RUC, nombre y apellido) antes de enviar cualquier cotización.
  */
 
-type Line = { slug: string; qty: number };
+export type CartLine = { slug: string; qty: number };
+type Line = CartLine;
 type QuoteCart = {
   lines: Line[];
   count: number;
@@ -95,17 +96,6 @@ export function useQuoteCart() {
   return ctx;
 }
 
-export function buildQuoteMessage(lines: Line[]) {
-  const items = lines
-    .map((l) => {
-      const p = getProduct(l.slug);
-      return p ? `• ${l.qty} × ${p.name}` : null;
-    })
-    .filter(Boolean)
-    .join("\n");
-  return `Hola, Misión Tecnológica. Quisiera solicitar una cotización de:\n${items}\n\nEmpresa: \nCiudad / sede: `;
-}
-
 /** Botón de la cabecera: solo aparece cuando hay equipos en la cotización. */
 export function QuoteCartButton({ className }: { className?: string }) {
   const { count, setOpen } = useQuoteCart();
@@ -135,7 +125,7 @@ function QuoteCartSheet() {
         <div className="border-b border-line px-5 py-5 pr-16">
           <SheetTitle className="text-xl font-bold text-ink">Tu cotización</SheetTitle>
           <SheetDescription className="mt-1 text-sm text-ink-soft">
-            Sin precios ni pagos: enviaremos tu solicitud por WhatsApp a un asesor.
+            Sin precios ni pagos: completa tus datos y un asesor te enviará la propuesta.
           </SheetDescription>
         </div>
 
@@ -146,7 +136,7 @@ function QuoteCartSheet() {
             </span>
             <p className="font-semibold text-ink">Aún no agregaste equipos.</p>
             <Button asChild variant="outline" onClick={() => setOpen(false)}>
-              <Link href="/tienda">Ver la tienda</Link>
+              <Link href="/catalogo">Ver el catálogo</Link>
             </Button>
           </div>
         ) : (
@@ -209,10 +199,10 @@ function QuoteCartSheet() {
                 <span>Equipos en la cotización</span>
                 <span className="font-bold text-ink tabular-nums">{count}</span>
               </p>
-              <Button asChild size="lg" className="w-full bg-[#1fa855] shadow-none hover:bg-[#178a45]">
-                <a href={whatsappLink(siteConfig.contact.whatsapp, buildQuoteMessage(lines))} target="_blank" rel="noopener noreferrer">
-                  Solicitar cotización por WhatsApp
-                </a>
+              <Button asChild size="lg" className="w-full">
+                <Link href="/cotizador#enviar" onClick={() => setOpen(false)}>
+                  Continuar con mi solicitud
+                </Link>
               </Button>
               <button type="button" onClick={clear} className="mx-auto flex items-center gap-1.5 text-sm text-ink-soft hover:text-destructive">
                 <X aria-hidden className="size-3.5" />

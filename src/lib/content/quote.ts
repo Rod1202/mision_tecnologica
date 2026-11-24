@@ -1,22 +1,18 @@
 import type { IconName } from "./types";
 
 /**
- * Cotizador de proyecto — servicios, opciones y TARIFAS DE DEMOSTRACIÓN.
- * Equivale a la futura colección global `QuoteSettings` de Payload.
+ * "Encuentra tu solución" — perfil "Sé lo que necesito" (cotizador de proyecto).
+ * Servicios, opciones y límites. Equivale a la futura colección global `QuoteSettings` de Payload.
  *
- * TARIFAS: todos los montos en soles (PEN) son de prueba (`ratesAreDemo: true`) para que el
- * cotizador calcule y se pueda revisar la experiencia. La estimación se muestra SIEMPRE rotulada
- * como de demostración mientras `ratesAreDemo` sea `true`. Reemplazar por las tarifas referenciales
- * que entregue el área comercial y recién entonces poner `ratesAreDemo: false`.
+ * SIN PRECIOS: el cotizador dimensiona el proyecto (equipos, volúmenes, sedes, plazos) y lo envía a un
+ * asesor; no muestra montos. La propuesta económica la prepara el área comercial.
  */
 
-export const ratesAreDemo = true;
-
 /* ------------------------------------------------------------------ */
-/* Servicios                                                            */
+/* Servicios (las 4 verticales)                                         */
 /* ------------------------------------------------------------------ */
 
-export const serviceIds = ["computo", "impresion", "digitalizacion"] as const;
+export const serviceIds = ["computo", "impresion", "digitalizacion", "audiovideo"] as const;
 export type ServiceId = (typeof serviceIds)[number];
 
 export const quoteServices: { id: ServiceId; title: string; summary: string; icon: IconName }[] = [
@@ -29,7 +25,7 @@ export const quoteServices: { id: ServiceId; title: string; summary: string; ico
   {
     id: "impresion",
     title: "Impresión",
-    summary: "Multifuncionales HP con consumibles, mantenimiento y reportes de uso.",
+    summary: "Equipos, consumibles y mantenimiento por página, por clic o con venta de equipos.",
     icon: "printer",
   },
   {
@@ -37,6 +33,12 @@ export const quoteServices: { id: ServiceId; title: string; summary: string; ico
     title: "Digitalización",
     summary: "Archivo físico convertido en documentos digitales buscables y ordenados.",
     icon: "scan",
+  },
+  {
+    id: "audiovideo",
+    title: "Audio y video",
+    summary: "Salas de reuniones equipadas y headsets para tus colaboradores.",
+    icon: "video",
   },
 ];
 
@@ -57,6 +59,7 @@ export const locationOptions = [
 ] as const satisfies readonly Option[];
 export type Location = (typeof locationOptions)[number]["value"];
 
+/** Plazo del contrato (cómputo, impresión, audio y video). La digitalización usa su propio "plazo del servicio". */
 export const termOptions = [
   { value: 12, label: "12 meses" },
   { value: 24, label: "24 meses" },
@@ -101,16 +104,24 @@ export const computoExtraOptions = [
 export type ComputoExtra = (typeof computoExtraOptions)[number]["value"];
 
 // Impresión
-export const printFormatOptions = [
-  { value: "a4", label: "A4 y oficio" },
-  { value: "a3", label: "Incluye A3" },
+export const printFleetOptions = [
+  { value: "actual", label: "Equipos actuales" },
+  { value: "estimado", label: "Estimado requerido" },
 ] as const satisfies readonly Option[];
-export type PrintFormat = (typeof printFormatOptions)[number]["value"];
+export type PrintFleet = (typeof printFleetOptions)[number]["value"];
+
+/** Formatos de papel: cantidad de páginas al mes por formato. */
+export const paperFormats = [
+  { value: "a4", label: "A4" },
+  { value: "oficio", label: "Oficio" },
+  { value: "a3", label: "A3" },
+] as const satisfies readonly Option[];
+export type PaperFormat = (typeof paperFormats)[number]["value"];
 
 export const printModeOptions = [
-  { value: "outsourcing", label: "Costo por página", hint: "Equipos, tóner y mantenimiento incluidos" },
-  { value: "alquiler", label: "Alquiler de equipos", hint: "Cuota fija por equipo más consumibles" },
-  { value: "compra", label: "Compra de equipos", hint: "Pago único más consumibles" },
+  { value: "pagina", label: "Costo por página", hint: "Tarifa por página impresa; equipos, consumibles y mantenimiento incluidos" },
+  { value: "clic", label: "Costo por clic", hint: "Tarifa por cada impresión que registra el contador del equipo" },
+  { value: "venta", label: "Venta de equipo + servicio", hint: "Compras los equipos y contratas consumibles y soporte" },
 ] as const satisfies readonly Option[];
 export type PrintMode = (typeof printModeOptions)[number]["value"];
 
@@ -123,6 +134,22 @@ export type PrintExtra = (typeof printExtraOptions)[number]["value"];
 export const printVolumePresets = [2_000, 10_000, 30_000, 80_000];
 
 // Digitalización
+/** Cómo se mide el volumen. `sheets` = hojas aproximadas por unidad (solo como referencia). */
+export const scanUnitOptions = [
+  { value: "paginas", label: "Páginas", hint: "Hojas sueltas o conteo exacto" },
+  { value: "files", label: "Files", hint: "Archivadores" },
+  { value: "tomos", label: "Tomos", hint: "Más de 200 hojas en promedio" },
+  { value: "cajas", label: "Cajas", hint: "Unas 2 000 hojas por caja" },
+] as const satisfies readonly Option[];
+export type ScanUnit = (typeof scanUnitOptions)[number]["value"];
+
+export const scanUnitWords: Record<ScanUnit, { one: string; many: string; sheets?: number }> = {
+  paginas: { one: "página", many: "páginas" },
+  files: { one: "file", many: "files" },
+  tomos: { one: "tomo", many: "tomos", sheets: 200 },
+  cajas: { one: "caja", many: "cajas", sheets: 2_000 },
+};
+
 export const docTypeOptions = [
   { value: "sueltas", label: "Hojas sueltas", hint: "A4 u oficio, en buen estado" },
   { value: "expedientes", label: "Expedientes y folders", hint: "Con grapas, anillados o tamaños mixtos" },
@@ -144,17 +171,56 @@ export const scanServiceOptions = [
 ] as const satisfies readonly Option[];
 export type ScanService = (typeof scanServiceOptions)[number]["value"];
 
-export const urgencyOptions = [
-  { value: "estandar", label: "Plazo estándar" },
-  { value: "urgente", label: "Urgente", hint: "Doble turno o estación adicional" },
+/** Plazo del servicio de digitalización (reemplaza al plazo de contrato). */
+export const scanTermOptions = [
+  { value: "1m", label: "Hasta 1 mes" },
+  { value: "3m", label: "1 a 3 meses" },
+  { value: "6m", label: "3 a 6 meses" },
+  { value: "12m", label: "Más de 6 meses" },
 ] as const satisfies readonly Option[];
-export type Urgency = (typeof urgencyOptions)[number]["value"];
+export type ScanTerm = (typeof scanTermOptions)[number]["value"];
 
-export const scanUnitOptions = [
-  { value: "paginas", label: "Páginas" },
-  { value: "cajas", label: "Cajas de archivo" },
+// Audio y video
+export const avNeedOptions = [
+  { value: "salas", label: "Salas de reuniones", hint: "Videoconferencia para equipos" },
+  { value: "headsets", label: "Headsets", hint: "Audio individual para colaboradores" },
 ] as const satisfies readonly Option[];
-export type ScanUnit = (typeof scanUnitOptions)[number]["value"];
+export type AvNeed = (typeof avNeedOptions)[number]["value"];
+
+export const roomDeviceOptions = [
+  { value: "camaras", label: "Cámaras" },
+  { value: "microfonos", label: "Micrófonos" },
+  { value: "audifonos", label: "Audífonos" },
+  { value: "hub-mesa", label: "Hub de mesa" },
+  { value: "hub-pantalla", label: "Hub de pantalla" },
+  { value: "altavoz", label: "Altavoz" },
+  { value: "display", label: "Display o pantalla" },
+] as const satisfies readonly Option[];
+export type RoomDevice = (typeof roomDeviceOptions)[number]["value"];
+
+export const platformOptions = [
+  { value: "teams", label: "Microsoft Teams" },
+  { value: "zoom", label: "Zoom" },
+  { value: "meet", label: "Google Meet" },
+  { value: "webex", label: "Webex" },
+  { value: "otra", label: "Otra o por definir" },
+] as const satisfies readonly Option[];
+export type Platform = (typeof platformOptions)[number]["value"];
+
+export const headsetUserOptions = [
+  { value: "basico", label: "Básico", hint: "Call center" },
+  { value: "estandar", label: "Estándar", hint: "Producción y oficina" },
+  { value: "ejecutivo", label: "Ejecutivo", hint: "Calidad de audio y cancelación de ruido" },
+] as const satisfies readonly Option[];
+export type HeadsetUser = (typeof headsetUserOptions)[number]["value"];
+
+export const headsetFeatureOptions = [
+  { value: "cable", label: "Con cable" },
+  { value: "inalambrico", label: "Sin cable" },
+  { value: "anc", label: "Audífonos con cancelación de ruido" },
+  { value: "mic-anc", label: "Micrófono con cancelación de ruido" },
+] as const satisfies readonly Option[];
+export type HeadsetFeature = (typeof headsetFeatureOptions)[number]["value"];
 
 /* ------------------------------------------------------------------ */
 /* Límites de los controles                                             */
@@ -163,62 +229,12 @@ export type ScanUnit = (typeof scanUnitOptions)[number]["value"];
 export const limits = {
   sites: { min: 1, max: 60 },
   devices: { min: 0, max: 2_000 },
-  printPages: { min: 500, max: 200_000 },
-  printDevices: { min: 1, max: 200 },
-  scanPages: { min: 100, max: 3_000_000 },
-  scanBoxes: { min: 1, max: 1_200 },
-} as const;
-
-/**
- * Documentos por caja de archivo estándar (para convertir cajas ⇄ páginas).
- * Los planos se cuentan por plano: una caja o tubo guarda muchos menos.
- */
-export const SHEETS_PER_BOX: Record<DocType, number> = { sueltas: 2_500, expedientes: 2_000, planos: 100 };
-
-/* ------------------------------------------------------------------ */
-/* Tarifas de demostración (PEN)                                        */
-/* ------------------------------------------------------------------ */
-
-export const rates = {
-  /** Despliegue e instalación por sede (pago único), solo con cómputo o impresión. */
-  deploymentPerSite: { lima: 220, mixto: 340, provincias: 460 } satisfies Record<Location, number>,
-  /** Factor sobre las cuotas mensuales según el plazo del contrato. */
-  termFactor: { 12: 1.12, 24: 1, 36: 0.92 } satisfies Record<Term, number>,
-
-  computo: {
-    rentPerMonth: { laptop: 175, desktop: 135, workstation: 410 } satisfies Record<DeviceType, number>,
-    purchase: { laptop: 3_300, desktop: 2_700, workstation: 7_900 } satisfies Record<DeviceType, number>,
-    profileFactor: { basico: 0.85, estandar: 1, avanzado: 1.35 } satisfies Record<Profile, number>,
-    soportePerDeviceMonth: 32,
-    gestionPerDeviceMonth: 16,
-    imagenPerDevice: 60,
-    perifericos: { rentPerMonth: 28, purchase: 690 },
-  },
-
-  impresion: {
-    /** Páginas al mes que atiende cómodamente un equipo (para sugerir la cantidad). */
-    pagesPerDevice: 6_000,
-    /** Por debajo de este volumen por sede no se sugiere un equipo propio para cada sede. */
-    minPagesPerSite: 700,
-    outsourcing: { bwPage: 0.058, colorPage: 0.3, feePerDeviceMonth: 85 },
-    alquiler: { perDeviceMonth: 390, bwPage: 0.032, colorPage: 0.21 },
-    compra: { perDevice: 5_200, bwPage: 0.04, colorPage: 0.24 },
-    a3Factor: 1.25,
-    /** El color en equipos de alquiler o compra sube el costo del equipo. */
-    colorDeviceFactor: 1.35,
-    segura: { perDevice: 420, perDeviceMonth: 22 },
-    monitoreoPerDeviceMonth: 14,
-  },
-
-  digitalizacion: {
-    perPage: { sueltas: 0.11, expedientes: 0.17, planos: 2.4 } satisfies Record<DocType, number>,
-    /** Páginas por día hábil de una estación de captura. */
-    pagesPerDay: { sueltas: 14_000, expedientes: 8_000, planos: 350 } satisfies Record<DocType, number>,
-    services: { ocr: 0.025, indexacion: 0.04, gestor: 0.008, rearchivo: 0.03 } satisfies Record<ScanService, number>,
-    gestorSetup: 950,
-    sitioSetup: 1_400,
-    centroPerBox: 32,
-    urgentFactor: 1.25,
-    provinciasFactor: 1.08,
-  },
+  printPages: { min: 0, max: 500_000 },
+  printDevices: { min: 1, max: 500 },
+  formatPages: { min: 0, max: 500_000 },
+  scanAmount: { min: 1, max: 3_000_000 },
+  roomGroups: { max: 6 },
+  rooms: { min: 1, max: 200 },
+  roomUsers: { min: 2, max: 100 },
+  headsets: { min: 1, max: 5_000 },
 } as const;

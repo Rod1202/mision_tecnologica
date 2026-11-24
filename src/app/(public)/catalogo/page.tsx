@@ -12,10 +12,10 @@ import { Button } from "@/components/ui/button";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Tienda: impresoras HP LaserJet Enterprise",
+  title: "Catálogo corporativo: impresión, cómputo y audio y video",
   description:
-    "Catálogo de multifuncionales HP LaserJet Enterprise. Filtra por categoría, marca y precio, agrega los equipos a tu cotización y recibe atención de un asesor por WhatsApp.",
-  path: "/tienda",
+    "Portafolio de equipos para empresas: impresoras HP, ticketeras, plotters y escáneres; laptops, PC y workstations HP, ASUS y Lenovo; y audio y video para salas. Arma tu cotización con un asesor de Misión Tecnológica.",
+  path: "/catalogo",
 });
 
 /** El salto de generación solo tiene sentido si las fichas del modelo anterior y su sucesor se pueden mostrar. */
@@ -40,14 +40,14 @@ function StaticGrid() {
   );
 }
 
-export default function TiendaPage() {
+export default function CatalogoPage() {
   return (
     <>
       <PageIntro
-        breadcrumbs={[{ label: "Tienda" }]}
-        eyebrow="Tienda"
-        title="Equipos de impresión HP para empresas."
-        description="Elige los equipos, agrégalos a tu cotización y envíala por WhatsApp. Un asesor te responderá con la propuesta."
+        breadcrumbs={[{ label: "Catálogo" }]}
+        eyebrow="Catálogo"
+        title="Portafolio corporativo de equipos."
+        description="Impresión y digitalización, cómputo HP, ASUS y Lenovo, y audio y video para tus salas. Elige los equipos, agrégalos a tu cotización y un asesor te enviará la propuesta."
       />
 
       <section aria-labelledby="catalogo-title" className="section-y bg-surface">
@@ -55,18 +55,18 @@ export default function TiendaPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h2 id="catalogo-title" className="text-2xl font-bold text-ink sm:text-3xl">
-                Catálogo
+                Equipos por línea
               </h2>
-              <p className="mt-2 text-ink-soft">Filtra por categoría, marca y precio, y ordena los resultados.</p>
+              <p className="mt-2 text-ink-soft">Elige una línea, filtra por categoría y marca, y ordena los resultados.</p>
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
                 <Button asChild variant="outline">
-                  <Link href="/tienda/comparar">
+                  <Link href="/catalogo/comparar">
                     <Columns3 aria-hidden />
                     Comparar equipos
                   </Link>
                 </Button>
                 {showGenerationLink() ? (
-                  <Link href="/tienda/comparar#upgrade" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+                  <Link href="/catalogo/comparar#upgrade" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
                     ¿Ya tienes un equipo? Mira tus opciones de upgrade
                     <ArrowRight aria-hidden className="size-4" />
                   </Link>
@@ -89,8 +89,8 @@ export default function TiendaPage() {
       <CtaBand
         title="¿Necesitas una solución completa de impresión?"
         text="Además de los equipos, nos encargamos de la implementación, los consumibles y el soporte."
-        primary={{ label: "Solicitar asesoría", href: "/contacto" }}
-        secondary={{ label: "Ver impresión empresarial", href: "/soluciones/impresion-empresarial" }}
+        primary={{ label: "Solicitar asesoría", href: "/asesoria" }}
+        secondary={{ label: "Ver outsourcing de impresión", href: "/soluciones/outsourcing-de-impresion" }}
       />
     </>
   );

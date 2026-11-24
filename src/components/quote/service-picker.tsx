@@ -18,7 +18,7 @@ export function ServicePicker() {
       <legend className="text-lg font-bold text-white">¿Qué necesita tu proyecto?</legend>
       <p className="mt-1 text-white">Elige uno o varios servicios.</p>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-3 sm:gap-4">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {quoteServices.map((s) => {
           const on = quote.services.includes(s.id);
           return (
@@ -28,7 +28,7 @@ export function ServicePicker() {
                 "group relative flex cursor-pointer gap-4 rounded-3xl p-5 transition-[background-color,color,box-shadow,transform] duration-200 active:scale-[0.99] sm:flex-col sm:p-6",
                 "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-white",
                 on
-                  ? "bg-white text-ink shadow-[0_24px_48px_-24px_rgb(1_26_71/0.75)]"
+                  ? "bg-white text-ink shadow-[0_24px_48px_-24px_rgb(0_20_51/0.75)]"
                   : "bg-brand-blue-800/45 text-white ring-1 ring-white/30 ring-inset hover:bg-brand-blue-800/60",
               )}
             >
@@ -70,12 +70,12 @@ export function ServicePicker() {
               </a>
             </Button>
             <p className="text-sm text-white" aria-live="polite">
-              La estimación se actualiza mientras ajustas cada opción.
+              Ajusta cada opción y envía tu proyecto a un asesor.
             </p>
           </>
         ) : (
           <p className="text-sm text-white" aria-live="polite">
-            Al elegir un servicio verás sus opciones y una estimación en vivo.
+            Al elegir un servicio verás sus opciones para dimensionar tu proyecto.
           </p>
         )}
       </div>

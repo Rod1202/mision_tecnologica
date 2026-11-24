@@ -48,7 +48,7 @@ export function ComingSoon({ text }: { text?: string }) {
             {text ?? "Estamos preparando esta sección. Mientras tanto, conversemos sobre lo que necesita tu empresa."}
           </p>
           <Button asChild className="mt-8">
-            <Link href="/#contacto">
+            <Link href="/asesoria">
               Solicitar asesoría
               <ArrowRight aria-hidden />
             </Link>
@@ -63,7 +63,7 @@ export function ComingSoon({ text }: { text?: string }) {
 export function CtaBand({
   title = "¿Qué necesita mejorar tu empresa?",
   text = "Cuéntanos qué necesita tu organización y te ayudaremos a identificar el siguiente paso.",
-  primary = { label: "Solicitar asesoría", href: "/contacto" },
+  primary = { label: "Solicitar asesoría", href: "/asesoria" },
   secondary,
   className = "section-y",
 }: {

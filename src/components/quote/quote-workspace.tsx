@@ -1,15 +1,17 @@
 "use client";
 
-import { Plus, RotateCcw } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Plus, RotateCcw, ShoppingBag } from "lucide-react";
 
 import { Icon } from "@/components/brand/icon";
+import { useQuoteCart } from "@/components/catalog/quote-cart";
 import { ProjectPanel, servicePanels } from "@/components/quote/quote-panels";
 import { focusSoon, useQuote } from "@/components/quote/quote-provider";
 import { QuoteRequestForm } from "@/components/quote/quote-request-form";
 import { QuoteMobileBar, QuoteSummary } from "@/components/quote/quote-summary";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { quoteServices } from "@/lib/content/quote";
-import { describeService } from "@/lib/quote";
+import { describeCatalogItems, describeService } from "@/lib/quote";
 
 const nextSteps = [
   { title: "Revisamos tu proyecto", text: "Un asesor valida volúmenes, sedes y modalidad." },
@@ -20,6 +22,8 @@ const nextSteps = [
 /** Área de configuración: paneles por servicio + resumen en vivo + envío. */
 export function QuoteWorkspace() {
   const { quote, hydrated, toggleService, reset } = useQuote();
+  const { lines } = useQuoteCart();
+  const catalog = describeCatalogItems(lines);
   const selected = quote.services;
   const missing = quoteServices.filter((s) => !selected.includes(s.id));
 
@@ -90,8 +94,24 @@ export function QuoteWorkspace() {
               description="Recibimos la configuración completa: no tendrás que explicarla otra vez."
             />
 
+            {catalog.length > 0 ? (
+              <div className="mt-8 flex gap-4 rounded-2xl bg-surface p-4">
+                <span aria-hidden className="inline-flex h-10 w-13 shrink-0 items-center justify-center rounded-full bg-white text-brand-blue">
+                  <ShoppingBag className="size-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="font-bold text-ink">Equipos del catálogo</p>
+                  {catalog.map((l) => (
+                    <p key={l} className="text-sm leading-relaxed text-ink-soft">
+                      {l}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             {selected.length > 0 ? (
-              <div className="mt-8 space-y-3">
+              <div className="mt-3 space-y-3">
                 {selected.map((id) => {
                   const s = quoteServices.find((x) => x.id === id)!;
                   return (
@@ -126,6 +146,14 @@ export function QuoteWorkspace() {
                 </li>
               ))}
             </ol>
+
+            <p className="mt-10 rounded-2xl border border-dashed border-input p-5 text-ink-soft">
+              ¿Prefieres que te guiemos?{" "}
+              <Link href="/asesoria" className="inline-flex items-center gap-1 font-semibold text-brand-blue hover:underline">
+                Agenda una reunión con un asesor
+                <ArrowRight aria-hidden className="size-4" />
+              </Link>
+            </p>
           </div>
 
           <div className="lg:col-span-7">
@@ -147,8 +175,8 @@ function EmptyState({ ready }: { ready: boolean }) {
         Empieza por un servicio.
       </h2>
       <p className="mt-3 max-w-xl leading-relaxed text-ink-soft">
-        Elige arriba lo que necesita tu proyecto o empieza aquí. Puedes combinar cómputo, impresión y digitalización en una sola
-        cotización.
+        Elige arriba lo que necesita tu proyecto o empieza aquí. Puedes combinar cómputo, impresión, digitalización y audio y
+        video en una sola cotización.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         {quoteServices.map((s) => (

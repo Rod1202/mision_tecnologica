@@ -38,9 +38,9 @@ export function SiteHeader() {
         </Link>
 
         <nav aria-label="Principal" className="hidden lg:block">
-          <ul className="flex items-center gap-2 xl:gap-4">
+          <ul className="flex items-center gap-0.5 xl:gap-2">
             {mainNav.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const active = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href}>
                   <Link
@@ -48,13 +48,13 @@ export function SiteHeader() {
                     onClick={toTopIfSamePage(item.href)}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors xl:px-4",
+                      "relative rounded-full px-2.5 py-2 text-[0.95rem] font-semibold whitespace-nowrap transition-colors xl:px-3.5",
                       active ? "text-brand-blue" : "text-ink hover:text-brand-blue",
                     )}
                   >
                     {item.label}
                     {active ? (
-                      <span aria-hidden className="absolute inset-x-3 -bottom-0.5 h-1 rounded-full bg-brand-gradient xl:inset-x-4" />
+                      <span aria-hidden className="absolute inset-x-2.5 -bottom-0.5 h-1 rounded-full bg-brand-gradient xl:inset-x-3.5" />
                     ) : null}
                   </Link>
                 </li>
@@ -80,8 +80,8 @@ export function SiteHeader() {
               <span className="hidden lg:inline xl:hidden">Cotizar</span>
             </Link>
           </Button>
-          <Button asChild size="sm" className="hidden sm:inline-flex lg:h-11 lg:px-6 lg:text-[0.95rem]">
-            <Link href="/#contacto">Solicitar asesoría</Link>
+          <Button asChild size="sm" className="hidden sm:inline-flex lg:h-11 lg:px-5 lg:text-[0.95rem]">
+            <Link href="/contacto">Contáctanos</Link>
           </Button>
           <MobileNav />
         </div>

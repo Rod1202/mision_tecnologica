@@ -11,9 +11,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-brand-blue text-white shadow-[0_8px_20px_-8px_rgb(0_102_255/0.6)] hover:bg-brand-blue-700 focus-visible:outline-brand-blue",
+          "bg-brand-blue text-white shadow-[0_8px_20px_-8px_rgb(0_61_153/0.6)] hover:bg-brand-blue-700 focus-visible:outline-brand-blue",
         inverse:
-          "bg-white text-brand-blue shadow-[0_8px_24px_-10px_rgb(1_26_71/0.45)] hover:bg-brand-blue-50 focus-visible:outline-white",
+          "bg-white text-brand-blue shadow-[0_8px_24px_-10px_rgb(0_20_51/0.45)] hover:bg-brand-blue-50 focus-visible:outline-white",
         outline:
           "border border-brand-blue/30 bg-white text-brand-blue hover:border-brand-blue hover:bg-brand-blue-50 focus-visible:outline-brand-blue",
         "outline-inverse":

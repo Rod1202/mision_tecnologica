@@ -12,7 +12,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Misión Tecnológica | Outsourcing tecnológico e impresión empresarial",
+    default: "Misión Tecnológica | Soluciones TI, cómputo e impresión",
     template: "%s | Misión Tecnológica",
   },
   description: siteConfig.description,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0066ff",
+  themeColor: "#003d99",
   width: "device-width",
   initialScale: 1,
 };
@@ -40,7 +40,15 @@ const organizationJsonLd = {
   url: siteConfig.url,
   logo: `${siteConfig.url}/brand/logo-mt-color.png`,
   email: siteConfig.contact.email,
-  ...(siteConfig.social.linkedin ? { sameAs: [siteConfig.social.linkedin] } : {}),
+  telephone: siteConfig.contact.phone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.contact.address.street,
+    addressLocality: siteConfig.contact.address.district,
+    addressRegion: siteConfig.contact.address.city,
+    addressCountry: siteConfig.contact.address.country,
+  },
+  sameAs: Object.values(siteConfig.social).filter(Boolean),
 };
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

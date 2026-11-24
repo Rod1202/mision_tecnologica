@@ -34,7 +34,7 @@ export function MobileNav() {
 
         <nav aria-label="Principal (móvil)" className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-1">
-            {[{ label: "Inicio", href: "/" }, ...mainNav].map((item) => {
+            {mainNav.map((item) => {
               const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
               return (
                 <li key={item.href}>
@@ -78,7 +78,7 @@ export function MobileNav() {
           </SheetClose>
           <SheetClose asChild>
             <Button asChild size="lg" className="w-full">
-              <Link href="/#contacto">Solicitar asesoría</Link>
+              <Link href="/contacto">Contáctanos</Link>
             </Button>
           </SheetClose>
           <div className="flex flex-col gap-1 pt-1 text-sm text-ink-soft">

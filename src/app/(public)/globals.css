@@ -2,18 +2,19 @@
 
 /*
  * Sistema de diseño — Misión Tecnológica
- * Basado en el Brandbook 2023. Color principal indicado por el equipo: #0066FF.
+ * Basado en el Brandbook 2023. Color principal indicado por el equipo: #003D99, el #0066FF de marca
+ * oscurecido al 30 % de luminosidad (mismo tono). Todo el sitio lo toma del token --color-brand-blue.
  * Los colores complementarios del brandbook (#5D20D1, #FF8721, #EA54D6, #14003B, #BFBF4B)
  * se reservan para casos muy puntuales y no forman parte de la paleta de la web.
  */
 
 @theme {
   /* Marca */
-  --color-brand-blue: #0066ff;
-  --color-brand-blue-700: #0052cc;
-  --color-brand-blue-800: #003f9e;
-  --color-brand-blue-100: #dbe8ff;
-  --color-brand-blue-50: #eef4ff;
+  --color-brand-blue: #003d99;
+  --color-brand-blue-700: #00317d; /* hover y degradados */
+  --color-brand-blue-800: #002966;
+  --color-brand-blue-100: #ccdcf5;
+  --color-brand-blue-50: #e6eefa;
   --color-brand-teal: #00cdc5;
   --color-brand-teal-700: #00857f; /* turquesa oscurecido: texto pequeño sobre blanco con contraste AA */
   --color-brand-teal-800: #006b66; /* texto pequeño sobre turquesa claro (teal-50) con contraste AA */
@@ -25,7 +26,7 @@
   --color-ink-faint: #7a879e;
   --color-surface: #ebf0f7;
   --color-line: #e1e7f1;
-  --color-deep: #011a47; /* sombra profunda del azul de marca, solo para el pie de página */
+  --color-deep: #011a47; /* azul muy profundo: solo para la capa oscura del video del hero */
 
   /* shadcn/ui */
   --color-background: #ffffff;
@@ -53,7 +54,7 @@
   --radius-4xl: 2.5rem;
 
   --shadow-soft: 0 1px 2px rgb(11 26 51 / 0.04), 0 8px 24px -12px rgb(11 26 51 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 102 255 / 0.35);
+  --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 61 153 / 0.35);
 
   --animate-pill-in: pill-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-panel-in: panel-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -243,10 +244,10 @@
   background-image: linear-gradient(90deg, var(--color-brand-teal) 0%, var(--color-brand-blue) 100%);
 }
 
-/* Variante para fondos con texto blanco encima: predomina el azul (contraste AA)
-   y el turquesa solo aparece hacia la esquina inferior derecha. */
+/* Variante para fondos con texto blanco encima: predomina el azul de marca (contraste AA)
+   y solo hacia la esquina inferior derecha aclara hacia #0052CC con un toque de turquesa. */
 @utility bg-brand-gradient-deep {
-  background-image: linear-gradient(150deg, var(--color-brand-blue) 0%, var(--color-brand-blue) 50%, #00a3d9 85%, var(--color-brand-teal) 130%);
+  background-image: linear-gradient(150deg, var(--color-brand-blue) 0%, var(--color-brand-blue) 55%, #0052cc 92%, #00857f 135%);
 }
 
 @utility text-brand-gradient {

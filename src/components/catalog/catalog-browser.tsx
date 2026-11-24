@@ -1,14 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, SlidersHorizontal, X } from "lucide-react";
 
+import { Icon } from "@/components/brand/icon";
 import { ProductCard } from "@/components/catalog/product-card";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/form-controls";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
-import { formatPrice, type Product } from "@/lib/content/products";
+import { catalogLines, lineOfKind, type CatalogLine, type CatalogLineId } from "@/lib/content/catalog";
+import type { Product } from "@/lib/content/products";
 import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
@@ -17,45 +20,37 @@ import { cn } from "@/lib/utils";
 
 export const sortOptions = [
   { value: "relevancia", label: "Relevancia" },
-  { value: "precio-asc", label: "Precio: menor a mayor" },
-  { value: "precio-desc", label: "Precio: mayor a menor" },
   { value: "nombre-asc", label: "Nombre: A–Z" },
   { value: "nombre-desc", label: "Nombre: Z–A" },
 ] as const;
 type Sort = (typeof sortOptions)[number]["value"];
 
 type Filters = {
+  line: CatalogLineId | "todo";
   categories: string[];
   brands: string[];
-  min?: number;
-  max?: number;
   sort: Sort;
 };
 
 const list = (v: string | null) => (v ? v.split(",").map(decodeURIComponent).filter(Boolean) : []);
-const num = (v: string | null) => {
-  if (v === null || v.trim() === "") return undefined;
-  const n = Number(v);
-  return Number.isFinite(n) && n >= 0 ? n : undefined;
-};
+const isLine = (v: string | null): v is CatalogLineId => catalogLines.some((l) => l.id === v);
 
 function readFilters(params: URLSearchParams): Filters {
   const sort = params.get("orden") as Sort | null;
+  const line = params.get("linea");
   return {
+    line: isLine(line) ? line : "todo",
     categories: list(params.get("categoria")),
     brands: list(params.get("marca")),
-    min: num(params.get("min")),
-    max: num(params.get("max")),
     sort: sortOptions.some((o) => o.value === sort) ? (sort as Sort) : "relevancia",
   };
 }
 
 function toQuery(f: Filters) {
   const q = new URLSearchParams();
+  if (f.line !== "todo") q.set("linea", f.line);
   if (f.categories.length) q.set("categoria", f.categories.map(encodeURIComponent).join(","));
   if (f.brands.length) q.set("marca", f.brands.map(encodeURIComponent).join(","));
-  if (f.min !== undefined) q.set("min", String(f.min));
-  if (f.max !== undefined) q.set("max", String(f.max));
   if (f.sort !== "relevancia") q.set("orden", f.sort);
   const s = q.toString();
   return s ? `?${s}` : "";
@@ -65,31 +60,20 @@ function toQuery(f: Filters) {
 /* Lógica de filtrado                                                   */
 /* ------------------------------------------------------------------ */
 
-type Facet = "categories" | "brands" | "price";
+type Facet = "categories" | "brands";
+
+const lineOf = (p: Product) => lineOfKind[p.kind];
 
 function matches(p: Product, f: Filters, skip?: Facet) {
+  if (f.line !== "todo" && lineOf(p) !== f.line) return false;
   if (skip !== "categories" && f.categories.length && !f.categories.includes(p.category)) return false;
   if (skip !== "brands" && f.brands.length && !f.brands.includes(p.brand)) return false;
-  if (skip !== "price" && (f.min !== undefined || f.max !== undefined)) {
-    if (p.price === undefined) return false; // "A cotizar" no entra en un rango de precio
-    if (f.min !== undefined && p.price < f.min) return false;
-    if (f.max !== undefined && p.price > f.max) return false;
-  }
   return true;
 }
 
 function sortProducts(items: Product[], sort: Sort, original: Product[]) {
-  const byPrice = (dir: 1 | -1) => (a: Product, b: Product) => {
-    if (a.price === undefined) return 1; // sin precio al final
-    if (b.price === undefined) return -1;
-    return (a.price - b.price) * dir;
-  };
   const sorted = [...items];
   switch (sort) {
-    case "precio-asc":
-      return sorted.sort(byPrice(1));
-    case "precio-desc":
-      return sorted.sort(byPrice(-1));
     case "nombre-asc":
       return sorted.sort((a, b) => a.name.localeCompare(b.name, "es"));
     case "nombre-desc":
@@ -100,10 +84,11 @@ function sortProducts(items: Product[], sort: Sort, original: Product[]) {
 }
 
 function facetCounts(products: Product[], f: Filters, key: "category" | "brand", facet: Facet) {
-  const values = Array.from(new Set(products.map((p) => p[key]))).sort((a, b) => a.localeCompare(b, "es"));
+  const inLine = products.filter((p) => f.line === "todo" || lineOf(p) === f.line);
+  const values = Array.from(new Set(inLine.map((p) => p[key]))).sort((a, b) => a.localeCompare(b, "es"));
   return values.map((value) => ({
     value,
-    count: products.filter((p) => p[key] === value && matches(p, f, facet)).length,
+    count: inLine.filter((p) => p[key] === value && matches(p, f, facet)).length,
   }));
 }
 
@@ -118,7 +103,7 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
   const [filters, setFilters] = useState<Filters>(() => readFilters(new URLSearchParams(params.toString())));
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // La URL se actualiza con la History API: sin navegación ni petición al servidor (Next sincroniza useSearchParams).
+  // La URL se actualiza con la History API: sin navegación ni petición al servidor.
   const update = (patch: Partial<Filters>) => {
     const next = { ...filters, ...patch };
     setFilters(next);
@@ -128,7 +113,7 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
       /* ignorar */
     }
   };
-  const clearAll = () => update({ categories: [], brands: [], min: undefined, max: undefined, sort: "relevancia" });
+  const clearAll = () => update({ categories: [], brands: [], sort: "relevancia" });
 
   const results = useMemo(
     () => sortProducts(products.filter((p) => matches(p, filters)), filters.sort, products),
@@ -136,14 +121,12 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
   );
   const categories = facetCounts(products, filters, "category", "categories");
   const brands = facetCounts(products, filters, "brand", "brands");
-  const prices = products.map((p) => p.price).filter((v): v is number => v !== undefined);
-  const priceBounds = prices.length ? { min: Math.min(...prices), max: Math.max(...prices) } : null;
+  const line = filters.line === "todo" ? null : catalogLines.find((l) => l.id === filters.line)!;
+  const lineCount = (id: CatalogLineId) => products.filter((p) => lineOf(p) === id).length;
 
   const activeChips = [
     ...filters.categories.map((c) => ({ label: c, onRemove: () => update({ categories: filters.categories.filter((x) => x !== c) }) })),
     ...filters.brands.map((b) => ({ label: `Marca: ${b}`, onRemove: () => update({ brands: filters.brands.filter((x) => x !== b) }) })),
-    ...(filters.min !== undefined ? [{ label: `Desde ${formatPrice(filters.min)}`, onRemove: () => update({ min: undefined }) }] : []),
-    ...(filters.max !== undefined ? [{ label: `Hasta ${formatPrice(filters.max)}`, onRemove: () => update({ max: undefined }) }] : []),
   ];
 
   const panel = (
@@ -151,94 +134,123 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
       filters={filters}
       categories={categories}
       brands={brands}
-      priceBounds={priceBounds}
       onToggle={(key, value) => {
         const current = filters[key];
         update({ [key]: current.includes(value) ? current.filter((v) => v !== value) : [...current, value] } as Partial<Filters>);
       }}
-      onPrice={(min, max) => update({ min, max })}
       onClear={clearAll}
       hasActive={activeChips.length > 0}
     />
   );
 
   return (
-    <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-      {/* Filtros: barra lateral en escritorio */}
-      <aside aria-label="Filtros" className="hidden lg:col-span-3 lg:block">
-        <div className="sticky top-28 rounded-3xl border border-line bg-white p-6 shadow-soft">{panel}</div>
-      </aside>
+    <div>
+      {/* Líneas del catálogo */}
+      <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div role="group" aria-label="Líneas del catálogo" className="inline-flex min-w-max gap-1 rounded-full bg-white p-1.5 ring-1 ring-line ring-inset">
+          {[{ id: "todo" as const, title: "Todo el catálogo", icon: null }, ...catalogLines].map((l) => {
+            const active = filters.line === l.id;
+            return (
+              <button
+                key={l.id}
+                type="button"
+                aria-pressed={active}
+                onClick={() => update({ line: l.id, categories: [], brands: [] })}
+                className={cn(
+                  "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap transition-colors sm:px-5",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
+                  active ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]" : "text-ink-soft hover:text-ink",
+                )}
+              >
+                {l.icon ? <Icon name={l.icon} className="size-4" /> : null}
+                {l.title}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-      <div className="min-w-0 lg:col-span-9">
-        {/* Barra de resultados y orden */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p role="status" aria-live="polite" className="font-semibold text-ink">
-            {results.length} {results.length === 1 ? "equipo" : "equipos"}
-            {activeChips.length > 0 ? <span className="font-normal text-ink-soft"> con los filtros aplicados</span> : null}
-          </p>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" className="lg:hidden" onClick={() => setMobileOpen(true)}>
-              <SlidersHorizontal aria-hidden />
-              Filtros{activeChips.length > 0 ? ` (${activeChips.length})` : ""}
-            </Button>
-            <label htmlFor="orden" className="sr-only">
-              Ordenar por
-            </label>
-            <div className="min-w-0 flex-1 sm:w-60 sm:flex-none">
-              <Select id="orden" value={filters.sort} onChange={(e) => update({ sort: e.target.value as Sort })} className="h-11">
-                {sortOptions.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.value === "relevancia" ? "Ordenar: Relevancia" : o.label}
-                  </option>
-                ))}
-              </Select>
+      {line ? <LineOverview line={line} count={lineCount(line.id)} /> : null}
+
+      {line && lineCount(line.id) === 0 ? null : (
+        <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-10">
+          {/* Filtros: barra lateral en escritorio */}
+          <aside aria-label="Filtros" className="hidden lg:col-span-3 lg:block">
+            <div className="sticky top-28 rounded-3xl border border-line bg-white p-6 shadow-soft">{panel}</div>
+          </aside>
+
+          <div className="min-w-0 lg:col-span-9">
+            {/* Barra de resultados y orden */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p role="status" aria-live="polite" className="font-semibold text-ink">
+                {results.length} {results.length === 1 ? "equipo" : "equipos"}
+                {activeChips.length > 0 ? <span className="font-normal text-ink-soft"> con los filtros aplicados</span> : null}
+              </p>
+              <div className="flex items-center gap-3">
+                <Button variant="outline" className="lg:hidden" onClick={() => setMobileOpen(true)}>
+                  <SlidersHorizontal aria-hidden />
+                  Filtros{activeChips.length > 0 ? ` (${activeChips.length})` : ""}
+                </Button>
+                <label htmlFor="orden" className="sr-only">
+                  Ordenar por
+                </label>
+                <div className="min-w-0 flex-1 sm:w-56 sm:flex-none">
+                  <Select id="orden" value={filters.sort} onChange={(e) => update({ sort: e.target.value as Sort })} className="h-11">
+                    {sortOptions.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.value === "relevancia" ? "Ordenar: Relevancia" : o.label}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
             </div>
+
+            {/* Filtros activos */}
+            {activeChips.length > 0 ? (
+              <ul aria-label="Filtros activos" className="mt-5 flex flex-wrap items-center gap-2">
+                {activeChips.map((chip) => (
+                  <li key={chip.label}>
+                    <button
+                      type="button"
+                      onClick={chip.onRemove}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue-50 py-1.5 pr-2.5 pl-3.5 text-sm font-semibold text-brand-blue-800 hover:bg-brand-blue-100"
+                      aria-label={`Quitar filtro ${chip.label}`}
+                    >
+                      {chip.label}
+                      <X aria-hidden className="size-3.5" />
+                    </button>
+                  </li>
+                ))}
+                <li>
+                  <button type="button" onClick={clearAll} className="px-2 text-sm font-semibold text-ink-soft underline-offset-4 hover:text-brand-blue hover:underline">
+                    Limpiar todo
+                  </button>
+                </li>
+              </ul>
+            ) : null}
+
+            {/* Resultados */}
+            {results.length > 0 ? (
+              <ul className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {results.map((p) => (
+                  <li key={p.slug}>
+                    <ProductCard product={p} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="mt-8 rounded-[2rem] border border-dashed border-line bg-white p-10 text-center">
+                <p className="text-lg font-semibold text-ink">No encontramos equipos con estos filtros.</p>
+                <p className="mt-2 text-ink-soft">Prueba quitando algún filtro.</p>
+                <Button variant="outline" className="mt-6" onClick={clearAll}>
+                  Limpiar filtros
+                </Button>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Filtros activos */}
-        {activeChips.length > 0 ? (
-          <ul aria-label="Filtros activos" className="mt-5 flex flex-wrap items-center gap-2">
-            {activeChips.map((chip) => (
-              <li key={chip.label}>
-                <button
-                  type="button"
-                  onClick={chip.onRemove}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue-50 py-1.5 pr-2.5 pl-3.5 text-sm font-semibold text-brand-blue-800 hover:bg-brand-blue-100"
-                  aria-label={`Quitar filtro ${chip.label}`}
-                >
-                  {chip.label}
-                  <X aria-hidden className="size-3.5" />
-                </button>
-              </li>
-            ))}
-            <li>
-              <button type="button" onClick={clearAll} className="px-2 text-sm font-semibold text-ink-soft underline-offset-4 hover:text-brand-blue hover:underline">
-                Limpiar todo
-              </button>
-            </li>
-          </ul>
-        ) : null}
-
-        {/* Resultados */}
-        {results.length > 0 ? (
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {results.map((p) => (
-              <li key={p.slug}>
-                <ProductCard product={p} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="mt-8 rounded-[2rem] border border-dashed border-line bg-white p-10 text-center">
-            <p className="text-lg font-semibold text-ink">No encontramos equipos con estos filtros.</p>
-            <p className="mt-2 text-ink-soft">Prueba quitando algún filtro o ampliando el rango de precio.</p>
-            <Button variant="outline" className="mt-6" onClick={clearAll}>
-              Limpiar filtros
-            </Button>
-          </div>
-        )}
-      </div>
+      )}
 
       {/* Filtros: panel lateral en móvil */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -260,6 +272,52 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Resumen de la línea: qué cotizamos, aunque aún no tenga fichas        */
+/* ------------------------------------------------------------------ */
+
+function LineOverview({ line, count }: { line: CatalogLine; count: number }) {
+  return (
+    <div className="mt-8 grid gap-6 rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8 lg:grid-cols-12 lg:items-center">
+      <div className="flex gap-4 lg:col-span-7">
+        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+          <Icon name={line.icon} className="size-6" />
+        </span>
+        <div className="min-w-0">
+          <h3 className="text-2xl font-bold text-ink">{line.title}</h3>
+          <p className="mt-1 leading-relaxed text-ink-soft">{line.summary}</p>
+          {line.brands.length ? (
+            <p className="mt-2 text-sm font-semibold text-ink-soft">
+              Marcas: <span className="text-ink">{line.brands.join(" · ")}</span>
+            </p>
+          ) : null}
+          <ul aria-label={`Categorías de ${line.title}`} className="mt-4 flex flex-wrap gap-2">
+            {line.categories.map((c) => (
+              <li key={c} className="rounded-full bg-surface px-3 py-1 text-sm font-semibold text-ink-soft">
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="rounded-3xl bg-surface p-6 lg:col-span-5">
+        <p className="font-bold text-ink">
+          {count === 0 ? "Estamos publicando las fichas de esta línea." : "¿No ves el modelo que buscas?"}
+        </p>
+        <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+          Cotizamos todas estas categorías. Cuéntanos qué equipos necesitas y te enviamos una propuesta con modelos y condiciones.
+        </p>
+        <Button asChild className="mt-5">
+          <Link href={`/cotizador?servicio=${line.quoteService}`}>
+            Cotizar {line.title.toLowerCase()}
+            <ArrowRight aria-hidden />
+          </Link>
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Panel de filtros (compartido entre escritorio y móvil)               */
 /* ------------------------------------------------------------------ */
 
@@ -267,18 +325,14 @@ function FilterPanel({
   filters,
   categories,
   brands,
-  priceBounds,
   onToggle,
-  onPrice,
   onClear,
   hasActive,
 }: {
   filters: Filters;
   categories: { value: string; count: number }[];
   brands: { value: string; count: number }[];
-  priceBounds: { min: number; max: number } | null;
   onToggle: (key: "categories" | "brands", value: string) => void;
-  onPrice: (min?: number, max?: number) => void;
   onClear: () => void;
   hasActive: boolean;
 }) {
@@ -293,15 +347,8 @@ function FilterPanel({
         ) : null}
       </div>
 
-      <CheckboxGroup
-        legend="Categoría"
-        options={categories}
-        selected={filters.categories}
-        onToggle={(v) => onToggle("categories", v)}
-      />
+      <CheckboxGroup legend="Categoría" options={categories} selected={filters.categories} onToggle={(v) => onToggle("categories", v)} />
       <CheckboxGroup legend="Marca" options={brands} selected={filters.brands} onToggle={(v) => onToggle("brands", v)} />
-
-      {priceBounds ? <PriceRange bounds={priceBounds} min={filters.min} max={filters.max} onChange={onPrice} /> : null}
     </div>
   );
 }
@@ -346,89 +393,6 @@ function CheckboxGroup({
           );
         })}
       </ul>
-    </fieldset>
-  );
-}
-
-function PriceRange({
-  bounds,
-  min,
-  max,
-  onChange,
-}: {
-  bounds: { min: number; max: number };
-  min?: number;
-  max?: number;
-  onChange: (min?: number, max?: number) => void;
-}) {
-  const [draftMin, setDraftMin] = useState(min?.toString() ?? "");
-  const [draftMax, setDraftMax] = useState(max?.toString() ?? "");
-
-  // Sincroniza los campos si los filtros cambian desde fuera (chips, "Limpiar").
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reflejar el estado de la URL en los campos
-    setDraftMin(min?.toString() ?? "");
-    setDraftMax(max?.toString() ?? "");
-  }, [min, max]);
-
-  // Aplica el rango tras una breve pausa al escribir.
-  useEffect(() => {
-    const t = window.setTimeout(() => {
-      const nMin = draftMin.trim() === "" ? undefined : Math.max(0, Number(draftMin));
-      const nMax = draftMax.trim() === "" ? undefined : Math.max(0, Number(draftMax));
-      const valid = (v?: number) => v === undefined || Number.isFinite(v);
-      if (!valid(nMin) || !valid(nMax)) return;
-      if (nMin !== min || nMax !== max) onChange(nMin, nMax);
-    }, 450);
-    return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo reaccionar a lo que escribe el usuario
-  }, [draftMin, draftMax]);
-
-  const invalid = draftMin !== "" && draftMax !== "" && Number(draftMin) > Number(draftMax);
-
-  return (
-    <fieldset>
-      <legend className="text-sm font-bold tracking-[0.08em] text-ink-soft uppercase">Precio referencial (S/)</legend>
-      <div className="mt-3 grid grid-cols-2 gap-3">
-        <div>
-          <label htmlFor="precio-min" className="text-xs font-semibold text-ink-soft">
-            Mínimo
-          </label>
-          <input
-            id="precio-min"
-            type="number"
-            inputMode="numeric"
-            min={0}
-            step={100}
-            placeholder={String(bounds.min)}
-            value={draftMin}
-            onChange={(e) => setDraftMin(e.target.value)}
-            className="mt-1 h-11 w-full rounded-xl border border-input bg-white px-3 text-ink tabular-nums outline-none focus-visible:border-brand-blue focus-visible:ring-4 focus-visible:ring-brand-blue/15"
-          />
-        </div>
-        <div>
-          <label htmlFor="precio-max" className="text-xs font-semibold text-ink-soft">
-            Máximo
-          </label>
-          <input
-            id="precio-max"
-            type="number"
-            inputMode="numeric"
-            min={0}
-            step={100}
-            placeholder={String(bounds.max)}
-            value={draftMax}
-            onChange={(e) => setDraftMax(e.target.value)}
-            aria-invalid={invalid}
-            className="mt-1 h-11 w-full rounded-xl border border-input bg-white px-3 text-ink tabular-nums outline-none focus-visible:border-brand-blue focus-visible:ring-4 focus-visible:ring-brand-blue/15 aria-[invalid=true]:border-destructive"
-          />
-        </div>
-      </div>
-      <p className={cn("mt-2 text-xs", invalid ? "font-medium text-destructive" : "text-ink-faint")}>
-        {invalid
-          ? "El mínimo no puede ser mayor que el máximo."
-          : `Catálogo: ${formatPrice(bounds.min)} – ${formatPrice(bounds.max)}`}
-      </p>
     </fieldset>
   );
 }

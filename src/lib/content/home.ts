@@ -1,60 +1,51 @@
-import type { Challenge, Milestone } from "./types";
+import type { IconName } from "./types";
 
 /* Soluciones, sectores y productos viven en sus propios archivos:
  * solutions.ts · sectors.ts · products.ts */
 
 /* ------------------------------------------------------------------ */
-/* 02 · El desafío                                                     */
+/* 01 · Hero                                                            */
 /* ------------------------------------------------------------------ */
 
-export const challenges: Challenge[] = [
-  {
-    id: "control-de-recursos",
-    title: "Control de recursos",
-    description:
-      "Conocer qué equipos y servicios tecnológicos tiene la empresa, dónde están y cómo se usan, para administrarlos con eficiencia.",
-    icon: "gauge",
-  },
-  {
-    id: "continuidad-operativa",
-    title: "Continuidad operativa",
-    description:
-      "Reducir las fricciones del día a día para que las áreas sigan trabajando sin interrupciones por temas tecnológicos.",
-    icon: "activity",
-  },
-  {
-    id: "gestion-especializada",
-    title: "Gestión especializada",
-    description:
-      "Acceder a conocimientos y servicios adecuados a cada necesidad, sin cargar al equipo interno con tareas fuera de su foco.",
-    icon: "user-cog",
-  },
+/**
+ * Video de fondo del hero (bucle de operaciones y tecnología).
+ * Colocar el archivo en /public/media/ (MP4 H.264, sin audio, idealmente < 5 MB y 10–20 s) y una imagen
+ * de respaldo (`poster`, JPG/WebP del primer cuadro). Mientras `src` esté vacío se muestra el fondo de marca.
+ */
+export const heroVideo: { src?: string; poster?: string } = {
+  src: undefined, // p. ej. "/media/hero-operaciones.mp4"
+  poster: undefined, // p. ej. "/media/hero-operaciones.jpg"
+};
+
+/** "Te ofrecemos": los tres pilares (antes la sección "El desafío"). */
+export const heroPillars = ["Control de recursos", "Continuidad operativa", "Gestión especializada"];
+
+/* ------------------------------------------------------------------ */
+/* 04 · Capas de servicio y sustentabilidad                             */
+/* ------------------------------------------------------------------ */
+
+export const serviceLayers: { title: string; description: string; icon: IconName }[] = [
+  { title: "Soporte", description: "Mesa de ayuda y atención técnica, en sitio y remota, durante todo el servicio.", icon: "life-buoy" },
+  { title: "Instalaciones", description: "Instalación, configuración y puesta en marcha de los equipos en cada sede.", icon: "wrench" },
+  { title: "Software de gestión", description: "Control de equipos, consumos y volúmenes, con reportes para tomar decisiones.", icon: "dashboard" },
+  { title: "Compensación de carbono", description: "Opción de compensar la huella de carbono asociada al servicio.", icon: "leaf" },
+  { title: "Captura de datos inteligente", description: "Digitalización con texto buscable e indexación para encontrar la información al instante.", icon: "scan" },
 ];
 
-/* ------------------------------------------------------------------ */
-/* 04 · Impresión empresarial                                          */
-/* ------------------------------------------------------------------ */
-
-export const printingCapabilities: string[] = [
-  "Evaluación de la necesidad de impresión de cada sede o área.",
-  "Instalación, configuración y puesta en marcha de los equipos.",
-  "Soporte técnico y mantenimiento durante la operación.",
-  "Seguimiento del parque de impresión y de sus consumibles.",
-];
-
-/* ------------------------------------------------------------------ */
-/* 06 · Innovación                                                     */
-/* ------------------------------------------------------------------ */
-
-export const featuredMilestone: Milestone = {
-  id: "hp-nueva-generacion-2026",
-  year: "2026",
-  category: "Impresión empresarial",
-  title: "Equipos HP LaserJet Enterprise de nueva generación, en producción",
-  // Formulación prudente aprobada en el documento del proyecto, mientras se valida la afirmación de primacía.
-  summary:
-    "Misión Tecnológica cuenta con equipos de impresión láser HP de nueva generación desplegados en entornos de producción.",
-  href: "/soluciones/impresion-empresarial",
-  verified: false,
-  note: "Confirmar país, fechas de lanzamiento y de puesta en producción, modelos, cantidades, evidencia y permisos del cliente.",
+/**
+ * Sustentabilidad. Fuentes: web actual (Inicio, sección "Partners") y documento "Arquitectura UX/UI"
+ * ("Líderes en sustentabilidad, 3 años seguidos"). Insignias oficiales en /public/sustentabilidad/ (opcional)
+ * y foto de selva en `background`.
+ */
+export const sustainability = {
+  title: "Líderes en sustentabilidad",
+  streak: "3 años consecutivos",
+  text: "Alcanzamos el nivel 5 estrellas en HP Amplify Impact, la máxima distinción en sostenibilidad del programa de socios de HP, y HP nos reconoció como el canal más sustentable de Latinoamérica en 2024.",
+  /** Reconocimientos destacados. `image` = ruta en /public (opcional). */
+  badges: [
+    { label: "HP Amplify Impact", detail: "Nivel 5 estrellas" },
+    { label: "Canal más sustentable de Latinoamérica", detail: "HP · 2024" },
+  ] as { label: string; detail: string; image?: string }[],
+  /** Foto de fondo (selva). Sin foto se usa un degradé verde azulado. */
+  background: undefined as string | undefined,
 };

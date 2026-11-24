@@ -24,26 +24,15 @@ export type IconName =
   | "landmark"
   | "truck"
   | "shopping-bag"
-  | "building";
-
-export type Challenge = {
-  id: string;
-  title: string;
-  description: string;
-  icon: IconName;
-};
+  | "building"
+  | "video"
+  | "headphones"
+  | "wrench"
+  | "dashboard"
+  | "leaf";
 
 export type Client = {
   name: string;
   /** Logotipo autorizado (se usará cuando exista permiso de uso). */
   logo?: string;
-} & Verification;
-
-export type Milestone = {
-  id: string;
-  year: string;
-  category: string;
-  title: string;
-  summary: string;
-  href: string;
 } & Verification;

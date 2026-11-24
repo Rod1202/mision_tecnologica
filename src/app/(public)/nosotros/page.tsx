@@ -1,20 +1,22 @@
 import Link from "next/link";
-import { ArrowRight, Award, Check, ClipboardCheck, GraduationCap, MapPin, RefreshCw, ShieldCheck, Users, Workflow } from "lucide-react";
+import { ArrowRight, Award, Check, ClipboardCheck, Compass, Eye, GraduationCap, RefreshCw, ShieldCheck, Trophy, Users, Workflow } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import { Eyebrow, IsoStrokes } from "@/components/brand/pills";
+import { IsoStrokes } from "@/components/brand/pills";
+import { PresenceLegend, PresenceMap } from "@/components/company/presence-map";
 import { CtaBand, PageIntro } from "@/components/layout/page-intro";
 import { SectionHeading } from "@/components/marketing/section-heading";
+import { SustainabilityCard } from "@/components/marketing/service-layers";
 import { Button } from "@/components/ui/button";
-import { about, certifications, coverage, hpPartnership, leaders, qualityStandards } from "@/lib/content/company";
+import { about, awards, certifications, hpPartnership, leaders, presence, qualityStandards } from "@/lib/content/company";
 import { solutionHref } from "@/lib/content/solutions";
 import { pageMetadata } from "@/lib/seo";
 import { showUnverifiedContent } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Nosotros: partner de HP, certificaciones ISO y cobertura nacional",
+  title: "Nosotros: Partner Platinum de HP, normas ISO y presencia en Latinoamérica",
   description:
-    "Misión Tecnológica es partner de HP, cuenta con certificaciones ISO 9001 e ISO/IEC 27001 y atiende a empresas con cobertura a nivel nacional en el Perú.",
+    "Misión Tecnológica es una empresa peruana de soluciones TI, cómputo e impresión: Partner Platinum de HP desde 2016, Centro de Servicio Autorizado HP, con normas ISO, sede en Lima, filial en Bolivia y alianzas en la región.",
   path: "/nosotros",
 });
 
@@ -33,7 +35,7 @@ export default function NosotrosPage() {
         description={about.intro}
       >
         <ul className="mt-9 flex flex-wrap gap-3" aria-label="Credenciales">
-          {["Partner de HP", "ISO 9001", "ISO/IEC 27001", "Cobertura nacional"].map((t) => (
+          {[hpPartnership.badge, ...certifications.map((c) => c.code), "Presencia en Latinoamérica"].map((t) => (
             <li key={t} className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 font-semibold ring-1 ring-white/25 ring-inset">
               <Check aria-hidden className="size-4 text-brand-teal" strokeWidth={3} />
               {t}
@@ -42,13 +44,67 @@ export default function NosotrosPage() {
         </ul>
       </PageIntro>
 
-      {/* Partner de HP */}
+      {/* Qué es Misión + presencia */}
+      <section aria-labelledby="presencia-title" className="section-y bg-white">
+        <div className="container-mt grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-6">
+            <SectionHeading id="presencia-title" eyebrow="Qué es Misión" title={presence.title} description={presence.intro} />
+            <dl className="mt-8 flex flex-wrap gap-3">
+              {about.stats.map((st) => (
+                <div key={st.label} className="rounded-3xl bg-surface px-6 py-4">
+                  <dt className="sr-only">{st.label}</dt>
+                  <dd className="text-3xl font-extrabold text-brand-blue">{st.value}</dd>
+                  <dd className="text-sm font-semibold text-ink-soft">{st.label}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-10">
+              <PresenceLegend />
+            </div>
+          </div>
+          <div className="lg:col-span-6">
+            <PresenceMap className="mx-auto max-w-md" />
+          </div>
+        </div>
+      </section>
+
+      {/* Misión, visión y valores */}
+      <section aria-labelledby="proposito-title" className="section-y bg-surface">
+        <div className="container-mt">
+          <SectionHeading id="proposito-title" eyebrow="Propósito" title="Misión, visión y valores." />
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {[
+              { title: "Misión", text: about.mission, Ico: Compass },
+              { title: "Visión", text: about.vision, Ico: Eye },
+            ].map(({ title, text, Ico }) => (
+              <div key={title} className="rounded-[2rem] border border-line bg-white p-8 shadow-soft">
+                <span className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue text-white">
+                  <Ico aria-hidden className="size-6" strokeWidth={1.8} />
+                </span>
+                <h3 className="mt-6 text-2xl font-bold text-ink">{title}</h3>
+                <p className="mt-2 text-lg leading-relaxed text-ink-soft">{text}</p>
+              </div>
+            ))}
+          </div>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {about.values.map((v) => (
+              <li key={v.title} className="rounded-3xl border border-line bg-white p-6 shadow-soft">
+                <h3 className="font-bold text-brand-blue">{v.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-soft">{v.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Partner Platinum de HP */}
       <section aria-labelledby="hp-title" className="section-y bg-white">
         <div className="container-mt grid items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <SectionHeading id="hp-title" eyebrow="Alianza" title={hpPartnership.title} description={hpPartnership.description} />
+            <p className="mt-5 text-lg leading-relaxed text-ink-soft">{hpPartnership.meaning}</p>
             <Button asChild variant="outline" size="lg" className="mt-8">
-              <Link href={solutionHref("impresion-empresarial")}>
+              <Link href={solutionHref("outsourcing-de-impresion")}>
                 Ver impresión empresarial
                 <ArrowRight aria-hidden />
               </Link>
@@ -56,8 +112,8 @@ export default function NosotrosPage() {
           </div>
           <div className="relative isolate overflow-hidden rounded-[2rem] bg-brand-blue p-8 text-white sm:p-10 lg:col-span-6">
             <IsoStrokes className="top-[-30%] right-[-20%] -z-10 h-[160%] w-[70%] opacity-[0.09]" />
-            <p className="text-sm font-bold tracking-[0.08em] text-white/70 uppercase">Misión Tecnológica</p>
-            <p className="mt-2 text-4xl font-extrabold sm:text-5xl">Partner de HP</p>
+            <p className="text-sm font-bold tracking-[0.08em] text-white/80 uppercase">Estatus</p>
+            <p className="mt-2 text-4xl font-extrabold sm:text-5xl">{hpPartnership.badge}</p>
             <ul className="mt-8 space-y-4">
               {hpPartnership.points.map((p) => (
                 <li key={p} className="flex gap-3">
@@ -72,18 +128,61 @@ export default function NosotrosPage() {
         </div>
       </section>
 
-      {/* Certificaciones */}
-      <section aria-labelledby="certificaciones-title" className="section-y bg-surface">
+      {/* Premios */}
+      <section aria-labelledby="premios-title" className="section-y bg-surface">
         <div className="container-mt">
           <SectionHeading
-            id="certificaciones-title"
-            eyebrow="Certificaciones"
-            title="Gestión certificada bajo normas internacionales."
-            description="Nuestros procesos están certificados en calidad y en seguridad de la información."
+            id="premios-title"
+            eyebrow="Reconocimientos"
+            title="Premios otorgados."
+            description="Reconocimientos de HP en el Perú y de Candefero en Latinoamérica."
           />
-          <ul className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            {(["HP", "Candefero"] as const).map((group) => (
+              <div key={group} className="rounded-[2rem] border border-line bg-white p-7 shadow-soft sm:p-8">
+                <h3 className="text-sm font-bold tracking-[0.08em] text-ink-soft uppercase">
+                  {group === "HP" ? "Premios nacionales · HP" : "Premios internacionales · Candefero"}
+                </h3>
+                <ol className="mt-5 space-y-3">
+                  {awards
+                    .filter((a) => a.group === group)
+                    .map((a) => (
+                      <li key={`${a.title}-${a.year}`} className="flex items-start gap-4 rounded-2xl bg-surface p-4">
+                        <span aria-hidden className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-gradient text-white">
+                          <Trophy className="size-5" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-bold text-ink">{a.title}</span>
+                          {a.detail ? <span className="block text-sm text-ink-soft">{a.detail}</span> : null}
+                        </span>
+                        <span className="shrink-0 rounded-full bg-white px-3 py-1 text-sm font-bold text-brand-blue ring-1 ring-line ring-inset">{a.year}</span>
+                      </li>
+                    ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certificaciones */}
+      <section aria-labelledby="certificaciones-title" className="section-y bg-white">
+        <div className="container-mt">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <SectionHeading
+              id="certificaciones-title"
+              eyebrow="Normas internacionales"
+              title="Trabajamos bajo normas ISO."
+              description="Trabajamos bajo sistemas de gestión certificados en calidad, seguridad de la información y antisoborno."
+            />
+            <Link href="/portal-iso" className="inline-flex shrink-0 items-center gap-2 font-semibold text-brand-blue hover:underline">
+              Ir al Portal ISO
+              <ArrowRight aria-hidden className="size-4" />
+            </Link>
+          </div>
+          <ul className="mt-12 grid gap-6 lg:grid-cols-3">
             {certifications.map((c) => (
-              <li key={c.code} className="flex flex-col gap-6 rounded-[2rem] border border-line bg-white p-8 shadow-soft sm:flex-row sm:items-start sm:p-10">
+              <li key={c.code} className="flex flex-col gap-6 rounded-[2rem] border border-line bg-white p-8 shadow-soft">
                 <span className="inline-flex size-24 shrink-0 flex-col items-center justify-center rounded-full bg-brand-gradient-deep text-white shadow-lift">
                   <Award aria-hidden className="size-7" />
                   <span className="mt-1 text-[0.7rem] font-bold tracking-wider uppercase">Certificado</span>
@@ -101,7 +200,7 @@ export default function NosotrosPage() {
       </section>
 
       {/* Estándares de calidad */}
-      <section aria-labelledby="estandares-title" className="section-y bg-white">
+      <section aria-labelledby="estandares-title" className="section-y bg-surface">
         <div className="container-mt">
           <SectionHeading
             id="estandares-title"
@@ -126,28 +225,25 @@ export default function NosotrosPage() {
         </div>
       </section>
 
-      {/* Cobertura nacional */}
-      <section aria-labelledby="cobertura-title" className="section-y relative isolate overflow-hidden bg-brand-blue text-white">
-        <IsoStrokes className="top-[-30%] right-[-30%] -z-10 h-[170%] w-[80%] opacity-[0.09] lg:right-[-4%] lg:w-[42%]" />
-        <div className="container-mt grid gap-12 lg:grid-cols-12">
+      {/* Sustentabilidad */}
+      <section aria-label="Sustentabilidad" className="section-y bg-white">
+        <div className="container-mt grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <SectionHeading id="cobertura-title" tone="inverse" eyebrow="Cobertura" title={coverage.title} description={coverage.description} />
+            <SectionHeading
+              eyebrow="Sustentabilidad"
+              title="Tecnología con menor impacto."
+              description="Gestionamos el ciclo de vida de los equipos y los consumibles con prácticas responsables, y ofrecemos la compensación de carbono como capa del servicio."
+            />
           </div>
-          <ul className="grid gap-4 sm:grid-cols-3 lg:col-span-7 lg:self-center">
-            {coverage.regions.map((r) => (
-              <li key={r.name} className="rounded-3xl bg-white/10 p-6 ring-1 ring-white/20 ring-inset">
-                <MapPin aria-hidden className="size-6 text-brand-teal" />
-                <p className="mt-4 text-2xl font-bold">{r.name}</p>
-                <p className="mt-1 text-white/80">{r.text}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="lg:col-span-7">
+            <SustainabilityCard />
+          </div>
         </div>
       </section>
 
       {/* Liderazgo */}
       {team.length > 0 ? (
-        <section id="liderazgo" aria-labelledby="liderazgo-title" className="section-y scroll-mt-20 bg-white">
+        <section id="liderazgo" aria-labelledby="liderazgo-title" className="section-y scroll-mt-20 bg-surface">
           <div className="container-mt">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <SectionHeading id="liderazgo-title" eyebrow="Liderazgo" title="Nuestro equipo directivo." />
@@ -179,15 +275,15 @@ export default function NosotrosPage() {
       ) : null}
 
       {/* Trabaja con nosotros */}
-      <section aria-labelledby="talento-title" className="bg-surface py-14">
+      <section aria-labelledby="talento-title" className="bg-brand-blue py-14 text-white">
         <div className="container-mt flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Eyebrow>Talento</Eyebrow>
-            <h2 id="talento-title" className="mt-3 text-2xl font-bold text-ink sm:text-3xl">
+            <p className="text-sm font-bold tracking-[0.08em] text-white/80 uppercase">Talento</p>
+            <h2 id="talento-title" className="mt-3 text-2xl font-bold sm:text-3xl">
               ¿Quieres ser parte del equipo?
             </h2>
           </div>
-          <Button asChild size="lg">
+          <Button asChild variant="inverse" size="lg">
             <Link href="/trabaja-con-nosotros">
               Ver convocatorias
               <ArrowRight aria-hidden />

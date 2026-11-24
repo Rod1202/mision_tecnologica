@@ -1,76 +1,50 @@
 "use server";
 
-import { headers } from "next/headers";
-
+import { isHoneypotFilled, isRateLimited } from "@/lib/server/guard";
 import { contactSchema, type ContactField, type ContactState } from "@/lib/validation/contact";
+import { fieldErrors } from "@/lib/validation/lead";
 
 /**
- * Recepción de solicitudes de asesoría.
+ * Recepción del formulario de contacto simple.
  *
- * Estado actual (fase de desarrollo): valida en servidor, filtra spam y limita la frecuencia,
- * pero TODAVÍA NO almacena ni envía la solicitud. Lo indica con claridad al usuario.
- * Siguiente fase: guardar en la colección `Leads` de Payload y notificar por correo.
+ * Estado actual (fase de desarrollo): valida en servidor, filtra spam y limita la frecuencia, pero
+ * TODAVÍA NO almacena ni envía el mensaje. Lo indica con claridad al usuario.
+ * Siguiente fase: colección `Leads` de Payload + notificación a contacto@misiontecnologica.com.
  */
 
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_PER_WINDOW = 5;
-// Límite en memoria: suficiente para desarrollo. En Netlify (serverless) y en el VPS
-// se reemplazará por un límite persistente (base de datos o proxy inverso).
-const hits = new Map<string, number[]>();
-
-function rateLimited(key: string) {
-  const now = Date.now();
-  const recent = (hits.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(key, recent);
-  return recent.length > MAX_PER_WINDOW;
-}
-
-const LEADS_STORAGE_READY = false;
+const CONTACT_STORAGE_READY = false;
 
 export async function submitContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
-  const raw = {
-    name: String(formData.get("name") ?? ""),
+  const values: Record<ContactField, string> = {
+    firstName: String(formData.get("firstName") ?? ""),
+    lastName: String(formData.get("lastName") ?? ""),
     company: String(formData.get("company") ?? ""),
     email: String(formData.get("email") ?? ""),
     phone: String(formData.get("phone") ?? ""),
-    need: String(formData.get("need") ?? ""),
+    topic: String(formData.get("topic") ?? ""),
     message: String(formData.get("message") ?? ""),
     consent: formData.get("consent") ? "on" : "",
   };
 
-  // Honeypot: campo invisible para personas. Si viene lleno, se descarta en silencio.
-  if (String(formData.get("website") ?? "").trim() !== "") {
-    return { status: "success", message: "Gracias. Recibimos tu solicitud." };
+  if (isHoneypotFilled(formData)) {
+    return { status: "success", message: "Gracias. Recibimos tu mensaje." };
+  }
+  if (await isRateLimited("contact")) {
+    return { status: "error", message: "Recibimos varios mensajes seguidos. Espera unos minutos e inténtalo de nuevo.", values };
   }
 
-  const h = await headers();
-  const ip = h.get("x-nf-client-connection-ip") ?? h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
-  if (rateLimited(ip)) {
-    return {
-      status: "error",
-      message: "Recibimos varias solicitudes seguidas. Espera unos minutos e inténtalo de nuevo.",
-      values: raw,
-    };
-  }
-
-  const parsed = contactSchema.safeParse(raw);
+  const parsed = contactSchema.safeParse(values);
   if (!parsed.success) {
-    const errors: Partial<Record<ContactField, string>> = {};
-    for (const issue of parsed.error.issues) {
-      const key = issue.path[0] as ContactField;
-      if (key && !errors[key]) errors[key] = issue.message;
-    }
-    return { status: "error", message: "Revisa los campos marcados.", errors, values: raw };
+    return { status: "error", message: "Revisa los campos marcados.", errors: fieldErrors<ContactField>(parsed.error.issues), values };
   }
 
-  if (!LEADS_STORAGE_READY) {
+  if (!CONTACT_STORAGE_READY) {
     return {
       status: "success",
       message:
-        "Formulario en modo de pruebas: tus datos se validaron correctamente, pero todavía no se almacenan ni se envían. Mientras tanto, escríbenos a contacto@misiontecnologica.com.",
+        "Formulario en modo de pruebas: tus datos se validaron correctamente, pero todavía no se almacenan ni se envían. Mientras tanto, escríbenos a contacto@misiontecnologica.com o llámanos al 919 280 810.",
     };
   }
 
-  return { status: "success", message: "Gracias. Un asesor revisará tu solicitud y te contactará." };
+  return { status: "success", message: `Gracias, ${parsed.data.firstName}. Un asesor te responderá por correo a la brevedad.` };
 }

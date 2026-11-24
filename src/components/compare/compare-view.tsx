@@ -21,7 +21,6 @@ import {
   type SpecRow,
 } from "@/lib/content/compare";
 import {
-  formatPrice,
   getProduct,
   ladderRank,
   monoSwitchFor,
@@ -183,7 +182,7 @@ export function CompareView({ products, showUnverified }: { products: Product[];
                     onClick={() => setActiveKind(k.id)}
                     className={cn(
                       "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap transition-colors sm:px-5",
-                      on ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_102_255/0.7)]" : "text-ink-soft hover:text-ink",
+                      on ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]" : "text-ink-soft hover:text-ink",
                     )}
                   >
                     <Icon name={k.icon} className="size-4" />
@@ -452,16 +451,6 @@ function buildRows(columns: (Product | null)[], kind: ProductKind, specsVisible:
   const none = columns.map(() => null);
   const summary: Omit<Row, "present">[] = [
     {
-      key: "price",
-      label: "Precio referencial",
-      group: "Resumen",
-      values: columns.map((p) => (p ? <PriceCell key={p.slug} product={p} /> : null)),
-      plain: columns.map((p) => (p ? (p.generation === "anterior" ? "referencia" : String(p.price ?? "a cotizar")) : null)),
-      best: bestOf(columns.map((p) => (p?.generation === "lanzamiento" ? (p.price ?? null) : null)), "lower"),
-      bestLabel: "Menor precio",
-      deltas: none,
-    },
-    {
       key: "generation",
       label: "Generación",
       group: "Resumen",
@@ -499,22 +488,6 @@ function buildRows(columns: (Product | null)[], kind: ProductKind, specsVisible:
     : [];
 
   return [...summary, ...specs].map((r) => ({ ...r, present }));
-}
-
-/** Precio compacto para columnas angostas (siempre rotulado como demo cuando corresponde). */
-function PriceCell({ product: p }: { product: Product }) {
-  if (p.price === undefined) return <span className="font-bold">A cotizar</span>;
-  return (
-    <span className="flex flex-col items-start gap-1">
-      <span className="text-lg leading-tight font-bold tabular-nums">{formatPrice(p.price)}</span>
-      <span className="text-sm text-ink-soft">referencial</span>
-      {p.priceIsDemo ? (
-        <span className="inline-flex rounded-full border border-dashed border-amber-500/70 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-800">
-          Demostración
-        </span>
-      ) : null}
-    </span>
-  );
 }
 
 /** Columnas con el mejor valor, solo si hay al menos dos valores y no son todos iguales. */
@@ -771,9 +744,9 @@ function EmptyKind({ kind }: { kind: ProductKind }) {
       <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
         <Icon name={k.icon} className="size-6" />
       </span>
-      <h3 className="mt-6 text-2xl font-bold text-ink">Pronto sumaremos {k.plural.toLowerCase()} a la tienda.</h3>
+      <h3 className="mt-6 text-2xl font-bold text-ink">Pronto sumaremos {k.plural.toLowerCase()} al catálogo.</h3>
       <p className="mt-3 leading-relaxed text-ink-soft">
-        Mientras tanto, cuéntanos cuántos equipos necesitas y con qué perfil: te enviamos una propuesta con modelos y precios.
+        Mientras tanto, cuéntanos cuántos equipos necesitas y con qué perfil: te enviamos una propuesta con modelos y condiciones.
       </p>
       <Button asChild className="mt-8">
         <Link href={`/cotizador?servicio=${kind === "laptop" ? "computo" : "impresion"}`}>
@@ -883,8 +856,8 @@ function UpgradeAdvisor({
                       ? "Si te pasas a monocromo, te recomendamos:"
                       : "Te recomendamos estas mejoras:"
                     : mono
-                      ? "No hay un monocromo más rápido en la tienda."
-                      : `Tu ${current.model} es el ${isColor ? "color" : "monocromo"} de mayor clase de la tienda.`}
+                      ? "No hay un monocromo más rápido en el catálogo."
+                      : `Tu ${current.model} es el ${isColor ? "color" : "monocromo"} de mayor clase del catálogo.`}
                 </h3>
               </div>
               {isColor ? (

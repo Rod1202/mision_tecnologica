@@ -78,7 +78,7 @@ export function Choice<V extends string | number>({
             <span
               className={cn(
                 "flex min-h-10 cursor-pointer items-center justify-center rounded-full px-2 text-center text-sm leading-tight font-semibold text-ink-soft transition-[background-color,color,box-shadow] duration-200 sm:px-3",
-                "hover:text-ink peer-checked:bg-brand-blue peer-checked:text-white peer-checked:shadow-[0_8px_20px_-10px_rgb(0_102_255/0.7)]",
+                "hover:text-ink peer-checked:bg-brand-blue peer-checked:text-white peer-checked:shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]",
                 "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-blue",
               )}
             >
@@ -100,7 +100,7 @@ export function Choice<V extends string | number>({
             className={cn(
               "group relative flex cursor-pointer gap-3 rounded-2xl border bg-white p-4 transition-[border-color,background-color,box-shadow] duration-200",
               "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-blue",
-              checked ? "border-brand-blue bg-brand-blue-50 shadow-[0_10px_24px_-18px_rgb(0_102_255/0.9)]" : "border-line hover:border-brand-blue/40",
+              checked ? "border-brand-blue bg-brand-blue-50 shadow-[0_10px_24px_-18px_rgb(0_61_153/0.9)]" : "border-line hover:border-brand-blue/40",
             )}
           >
             <input
@@ -391,6 +391,55 @@ export function RangeField({
         </div>
       ) : null}
       {description ? <div className="mt-3 text-sm leading-relaxed text-ink-soft">{description}</div> : null}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Número grande con unidad (volúmenes que pueden ser 0)                 */
+/* ------------------------------------------------------------------ */
+
+export function NumberField({
+  label,
+  value,
+  onChange,
+  min = 0,
+  max,
+  unit,
+  hint,
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  min?: number;
+  max: number;
+  /** Texto después del valor ("páginas al mes"). */
+  unit?: string;
+  hint?: string;
+}) {
+  const id = useId();
+  const draft = useDraftNumber(value, min, max, onChange);
+  return (
+    <div className="min-w-0">
+      <label htmlFor={id} className="font-semibold text-ink">
+        {label}
+      </label>
+      <div className="mt-2 flex items-center rounded-xl border border-input bg-white focus-within:border-brand-blue focus-within:ring-4 focus-within:ring-brand-blue/15">
+        <input
+          id={id}
+          type="text"
+          inputMode="numeric"
+          {...draft}
+          aria-describedby={hint ? `${id}-hint` : undefined}
+          className="h-12 min-w-0 flex-1 rounded-xl bg-transparent px-4 text-lg font-bold text-ink tabular-nums outline-none"
+        />
+        {unit ? <span className="shrink-0 pr-4 text-sm text-ink-soft">{unit}</span> : null}
+      </div>
+      {hint ? (
+        <p id={`${id}-hint`} className="mt-1.5 text-sm text-ink-faint">
+          {hint}
+        </p>
+      ) : null}
     </div>
   );
 }

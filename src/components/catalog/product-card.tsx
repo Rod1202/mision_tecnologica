@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { AddToQuoteButton } from "@/components/catalog/add-to-quote";
-import { ProductPrice } from "@/components/catalog/product-price";
 import { ProductVisual } from "@/components/catalog/product-visual";
 import { CompareToggle } from "@/components/compare/compare-toggle";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +27,6 @@ export function ProductCard({ product }: { product: Product }) {
           </Link>
         </h3>
         <p className="mt-2 leading-relaxed text-ink-soft">{product.summary}</p>
-        <ProductPrice product={product} className="mt-4" />
         {/* Acciones apiladas: las tarjetas pueden ser angostas (catálogo con filtros laterales) */}
         <div className="mt-auto flex flex-col gap-1 pt-6">
           <AddToQuoteButton slug={product.slug} name={product.name} className="w-full" />

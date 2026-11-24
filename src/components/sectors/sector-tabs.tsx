@@ -15,11 +15,12 @@ import { cn } from "@/lib/utils";
  * - Teclado: flechas izquierda/derecha, Inicio y Fin cambian de pestaña.
  * - La pestaña activa se refleja en la URL (#educacion, #logistica…) para poder enlazarla.
  */
-export function SectorTabs({ sectors }: { sectors: Sector[] }) {
+export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /** Reflejar la pestaña en la URL (#slug). */ syncHash?: boolean }) {
   const [active, setActive] = useState(sectors[0]?.slug ?? "");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
+    if (!syncHash) return;
     const fromHash = () => {
       const h = decodeURIComponent(window.location.hash.replace("#", ""));
       if (sectors.some((s) => s.slug === h)) setActive(h);
@@ -27,10 +28,11 @@ export function SectorTabs({ sectors }: { sectors: Sector[] }) {
     fromHash();
     window.addEventListener("hashchange", fromHash);
     return () => window.removeEventListener("hashchange", fromHash);
-  }, [sectors]);
+  }, [sectors, syncHash]);
 
   const onChange = (value: string) => {
     setActive(value);
+    if (!syncHash) return;
     try {
       window.history.replaceState(null, "", `#${value}`);
     } catch {
@@ -55,7 +57,7 @@ export function SectorTabs({ sectors }: { sectors: Sector[] }) {
   return (
     <div className="mt-10">
       <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div role="tablist" aria-label="Sectores" className="inline-flex min-w-max gap-1 rounded-full bg-surface p-1.5 ring-1 ring-line ring-inset">
+        <div role="tablist" aria-label="Sectores" className="inline-flex min-w-max gap-1 rounded-full bg-white p-1.5 ring-1 ring-line ring-inset">
           {sectors.map((s, i) => (
             <button
               key={s.slug}
@@ -74,7 +76,7 @@ export function SectorTabs({ sectors }: { sectors: Sector[] }) {
               className={cn(
                 "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap text-ink-soft transition-colors sm:px-5",
                 "hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
-                "data-[state=active]:bg-brand-blue data-[state=active]:text-white data-[state=active]:shadow-[0_8px_20px_-10px_rgb(0_102_255/0.7)]",
+                "data-[state=active]:bg-brand-blue data-[state=active]:text-white data-[state=active]:shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]",
               )}
             >
               <Icon name={s.icon} className="size-4" />
@@ -134,7 +136,7 @@ export function SectorTabs({ sectors }: { sectors: Sector[] }) {
                 </p>
               )}
 
-              <Link href="/contacto" className="mt-8 inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+              <Link href="/asesoria" className="mt-8 inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
                 Conversemos sobre tu empresa
                 <ArrowRight aria-hidden className="size-4" />
               </Link>

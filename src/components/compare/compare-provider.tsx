@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Selección de equipos para comparar (hasta COMPARE_MAX, del mismo tipo).
- * Se guarda en el navegador y se refleja en /tienda/comparar?modelos=a,b,c para poder compartirla.
+ * Se guarda en el navegador y se refleja en /catalogo/comparar?modelos=a,b,c para poder compartirla.
  */
 
 type CompareCtx = {
@@ -117,15 +117,15 @@ export function useCompare() {
 }
 
 export function compareHref(slugs: string[]) {
-  return slugs.length ? `/tienda/comparar?modelos=${slugs.map(encodeURIComponent).join(",")}` : "/tienda/comparar";
+  return slugs.length ? `/catalogo/comparar?modelos=${slugs.map(encodeURIComponent).join(",")}` : "/catalogo/comparar";
 }
 
-/** Bandeja flotante en la tienda: muestra lo elegido y lleva al comparador. */
+/** Bandeja flotante en el catálogo: muestra lo elegido y lleva al comparador. */
 function CompareTray() {
   const pathname = usePathname();
   const { slugs, kind, notice, remove, clear } = useCompare();
-  const inStore = pathname === "/tienda" || pathname.startsWith("/tienda/");
-  const visible = inStore && pathname !== "/tienda/comparar" && slugs.length > 0;
+  const inStore = pathname === "/catalogo" || pathname.startsWith("/catalogo/");
+  const visible = inStore && pathname !== "/catalogo/comparar" && slugs.length > 0;
 
   useEffect(() => {
     document.documentElement.classList.toggle("has-compare-tray", visible);

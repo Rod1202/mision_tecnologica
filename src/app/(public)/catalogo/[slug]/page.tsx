@@ -6,7 +6,6 @@ import { ArrowRight, Check, FileSearch } from "lucide-react";
 import { AddToQuoteButton } from "@/components/catalog/add-to-quote";
 import { DemoNotice } from "@/components/catalog/demo-notice";
 import { ProductCard } from "@/components/catalog/product-card";
-import { ProductPrice } from "@/components/catalog/product-price";
 import { ProductVisual } from "@/components/catalog/product-visual";
 import { CompareToggle, CompareWithLink } from "@/components/compare/compare-toggle";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -28,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = getProduct(slug);
   if (!p) return {};
-  const title = `${p.name} | Cotiza con Misión Tecnológica`;
+  const title = `${p.name} | Catálogo Misión Tecnológica`;
   return {
     title: { absolute: title },
-    description: `${p.summary} Solicita tu cotización por WhatsApp.`,
+    description: `${p.summary} Solicita tu cotización a un asesor de Misión Tecnológica.`,
     alternates: { canonical: productHref(p.slug) },
     openGraph: { title, url: productHref(p.slug) },
   };
@@ -55,7 +54,7 @@ export default async function ProductPage({ params }: Props) {
     <>
       <section className="bg-white pt-8 pb-16 sm:pb-20 lg:pb-24">
         <div className="container-mt">
-          <Breadcrumbs tone="default" items={[{ label: "Tienda", href: "/tienda" }, { label: product.name }]} />
+          <Breadcrumbs tone="default" items={[{ label: "Catálogo", href: "/catalogo" }, { label: product.name }]} />
 
           <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-6">
@@ -82,14 +81,15 @@ export default async function ProductPage({ params }: Props) {
               </ul>
 
               <div className="mt-8 rounded-3xl bg-surface p-6">
-                <p className="text-sm font-semibold text-ink-soft">Precio</p>
-                <ProductPrice product={product} size="lg" className="mt-1" />
-                <p className="mt-2 text-sm text-ink-soft">El precio final se confirma en la cotización según cantidad, servicio y sede.</p>
+                <p className="font-bold text-ink">Precio a cotizar</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                  Te enviamos la propuesta según cantidad, modalidad (venta, alquiler o servicio) y sedes.
+                </p>
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <AddToQuoteButton slug={product.slug} name={product.name} size="lg" className="flex-1" />
                   <CompareToggle slug={product.slug} name={product.name} className="h-13 px-5" />
                   <Link
-                    href={solutionHref("impresion-empresarial")}
+                    href={solutionHref("outsourcing-de-impresion")}
                     className="inline-flex h-13 items-center justify-center rounded-full px-6 font-semibold text-brand-blue hover:bg-white"
                   >
                     Servicio de impresión
@@ -130,7 +130,7 @@ export default async function ProductPage({ params }: Props) {
                   </CompareWithLink>
                   {upgradesFor(product.slug).length || printColorOf(product.slug) === "color" ? (
                     <Link
-                      href={`/tienda/comparar?actual=${product.slug}#upgrade`}
+                      href={`/catalogo/comparar?actual=${product.slug}#upgrade`}
                       className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
                     >
                       ¿Ya tienes este equipo? Mira sus opciones de upgrade
@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: Props) {
                     .map((old) => (
                     <Link
                       key={old.slug}
-                      href={`/tienda/comparar?modelos=${old.slug},${product.slug}`}
+                      href={`/catalogo/comparar?modelos=${old.slug},${product.slug}`}
                       className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
                     >
                       Salto de generación desde el {old.model}
@@ -171,8 +171,8 @@ export default async function ProductPage({ params }: Props) {
               <h2 id="otros-title" className="text-2xl font-bold text-ink sm:text-3xl">
                 Otros equipos
               </h2>
-              <Link href="/tienda" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
-                Ver tienda
+              <Link href="/catalogo" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+                Ver catálogo
                 <ArrowRight aria-hidden className="size-4" />
               </Link>
             </div>

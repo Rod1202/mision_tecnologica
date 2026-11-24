@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { IsoStrokes } from "@/components/brand/pills";
@@ -10,8 +10,8 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden bg-deep text-white">
-      <IsoStrokes className="-right-24 -bottom-40 h-[28rem] w-[22rem] opacity-[0.04] sm:-right-10" />
+    <footer className="relative overflow-hidden border-t border-white/20 bg-brand-blue text-white">
+      <IsoStrokes className="-right-24 -bottom-40 h-[28rem] w-[22rem] opacity-[0.08] sm:-right-10" />
 
       <div className="container-mt relative py-14 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-12">
@@ -19,12 +19,19 @@ export function SiteFooter() {
             <Link href="/" aria-label="Misión Tecnológica, ir al inicio" className="inline-block rounded-lg">
               <Logo variant="white" className="h-9" />
             </Link>
-            <p className="mt-6 max-w-sm leading-relaxed text-white/75">{siteConfig.description}</p>
+            <p className="mt-6 max-w-sm leading-relaxed text-white">{siteConfig.description}</p>
 
-            <ul className="mt-8 space-y-2 text-white/85">
+            <ul className="mt-8 space-y-2 text-white">
+              <li>
+                <a href={`tel:${siteConfig.contact.phone}`} className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline">
+                  <Phone aria-hidden className="size-4 text-white" />
+                  {siteConfig.contact.phoneDisplay}
+                  <span className="text-sm text-white">· {siteConfig.contact.hours}</span>
+                </a>
+              </li>
               <li>
                 <a href={`mailto:${siteConfig.contact.email}`} className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline">
-                  <Mail aria-hidden className="size-4 text-brand-teal" />
+                  <Mail aria-hidden className="size-4 text-white" />
                   {siteConfig.contact.email}
                 </a>
               </li>
@@ -35,36 +42,58 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline"
                 >
-                  <MessageCircle aria-hidden className="size-4 text-brand-teal" />
+                  <MessageCircle aria-hidden className="size-4 text-white" />
                   WhatsApp {siteConfig.contact.whatsappDisplay}
                 </a>
               </li>
-              {siteConfig.social.linkedin ? (
-                <li>
-                  <a
-                    href={siteConfig.social.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline"
-                  >
-                    <LinkedInGlyph />
-                    LinkedIn
-                  </a>
-                </li>
-              ) : null}
+              <li className="flex gap-3 py-2">
+                <MapPin aria-hidden className="mt-1 size-4 shrink-0 text-white" />
+                <address className="not-italic leading-relaxed">
+                  {siteConfig.contact.address.street}, {siteConfig.contact.address.district}, {siteConfig.contact.address.city}
+                </address>
+              </li>
+            </ul>
+
+            <ul aria-label="Redes sociales" className="mt-6 flex gap-2">
+              {socialLinks.map(({ label, href, Glyph }) =>
+                href ? (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="inline-flex size-11 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25 ring-inset transition-colors hover:bg-white/25"
+                    >
+                      <Glyph />
+                    </a>
+                  </li>
+                ) : null,
+              )}
             </ul>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:col-start-6">
             {footerNav.map((group) => (
               <nav key={group.title} aria-label={group.title}>
-                <h2 className="text-sm font-bold tracking-[0.08em] text-white/60 uppercase">{group.title}</h2>
+                <h2 className="text-sm font-bold tracking-[0.08em] text-white uppercase">{group.title}</h2>
                 <ul className="mt-4 space-y-1">
                   {group.items.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline">
-                        {item.label}
-                      </Link>
+                      {item.external ? (
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-10 items-center text-white hover:text-white hover:underline"
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <Link href={item.href} className="inline-flex min-h-10 items-center text-white hover:text-white hover:underline">
+                          {item.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -73,7 +102,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-white/25 pt-8 text-sm text-white sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Misión Tecnológica. Todos los derechos reservados.</p>
           <p>Perú</p>
         </div>
@@ -82,9 +111,33 @@ export function SiteFooter() {
   );
 }
 
+const socialLinks = [
+  { label: "LinkedIn", href: siteConfig.social.linkedin, Glyph: LinkedInGlyph },
+  { label: "Facebook", href: siteConfig.social.facebook, Glyph: FacebookGlyph },
+  { label: "Instagram", href: siteConfig.social.instagram, Glyph: InstagramGlyph },
+];
+
+function FacebookGlyph() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-white">
+      <path d="M13.5 21v-7.5h2.5l.4-3H13.5V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3Z" />
+    </svg>
+  );
+}
+
+function InstagramGlyph() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-none stroke-white" strokeWidth={2}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.8" className="fill-white stroke-none" />
+    </svg>
+  );
+}
+
 function LinkedInGlyph() {
   return (
-    <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-brand-teal">
+    <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-white">
       <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" />
     </svg>
   );

@@ -33,7 +33,7 @@ export function ProductVisual({
       <div className="flex flex-col items-center gap-3">
         <span
           className={cn(
-            "inline-flex items-center justify-center rounded-full bg-white text-brand-blue shadow-[0_18px_36px_-16px_rgb(1_26_71/0.7)]",
+            "inline-flex items-center justify-center rounded-full bg-white text-brand-blue shadow-[0_18px_36px_-16px_rgb(0_20_51/0.7)]",
             size === "sm" ? "size-10" : size === "lg" ? "size-28" : "size-20",
           )}
         >

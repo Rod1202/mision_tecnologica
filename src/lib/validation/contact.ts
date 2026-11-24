@@ -1,39 +1,35 @@
 import { z } from "zod";
 
-export const needOptions = [
-  { value: "outsourcing", label: "Outsourcing tecnológico" },
-  { value: "impresion", label: "Impresión empresarial" },
-  { value: "implementacion", label: "Implementación y despliegue" },
-  { value: "soporte", label: "Soporte y continuidad" },
-  { value: "cotizacion", label: "Solicitud de cotización" },
-  { value: "otra", label: "Otra necesidad" },
+import { leadSchema } from "@/lib/validation/lead";
+
+/**
+ * Formulario de contacto simple (botón "Contáctanos"): para consultas generales.
+ * Pide lo mínimo para responder a una empresa: nombre, apellido, empresa, correo corporativo y el mensaje.
+ * El RUC y el dimensionamiento quedan para "Encuentra tu solución" (cotizador y asesoría).
+ */
+
+export const contactTopicOptions = [
+  { value: "impresion", label: "Outsourcing de impresión" },
+  { value: "computo", label: "Arrendamiento y venta de cómputo" },
+  { value: "digitalizacion", label: "Digitalización documental" },
+  { value: "infraestructura", label: "Infraestructura tecnológica" },
+  { value: "otro", label: "Otro tema" },
 ] as const;
 
-const needValues = needOptions.map((o) => o.value) as [string, ...string[]];
+const topicValues = contactTopicOptions.map((o) => o.value) as [string, ...string[]];
 
-export const contactSchema = z.object({
-  name: z.string().trim().min(3, "Ingresa tu nombre y apellidos.").max(120, "Máximo 120 caracteres."),
-  company: z.string().trim().min(2, "Ingresa el nombre de tu empresa.").max(120, "Máximo 120 caracteres."),
-  email: z.string().trim().toLowerCase().email("Ingresa un correo válido.").max(160),
-  phone: z
-    .string()
-    .trim()
-    .max(30, "Máximo 30 caracteres.")
-    .regex(/^[+\d\s()-]*$/, "Usa solo números, espacios y los signos + ( ) -.")
-    .optional()
-    .or(z.literal("")),
-  need: z.enum(needValues, { message: "Selecciona el tipo de necesidad." }),
-  message: z.string().trim().min(10, "Cuéntanos un poco más (mínimo 10 caracteres).").max(2000, "Máximo 2000 caracteres."),
-  consent: z.literal("on", { message: "Necesitamos tu autorización para responderte." }),
-});
+export const contactSchema = leadSchema
+  .pick({ firstName: true, lastName: true, company: true, email: true, phone: true, consent: true })
+  .extend({
+    topic: z.enum(topicValues).optional().or(z.literal("")),
+    message: z.string().trim().min(10, "Cuéntanos un poco más (mínimo 10 caracteres).").max(2000, "Máximo 2000 caracteres."),
+  });
 
-export type ContactInput = z.infer<typeof contactSchema>;
-export type ContactField = keyof ContactInput;
+export type ContactField = keyof z.infer<typeof contactSchema>;
 
 export type ContactState = {
   status: "idle" | "success" | "error";
   message?: string;
   errors?: Partial<Record<ContactField, string>>;
-  /** Valores enviados, para no perder lo escrito si hay errores. */
   values?: Partial<Record<ContactField, string>>;
 };

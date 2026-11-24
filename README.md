@@ -1,28 +1,28 @@
 # Misión Tecnológica — Web corporativa
 
 Web corporativa de Misión Tecnológica: landing page + catálogo (sin pasarela de pago).
-Documentos base: `01_proyecto_web_mision_tecnologica.md` y `03_storyline_inicio_mision_tecnologica.md`.
+Documentos base: `01_proyecto_web_mision_tecnologica.md`, `Buenas_practicas_para_web.docx` y `Arquitectura_UX_UI_Nueva_Web_-_Misión_Tecnológica.pdf` (estos dos reemplazan al storyline `03_...`).
 
-## Estado actual (ronda 2)
+## Estado actual (ronda 3: arquitectura UX/UI)
 
-- Base del proyecto: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4 + componentes estilo shadcn/ui.
-- Sistema de diseño según el Brandbook 2023, con el azul **#0066FF** como color principal, turquesa **#00CDC5** como acento y la tipografía **Urbanist** (Google Fonts, autoalojada con `@fontsource-variable/urbanist`).
-- **Página de Inicio completa** con las 8 secciones del storyline.
-- Cabecera fija, menú móvil accesible, pie de página y botón flotante de WhatsApp.
-- Formulario de asesoría con validación en servidor (Server Action + Zod), protección anti-spam (honeypot) y límite de frecuencia. **Todavía no almacena ni envía** las solicitudes, y así se lo indica al usuario.
-- Publicaciones de LinkedIn mediante el widget de SociableKit, con un máximo de 3 publicaciones y altura limitada.
-- **Cabecera**: Soluciones · Sectores · Nosotros · Tienda + "Solicitar asesoría". El ícono de cotización solo aparece cuando hay equipos agregados.
-- **Soluciones**: índice en `/soluciones` y una página propia por solución en `/soluciones/[slug]`, con contenido, preguntas frecuentes y datos estructurados `Service`, `FAQPage` y `BreadcrumbList`.
-- **Sectores**: pestañas por sector con "cómo ayudamos" y los clientes. La pestaña activa queda en la URL (por ejemplo `/sectores#logistica`).
-- **Nosotros**: partner de HP, certificaciones ISO 9001 e ISO/IEC 27001, estándares de calidad, cobertura nacional y liderazgo.
-- **Tienda**: 3 multifuncionales HP de prueba con ficha propia (`/tienda/[slug]`), filtros por categoría, marca y precio, y orden por relevancia, precio y nombre. Los filtros se reflejan en la URL, por ejemplo `/tienda?marca=HP&max=6000&orden=precio-asc`. El carrito de cotización no tiene pagos: arma el mensaje de WhatsApp con los equipos y cantidades.
-- **Comparador de equipos** (`/tienda/comparar`): casilla "Comparar" en cada tarjeta y ficha, bandeja flotante en la tienda y tabla lado a lado de hasta 3 equipos del mismo tipo (impresoras; las laptops ya tienen sus filas definidas en `src/lib/content/compare.ts` y aparecen al cargarlas con `kind: "laptop"`). La primera columna es la base: las demás muestran la diferencia frente a ella ("+7 ppm (+16 %)", "1,1 s menos") y, si son un upgrade, un resumen del salto con cifras de antes y después. Resalta la mejor cifra de cada fila, permite ver solo las diferencias y la comparación se comparte por URL (`?modelos=a,b,c`).
-- **Asesor de upgrade** (arriba del comparador, o `?actual=slug`): el cliente elige el equipo que tiene hoy y recibe dos opciones de mejora del mismo tipo de impresión, según las escaleras `upgradeLadders` de `src/lib/content/products.ts` (monocromo: E42540f < E52645dn < X52952dn < X53052dn < E62655dn < X62757dn; color: M479fdw < E47528f < MFP 5800f). Si su equipo es a color, puede elegir "Pasar a monocromo" y ver los dos primeros monocromos más rápidos.
-- **Catálogo de impresoras** (9 modelos, todos cotizables): 4 de lanzamiento (X52952dn, X53052dn, X62757dn y Color MFP 5800f) y 5 de generación anterior (E52645dn, E62655dn, E42540f, M479fdw y E47528f), marcados con `generation` y `successor`. Las fichas salen de las hojas de datos públicas de HP, revisadas por un verificador independiente, y se publicaron con `verified: true` (fuentes en `specSources`, listadas al pie del comparador). Los modelos sin precio muestran "A cotizar".
-- **Cotizador de proyecto** (`/cotizador`, botón "Cotizar proyecto" en la cabecera, el menú móvil, el inicio, el pie de página y las páginas de soluciones): el visitante elige cómputo, impresión o digitalización (uno o varios), ajusta equipos, volúmenes, sedes y modalidad, y ve una estimación en vivo. La envía por formulario (validado en servidor, que recalcula el monto; **todavía no almacena**) o por WhatsApp. `?servicio=impresion` preselecciona servicios y el borrador se guarda en el navegador. Las tarifas de `src/lib/content/quote.ts` son **de demostración** (`ratesAreDemo: true`) y la estimación se rotula como tal hasta reemplazarlas por las reales.
-- **Trabaja con nosotros** (en el pie de página): convocatorias, detalle de cada una y postulación con CV en PDF de hasta 5 MB, validado en servidor. **Todavía no almacena** las postulaciones.
-- Redirecciones 301 de las URL antiguas: `/impresion-empresarial` → `/soluciones/impresion-empresarial` y `/liderazgo` → `/nosotros` (en `next.config.ts`).
-- SEO técnico: metadatos por página, canonical, Open Graph, migas de pan, `sitemap.xml` con todas las páginas finales, `robots.txt` y JSON-LD.
+- Base: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4 + componentes estilo shadcn/ui. Marca según el Brandbook 2023 (turquesa **#00CDC5**, **Urbanist**) con **#003D99** como color principal (decisión del equipo: el #0066FF de marca oscurecido, mismo tono). Se cambia en un solo lugar: el token `--color-brand-blue` de `globals.css`.
+- **Menú**: Inicio · Soluciones · Nosotros · Catálogo · Portal ISO + botones "Cotizar proyecto" (`/cotizador`) y "Contáctanos" (`/contacto`: formulario simple con nombre, apellido, empresa, correo corporativo, teléfono opcional, tema y mensaje; sin RUC).
+- **Inicio** (landing de conversión), con fondos alternados azul · blanco · gris:
+  1. Hero con video de fondo (cuando exista, en `heroVideo` de `home.ts`; capa oscura al 65 %), los 3 pilares "Te ofrecemos" y un solo botón, "Conoce más", que baja a Soluciones para iniciar el recorrido.
+  2. Marcas aliadas · 3. Soluciones (reemplaza a "El desafío") · 4. **Encuentra tu solución** (dos perfiles) · 5. Capas de servicio + Sustentabilidad · 6. Sectores en pestañas con clientes · 7. LinkedIn · 8. Cierre horizontal (3 pasos + contacto, "Contáctanos" lleva a Encuentra tu solución).
+- **Encuentra tu solución**:
+  - "Sé lo que necesito" (`/cotizador`): cómputo, impresión (parque actual o estimado, volumen B/N y color, cantidad por formato A4/Oficio/A3, costo por página, por clic o venta + servicio), digitalización (plazo del servicio, volumen en páginas, files, tomos o cajas, tipo, lugar y después del escaneo) y audio y video (salas con número de salas y usuarios, dispositivos y plataforma; headsets con tipo de usuario y funcionalidades). **Sin precios**: muestra un resumen, no montos. Incluye los equipos agregados desde el catálogo.
+  - "Quiero que me asesoren" (`/asesoria`): necesidad, sedes y usuarios, y fecha y hora para una reunión exploratoria (lunes a viernes).
+  - Ambos exigen **correo corporativo** (se rechazan Gmail, Hotmail, Outlook y similares), **empresa**, **RUC** (11 dígitos con dígito verificador), **nombre y apellido**; teléfono opcional. Validación en servidor (Server Actions + Zod), honeypot y límite de frecuencia. **Todavía no almacenan ni envían** las solicitudes, y así se lo indican al usuario.
+- **Datos de la web actual** (misiontecnologica.com): 4 líneas de negocio (outsourcing de impresión, arrendamiento y venta de cómputo, digitalización documental, infraestructura tecnológica), Partner Platinum de HP desde 2016, canal monomarca y Centro de Servicio Autorizado HP, premios HP y Candefero, HP Amplify Impact 5 estrellas y canal más sustentable de Latinoamérica 2024, misión, visión y valores, +10 años y +100 clientes, ISO 37001, teléfono, dirección, horario y redes sociales.
+- **Soluciones**: vista maestro-detalle (servicios a la izquierda, detalle a la derecha con alcance, beneficios, proceso y preguntas frecuentes). Cada solución conserva su URL `/soluciones/[slug]` para el SEO.
+- **Nosotros**: qué es Misión + mapa de presencia (sede en Lima, filial en Bolivia, alianzas en México, Costa Rica, Colombia, Ecuador y Chile), Partner Power de HP, normas ISO, estándares de calidad, sustentabilidad, equipo directivo y bolsa de trabajo.
+- **Catálogo** (`/catalogo`, antes `/tienda`): portafolio **sin precios** por líneas (Impresión y digitalización · Cómputo HP, ASUS y Lenovo · Audio y video), con filtros por categoría y marca. Las líneas sin fichas publicadas muestran sus categorías y un botón para cotizar. El carrito de cotización ya no va por WhatsApp: continúa en el formulario del cotizador.
+- **Comparador y asesor de upgrade** (`/catalogo/comparar`): igual que antes, sin la fila de precio.
+- **Portal ISO** (`/portal-iso`): misma estructura que la web actual (ISO/IEC 27001 e ISO 37001, documentos y Canal de Integridad).
+- **Trabaja con nosotros**: convocatorias y postulación con CV en PDF (todavía no almacena).
+- Redirecciones 301 en `next.config.ts`: `/tienda/*` → `/catalogo/*`, y las URL de la web actual (`/inicio-2`, `/contactanos`, `/hp-brand-showcase`, `/portal-iso-27001`, `/portal-iso-37001`).
+- SEO técnico: metadatos por página, canonical, Open Graph, migas de pan, `sitemap.xml`, `robots.txt` y JSON-LD.
 
 ## Requisitos
 
@@ -47,7 +47,7 @@ pnpm typecheck             # TypeScript
 
 ## Contenido pendiente de validación
 
-Los clientes (`sectors.ts`), el hito 2026 (`home.ts`), los gerentes (`company.ts`) y los datos técnicos de las impresoras (`products.ts`) llevan `verified: false`. Las convocatorias de ejemplo (`jobs.ts`) llevan `example: true`. Todos estos archivos están en `src/lib/content/`.
+Los clientes (`sectors.ts`), los gerentes (`company.ts`) y los datos técnicos de impresoras nuevas (`products.ts`) llevan `verified: false`. Las convocatorias de ejemplo (`jobs.ts`) llevan `example: true`. Todos estos archivos están en `src/lib/content/`.
 
 | Entorno | ¿Se muestra lo no validado? |
 | --- | --- |
@@ -57,14 +57,14 @@ Los clientes (`sectors.ts`), el hito 2026 (`home.ts`), los gerentes (`company.ts
 
 Para publicar una referencia, cambia `verified` a `true` cuando exista la autorización. En la fase de CMS esto pasará a Payload.
 
-En producción, por lo tanto: no se listan clientes, no aparece la sección de liderazgo, se oculta el hito 2026 y la bolsa de empleo muestra "Sin convocatorias activas" con el formulario de postulación espontánea. La tienda sí se muestra siempre, porque es un catálogo de demostración declarado como tal.
+En producción, por lo tanto: no se listan clientes, no aparece la sección de liderazgo y la bolsa de empleo muestra "Sin convocatorias activas" con el formulario de postulación espontánea.
 
 ## Datos a completar
 
 En `src/lib/site.ts`:
 
-- `contact.whatsapp`: el número actual es **genérico** (`51999999999`). Hay que reemplazarlo por el oficial y poner `whatsappIsPlaceholder` en `false`.
-- `social.linkedin`: la URL de la página de empresa. Mientras esté vacía, no se muestran enlaces a LinkedIn.
+- `contact.whatsapp`: el número actual es **genérico** (`51999999999`): la web actual no publica WhatsApp. Si el teléfono 919 280 810 también es WhatsApp, usar `51919280810` y poner `whatsappIsPlaceholder` en `false`.
+- `social`: LinkedIn, Facebook e Instagram, tomados de la web actual.
 
 En `src/lib/content/`:
 
@@ -72,7 +72,10 @@ En `src/lib/content/`:
 - `jobs.ts`: reemplazar las 3 convocatorias de ejemplo por las reales, con `example: false`.
 - `sectors.ts`: logos de clientes. Guarda el archivo en `public/clients/` (SVG o PNG con fondo transparente) y agrega `logo: "/clients/nombre.svg"` al cliente. Sin logo, se muestra un espacio reservado con el nombre.
 - `partners.ts`: marcas aliadas de la franja del Inicio. HP está confirmado. Hay 4 espacios reservados (`placeholder: true`) que solo se ven en desarrollo y pruebas: reemplázalos por las marcas reales con su logo en `public/partners/`.
-- `products.ts`: ficha técnica oficial de HP de cada modelo (`specs`). Los precios (`price`) son **de demostración** y se muestran rotulados así. Reemplázalos por precios referenciales reales con `priceIsDemo: false`, o elimínalos para mostrar "A cotizar".
+- `products.ts`: fichas del catálogo (sin precios). Para sumar laptops, audio y video u otras categorías, agrega productos con su `kind`, `category` y `brand`; la línea del catálogo sale de `lineOfKind` en `catalog.ts`.
+- `home.ts`: video del hero (`heroVideo`: MP4 sin audio de menos de 5 MB + imagen `poster`, en `public/media/`) y sustentabilidad (nombre del reconocimiento, años, insignias en `public/sustentabilidad/` y foto de selva en `background`).
+- `company.ts`: certificaciones. La web actual menciona ISO 37001 e ISO/IEC 27001 ("2 certificaciones ISO"); el equipo indicó ISO 9001 e ISO/IEC 27001. Hoy se muestran las tres: quitar la que no corresponda.
+- `iso.ts`: **antes de cambiar el dominio**, descargar los PDF del Portal ISO (y la guía de Derechos ARCO enlazada en `site.ts`) a `public/documentos/` y cambiar los enlaces; hoy apuntan a la web actual. Confirmar el correo del canal de seguridad de la información (la web actual muestra `segurinfo@` pero enlaza a `canaldeintegridad@`).
 - `solutions.ts`: confirmar con el área comercial el alcance de cada servicio.
 
 En el panel de **SociableKit**, configura también el número de publicaciones en 3. El componente ya recorta a 3, pero así el límite no depende solo del navegador.
@@ -87,8 +90,9 @@ src/
 │   │   ├── page.tsx         # Inicio
 │   │   ├── globals.css      # tokens de marca (Tailwind v4 @theme)
 │   │   ├── soluciones/ (+ [slug])   sectores/   nosotros/
-│   │   ├── tienda/ (+ [slug])       trabaja-con-nosotros/ (+ [slug])
-│   │   ├── publicaciones/   contacto/   privacidad/
+│   │   ├── catalogo/ (+ [slug], comparar)   trabaja-con-nosotros/ (+ [slug])
+│   │   ├── cotizador/   asesoria/   portal-iso/
+│   │   ├── publicaciones/   privacidad/
 │   │   └── icon.png, apple-icon.png, opengraph-image.jpg
 │   ├── sitemap.ts
 │   └── robots.ts

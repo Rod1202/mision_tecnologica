@@ -1,7 +1,7 @@
 import type { IconName } from "./types";
 
 /**
- * Comparador de equipos de la tienda — filas comparables por tipo de equipo.
+ * Comparador de equipos del catálogo — filas comparables por tipo de equipo.
  * Cada producto guarda sus datos en `specValues` con estas claves. Para sumar un tipo nuevo
  * (por ejemplo monitores), basta con agregarlo a `productKinds` y definir sus filas aquí.
  */

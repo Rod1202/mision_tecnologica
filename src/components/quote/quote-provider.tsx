@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { serviceIds, type ServiceId } from "@/lib/content/quote";
-import { defaultQuote, estimateQuote, type Estimate, type QuoteState } from "@/lib/quote";
+import { defaultQuote, type QuoteState } from "@/lib/quote";
 import { quoteStateSchema } from "@/lib/validation/quote";
 
 /**
@@ -12,18 +12,17 @@ import { quoteStateSchema } from "@/lib/validation/quote";
  * - `?servicio=impresion,computo` preselecciona servicios (lo usan los botones del sitio).
  */
 
-type Section = "project" | "computo" | "impresion" | "digitalizacion";
+type Section = "project" | "computo" | "impresion" | "digitalizacion" | "audiovideo";
 
 type QuoteCtx = {
   quote: QuoteState;
-  estimate: Estimate;
   hydrated: boolean;
   toggleService: (id: ServiceId, on?: boolean) => void;
   patch: <S extends Section>(section: S, value: Partial<QuoteState[S]>) => void;
   reset: () => void;
 };
 
-const STORAGE_KEY = "mt-cotizador-v1";
+const STORAGE_KEY = "mt-cotizador-v2";
 const Ctx = createContext<QuoteCtx | null>(null);
 
 const isServiceId = (v: string): v is ServiceId => (serviceIds as readonly string[]).includes(v);
@@ -95,10 +94,9 @@ export function QuoteProvider({ children }: { children: React.ReactNode }) {
 
   const reset = useCallback(() => setQuote(defaultQuote), []);
 
-  const estimate = useMemo(() => estimateQuote(quote), [quote]);
   const value = useMemo<QuoteCtx>(
-    () => ({ quote, estimate, hydrated, toggleService, patch, reset }),
-    [quote, estimate, hydrated, toggleService, patch, reset],
+    () => ({ quote, hydrated, toggleService, patch, reset }),
+    [quote, hydrated, toggleService, patch, reset],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

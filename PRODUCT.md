@@ -23,25 +23,24 @@ Partner de HP en impresión láser empresarial, con certificaciones ISO 9001 e I
 ## Operating Context
 
 - Contacto comercial por formulario (validado en servidor, aún sin almacenamiento) y por WhatsApp con mensaje prellenado.
-- La tienda es un catálogo de demostración: sin pagos ni stock; arma una cotización por WhatsApp.
-- Cotizador de proyecto (`/cotizador`): el visitante elige uno o varios servicios (cómputo, impresión, digitalización), los dimensiona y obtiene una estimación referencial en vivo, que envía por formulario o WhatsApp.
+- El catálogo es un portafolio sin precios (impresión y digitalización, cómputo, audio y video): sin pagos ni stock; los equipos elegidos viajan con la solicitud del cotizador.
+- Encuentra tu solución: "Sé lo que necesito" (`/cotizador`: cómputo, impresión, digitalización y audio y video, sin montos) y "Quiero que me asesoren" (`/asesoria`: necesidad, escala y reunión exploratoria). Ambos exigen correo corporativo, empresa, RUC, nombre y apellido.
 
 ## Capabilities and Constraints
 
 - Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, componentes estilo shadcn/ui. Payload CMS en una fase posterior: el contenido vive en `src/lib/content/` con la forma de las futuras colecciones.
 - Modalidades a cotizar (típicas del sector, confirmadas por el usuario como punto de partida y editables): cómputo en alquiler/outsourcing o compra; impresión en outsourcing por página, alquiler o compra; digitalización en sitio o en instalaciones de MT, con OCR e indexación.
-- Las tarifas del cotizador son de demostración hasta que el área comercial entregue las reales.
 - La digitalización todavía no tiene página de solución propia.
 
 ## Brand Commitments
 
-- Brandbook 2023: azul #0066FF principal, turquesa #00CDC5 de acento, tipografía Urbanist, formas de soporte siempre redondeadas (píldoras derivadas del isotipo).
+- Brandbook 2023 con #003D99 como color principal (el #0066FF oscurecido, mismo tono), turquesa #00CDC5 de acento, tipografía Urbanist, formas de soporte siempre redondeadas (píldoras derivadas del isotipo).
 - Tuteo, español de Perú, tono sobrio y claro.
 
 ## Evidence on Hand
 
 - Logos en `public/brand/`. Clientes, gerentes, hito 2026 y fichas HP pendientes de validación (`verified: false`).
-- No hay precios reales: todo monto mostrado debe rotularse como de demostración. No inventar clientes, cifras ni testimonios.
+- La web no muestra precios ni estimaciones: la propuesta económica la prepara un asesor. No inventar clientes, cifras ni testimonios.
 
 ## Product Principles
 

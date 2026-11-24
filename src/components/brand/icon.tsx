@@ -2,8 +2,11 @@ import {
   Activity,
   Building2,
   Gauge,
+  Headphones,
   GraduationCap,
   Landmark,
+  LayoutDashboard,
+  Leaf,
   Laptop,
   LifeBuoy,
   Network,
@@ -13,6 +16,8 @@ import {
   ShoppingBag,
   Truck,
   UserCog,
+  Video,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
@@ -33,6 +38,11 @@ const icons: Record<IconName, LucideIcon> = {
   truck: Truck,
   "shopping-bag": ShoppingBag,
   building: Building2,
+  video: Video,
+  headphones: Headphones,
+  wrench: Wrench,
+  dashboard: LayoutDashboard,
+  leaf: Leaf,
 };
 
 export function Icon({ name, className }: { name: IconName; className?: string }) {

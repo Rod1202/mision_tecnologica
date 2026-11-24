@@ -1,10 +1,8 @@
 /**
  * Catálogo de DEMOSTRACIÓN — futura colección `Products` de Payload.
- * No hay pagos ni stock: la tienda arma una solicitud de cotización por WhatsApp.
+ * No hay pagos ni stock: el catálogo arma una solicitud de cotización.
  *
- * PRECIOS: `price` es un precio REFERENCIAL DE DEMOSTRACIÓN (`priceIsDemo: true`) para probar
- * el filtro y el orden por precio. Se muestra siempre rotulado como demo. Reemplazar por el precio
- * referencial real (y poner `priceIsDemo: false`) o dejar `price` sin definir para mostrar "A cotizar".
+ * SIN PRECIOS: el catálogo es un portafolio corporativo; los montos se entregan en la cotización.
  *
  * Verificar nomenclatura y ficha técnica oficial de HP antes de publicar especificaciones.
  *
@@ -23,24 +21,22 @@ export type Product = {
   slug: string;
   name: string;
   model: string;
-  brand: "HP";
+  /** Marca del fabricante (HP, ASUS, Lenovo…). */
+  brand: string;
   family: string;
   /** Tipo de equipo: define qué filas se comparan (impresora, laptop…). */
   kind: ProductKind;
-  /** "lanzamiento": modelo vigente de la tienda. "anterior": generación anterior, solo como referencia en el comparador. */
+  /** "lanzamiento": modelo vigente del catálogo. "anterior": generación anterior, solo como referencia en el comparador. */
   generation: "lanzamiento" | "anterior";
   /** Año de lanzamiento del modelo (según el fabricante). */
   launchYear?: number;
   /** Línea comercial cuando importa para el cliente (por ejemplo "Managed: solo bajo contrato de impresión"). */
   lineNote?: string;
-  /** Generación anterior: slug del modelo de la tienda que lo reemplaza. */
+  /** Generación anterior: slug del modelo del catálogo que lo reemplaza. */
   successor?: string;
   /** Aclaración del reemplazo (por ejemplo, cuando el sucesor no es del mismo tipo de color). */
   successorNote?: string;
   category: string;
-  /** Precio referencial en soles (PEN). Sin definir = "A cotizar". */
-  price?: number;
-  priceIsDemo?: boolean;
   summary: string;
   highlights: string[];
   /** Pares etiqueta/valor de la ficha técnica. Vacío hasta contar con la ficha oficial. */
@@ -66,8 +62,6 @@ const launchModels: Product[] = [
     kind: "impresora",
     generation: "lanzamiento",
     category: "Multifuncional láser",
-    price: 5200,
-    priceIsDemo: true,
     summary:
       "Multifuncional láser de la línea HP LaserJet Enterprise para áreas y oficinas con impresión diaria de documentos.",
     highlights: [
@@ -110,8 +104,6 @@ const launchModels: Product[] = [
     kind: "impresora",
     generation: "lanzamiento",
     category: "Multifuncional láser",
-    price: 4500,
-    priceIsDemo: true,
     summary: "Multifuncional láser HP LaserJet Enterprise para equipos de trabajo que necesitan imprimir, copiar y digitalizar.",
     highlights: [
       "Impresión, copia y escaneo en un solo equipo.",
@@ -154,8 +146,6 @@ const launchModels: Product[] = [
     kind: "impresora",
     generation: "lanzamiento",
     category: "Multifuncional láser",
-    price: 8900,
-    priceIsDemo: true,
     summary: "Multifuncional láser HP LaserJet Enterprise para sedes y áreas con mayor volumen de documentos.",
     highlights: [
       "Impresión, copia y escaneo en un solo equipo.",
@@ -231,12 +221,6 @@ const launchModels: Product[] = [
     note: SPEC_NOTE,
   },
 ];
-
-const priceFormatter = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 });
-
-export function formatPrice(value: number) {
-  return priceFormatter.format(value);
-}
 
 const MANAGED_NOTE = "Línea Managed: HP la vende solo bajo contrato de impresión gestionada.";
 
@@ -329,7 +313,7 @@ const previousModels: Product[] = [
     generation: "anterior",
     lineNote: MANAGED_NOTE,
     successor: "hp-laserjet-enterprise-mfp-x52952dn",
-    successorNote: "HP no indica un sucesor oficial: el X52952dn es el multifuncional compacto equivalente de la tienda.",
+    successorNote: "HP no indica un sucesor oficial: el X52952dn es el multifuncional compacto equivalente del catálogo.",
     category: "Multifuncional láser",
     summary: "Multifuncional monocromo A4 compacto de la línea Managed de HP.",
     highlights: [],
@@ -368,7 +352,7 @@ const previousModels: Product[] = [
     generation: "anterior",
     launchYear: 2019,
     successor: "hp-color-laserjet-enterprise-mfp-5800f",
-    successorNote: "En la línea Pro, HP lo reemplazó por la Color LaserJet Pro MFP 4301fdw; en la tienda, el salto a color es la MFP 5800f.",
+    successorNote: "En la línea Pro, HP lo reemplazó por la Color LaserJet Pro MFP 4301fdw; en el catálogo, el salto a color es la MFP 5800f.",
     category: "Multifuncional láser color",
     summary: "Multifuncional láser a color A4 para pequeñas y medianas empresas, de la generación 2019.",
     highlights: [],
@@ -407,7 +391,7 @@ const previousModels: Product[] = [
     launchYear: 2020,
     lineNote: MANAGED_NOTE,
     successor: "hp-color-laserjet-enterprise-mfp-5800f",
-    successorNote: "HP no indica un sucesor oficial: la MFP 5800f es el multifuncional a color de nueva generación de la tienda.",
+    successorNote: "HP no indica un sucesor oficial: la MFP 5800f es el multifuncional a color de nueva generación del catálogo.",
     category: "Multifuncional láser color",
     summary: "Multifuncional láser a color A4 de la línea Managed de HP, de la generación 2020.",
     highlights: [],
@@ -445,7 +429,7 @@ export function getProduct(slug: string) {
   return products.find((p) => p.slug === slug);
 }
 
-/** Modelos de generación anterior que reemplaza un modelo de la tienda. */
+/** Modelos de generación anterior que reemplaza un modelo del catálogo. */
 export function predecessorsOf(slug: string) {
   return products.filter((p) => p.successor === slug);
 }
@@ -509,6 +493,6 @@ export function monoSwitchFor(slug: string, speedOf: (p: Product) => number | nu
     .slice(0, 2);
 }
 
-export const productHref = (slug: string) => `/tienda/${slug}`;
+export const productHref = (slug: string) => `/catalogo/${slug}`;
 
 export const productsByKind = (kind: ProductKind) => products.filter((p) => p.kind === kind);
