@@ -48,7 +48,7 @@ function PartnerLogo({ partner }: { partner: Partner }) {
       <span className="sr-only">Espacio para logotipo</span>
     </>
   ) : (
-    <span className="text-2xl font-extrabold tracking-tight text-ink-soft transition-colors group-hover:text-brand-blue">
+    <span className="text-2xl font-extrabold tracking-tight text-ink-soft transition-colors group-hover:text-brand-bright">
       {partner.name}
     </span>
   );

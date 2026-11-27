@@ -34,7 +34,7 @@ Partner de HP en impresión láser empresarial, con certificaciones ISO 9001 e I
 
 ## Brand Commitments
 
-- Brandbook 2023 con #003D99 como color principal (el #0066FF oscurecido, mismo tono), turquesa #00CDC5 de acento, tipografía Urbanist, formas de soporte siempre redondeadas (píldoras derivadas del isotipo).
+- Brandbook 2023: azul #0052CC (el #0066FF oscurecido un paso) reservado para hero, botones, llamados a la acción y acentos; fondos en blanco, gris claro (#ECEFF3) y blanco humo (#F6F7F9) para no saturar; turquesa #00CDC5 de acento, tipografía Urbanist, formas de soporte siempre redondeadas (píldoras derivadas del isotipo).
 - Tuteo, español de Perú, tono sobrio y claro.
 
 ## Evidence on Hand

@@ -17,6 +17,7 @@ export function QuoteSummary({ className }: { className?: string }) {
   const { quote } = useQuote();
   const { lines } = useQuoteCart();
   const catalog = describeCatalogItems(lines);
+  const empty = quote.services.length === 0 && catalog.length === 0;
 
   return (
     <section
@@ -32,9 +33,15 @@ export function QuoteSummary({ className }: { className?: string }) {
       <h2 id="resumen-title" className="text-xl font-bold">
         Resumen de tu solicitud
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-white">{projectLine(quote)}</p>
+      {empty ? (
+        <p className="mt-3 leading-relaxed text-white/90">
+          Aquí verás lo que vas eligiendo. Empieza por un servicio en el paso 1.
+        </p>
+      ) : (
+        <p className="mt-2 text-sm leading-relaxed text-white">{projectLine(quote)}</p>
+      )}
 
-      <ul className="mt-6 space-y-2 border-t border-white/20 pt-6">
+      <ul className={cn("mt-6 space-y-2 border-t border-white/20 pt-6", empty && "hidden")}>
         {quote.services.map((id) => {
           const s = getQuoteService(id);
           return (
@@ -70,7 +77,7 @@ export function QuoteSummary({ className }: { className?: string }) {
         ) : null}
       </ul>
 
-      <Button asChild variant="inverse" size="lg" className="mt-7 w-full">
+      <Button asChild variant="inverse" size="lg" className={cn("mt-7 w-full", empty && "hidden")}>
         <a href="#enviar">
           Enviar a un asesor
           <ArrowRight aria-hidden />
@@ -111,7 +118,7 @@ export function QuoteMobileBar() {
   return (
     <a
       href="#resumen"
-      className="animate-panel-in fixed bottom-4 left-4 z-30 flex h-14 max-w-[calc(100%-6.5rem)] items-center gap-3 rounded-full bg-ink py-2 pr-5 pl-2 text-white shadow-[0_16px_32px_-12px_rgb(11_26_51/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue sm:bottom-6 sm:left-6 lg:hidden"
+      className="animate-panel-in fixed bottom-4 left-4 z-30 flex h-14 max-w-[calc(100%-6.5rem)] items-center gap-3 rounded-full bg-ink py-2 pr-5 pl-2 text-white shadow-[0_16px_32px_-12px_rgb(11_26_51/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-bright sm:bottom-6 sm:left-6 lg:hidden"
     >
       <span aria-hidden className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-blue">
         <ChevronUp className="size-5" />

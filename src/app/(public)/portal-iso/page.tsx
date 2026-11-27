@@ -24,9 +24,9 @@ export default function PortalIsoPage() {
             <li key={p.id}>
               <a
                 href={`#${p.id}`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white/12 px-4 font-semibold ring-1 ring-white/25 ring-inset hover:bg-white/20"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 font-semibold text-ink shadow-soft ring-1 ring-line ring-inset hover:text-brand-bright"
               >
-                <ShieldCheck aria-hidden className="size-4 text-brand-teal" />
+                <ShieldCheck aria-hidden className="size-4 text-brand-bright" />
                 Portal {p.code}
               </a>
             </li>
@@ -49,7 +49,7 @@ export default function PortalIsoPage() {
               <h2 id={`${portal.id}-title`} className="mt-6 text-3xl font-extrabold text-ink sm:text-4xl">
                 Portal {portal.code}
               </h2>
-              <p className="mt-1 text-lg font-semibold text-brand-blue">{portal.name}</p>
+              <p className="mt-1 text-lg font-semibold text-brand-bright">{portal.name}</p>
               <p className="mt-4 text-lg leading-relaxed text-ink-soft">{portal.commitment}</p>
             </div>
 
@@ -63,11 +63,11 @@ export default function PortalIsoPage() {
                       rel="noopener noreferrer"
                       className="group flex items-center gap-4 rounded-3xl border border-line bg-white p-5 shadow-soft transition-shadow hover:shadow-lift"
                     >
-                      <span aria-hidden className="inline-flex h-12 w-14 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+                      <span aria-hidden className="inline-flex h-12 w-14 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
                         <FileText className="size-6" />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-bold text-ink group-hover:text-brand-blue">{d.title}</span>
+                        <span className="block font-bold text-ink group-hover:text-brand-bright">{d.title}</span>
                         <span className="block text-sm text-ink-soft">PDF · se abre en una pestaña nueva</span>
                       </span>
                       <span className="hidden shrink-0 rounded-full bg-brand-blue px-4 py-2 text-sm font-semibold text-white sm:inline-flex">Descargar</span>

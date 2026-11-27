@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 export function SectionHeading({
   eyebrow,
   title,
+  highlight,
   description,
   id,
   align = "left",
@@ -13,6 +14,8 @@ export function SectionHeading({
 }: {
   eyebrow: string;
   title: string;
+  /** Parte del título que se destaca en color (debe aparecer tal cual dentro de `title`). */
+  highlight?: string;
   description?: string;
   id?: string;
   align?: "left" | "center";
@@ -31,7 +34,7 @@ export function SectionHeading({
           tone === "inverse" ? "text-white" : "text-ink",
         )}
       >
-        {title}
+        <Highlighted text={title} part={highlight} tone={tone} />
       </Heading>
       {description ? (
         <p className={cn("mt-5 text-lg leading-relaxed", tone === "inverse" ? "text-white/85" : "text-ink-soft")}>
@@ -39,5 +42,18 @@ export function SectionHeading({
         </p>
       ) : null}
     </div>
+  );
+}
+
+/** Jerarquía por color: la parte clave del título en azul de acento (o turquesa sobre fondos azules). */
+export function Highlighted({ text, part, tone = "default" }: { text: string; part?: string; tone?: "default" | "inverse" }) {
+  const i = part ? text.indexOf(part) : -1;
+  if (!part || i < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <span className={tone === "inverse" ? "text-brand-teal" : "text-brand-bright"}>{part}</span>
+      {text.slice(i + part.length)}
+    </>
   );
 }

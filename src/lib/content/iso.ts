@@ -10,7 +10,7 @@ export type IsoDocument = { title: string; href: string };
 export type IsoChannel = { title: string; text: string; links: { label: string; href: string; external?: boolean }[] };
 
 export const isoIntro =
-  "Desde el año 2016 hemos mantenido nuestra condición de Partner Platinum de HP Inc, la categoría más elevada que otorga HP a sus canales. Trabajamos bajo sistemas de gestión certificados: aquí encontrarás nuestras políticas y los canales para reportar consultas o incidencias.";
+  "Trabajamos bajo sistemas de gestión certificados en seguridad de la información (ISO/IEC 27001) y antisoborno (ISO 37001). Aquí encontrarás nuestras políticas y los canales para reportar consultas o incidencias.";
 
 export const isoPortals: {
   id: string;

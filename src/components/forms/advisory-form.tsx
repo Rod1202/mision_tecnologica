@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Select, Textarea } from "@/components/ui/form-controls";
 import { submitAdvisory } from "@/lib/actions/advisory";
 import { cn } from "@/lib/utils";
-import { advisoryNeedOptions, limaToday, meetingSlots, type AdvisoryField, type AdvisoryState } from "@/lib/validation/advisory";
+import type { AdvisoryField, AdvisoryState } from "@/lib/validation/advisory";
+import { advisoryNeedOptions, limaToday, meetingSlots } from "@/lib/validation/advisory-options";
 
 const initialState: AdvisoryState = { status: "idle" };
 
@@ -87,9 +88,9 @@ export function AdvisoryForm({ className }: { className?: string }) {
             <label
               key={o.value}
               className={cn(
-                "group inline-flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border border-line bg-white py-1.5 pr-4 pl-1.5 text-sm font-semibold text-ink-soft transition-[border-color,background-color,color] duration-200 hover:border-brand-blue/40 hover:text-ink",
-                "has-[input:checked]:border-brand-blue has-[input:checked]:bg-brand-blue-50 has-[input:checked]:text-brand-blue-800",
-                "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-blue",
+                "group inline-flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border border-line bg-white py-1.5 pr-4 pl-1.5 text-sm font-semibold text-ink-soft transition-[border-color,background-color,color] duration-200 hover:border-brand-bright/40 hover:text-ink",
+                "has-[input:checked]:border-brand-bright has-[input:checked]:bg-brand-blue-50 has-[input:checked]:text-brand-blue-800",
+                "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-bright",
               )}
             >
               <input type="checkbox" name="needs" value={o.value} defaultChecked={selectedNeeds.includes(o.value)} className="peer sr-only" />

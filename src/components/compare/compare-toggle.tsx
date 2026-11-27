@@ -15,8 +15,8 @@ export function CompareToggle({ slug, name, className }: { slug: string; name: s
     <label
       className={cn(
         "inline-flex min-h-11 cursor-pointer items-center justify-center gap-2.5 rounded-full border px-4 text-sm font-semibold transition-[border-color,background-color,color] duration-200 select-none",
-        "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-blue",
-        on ? "border-brand-blue bg-brand-blue-50 text-brand-blue-800" : "border-line bg-white text-ink-soft hover:border-brand-blue/40 hover:text-ink",
+        "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-bright",
+        on ? "border-brand-bright bg-brand-blue-50 text-brand-blue-800" : "border-line bg-white text-ink-soft hover:border-brand-bright/40 hover:text-ink",
         className,
       )}
     >
@@ -25,7 +25,7 @@ export function CompareToggle({ slug, name, className }: { slug: string; name: s
         aria-hidden
         className={cn(
           "inline-flex size-5 items-center justify-center rounded-md border-2 transition-colors",
-          on ? "border-brand-blue bg-brand-blue text-white" : "border-input bg-white",
+          on ? "border-brand-bright bg-brand-blue text-white" : "border-input bg-white",
         )}
       >
         {on ? <Check className="size-3" strokeWidth={3.5} /> : null}
@@ -33,7 +33,7 @@ export function CompareToggle({ slug, name, className }: { slug: string; name: s
       <span>
         Comparar<span className="sr-only"> {name}</span>
       </span>
-      <Columns3 aria-hidden className={cn("size-4", on ? "text-brand-blue" : "opacity-60")} />
+      <Columns3 aria-hidden className={cn("size-4", on ? "text-brand-bright" : "opacity-60")} />
     </label>
   );
 }

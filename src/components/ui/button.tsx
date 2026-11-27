@@ -11,15 +11,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-brand-blue text-white shadow-[0_8px_20px_-8px_rgb(0_61_153/0.6)] hover:bg-brand-blue-700 focus-visible:outline-brand-blue",
+          "bg-brand-blue text-white shadow-[0_8px_20px_-8px_rgb(0_82_204/0.6)] hover:bg-brand-blue-700 focus-visible:outline-brand-bright",
         inverse:
-          "bg-white text-brand-blue shadow-[0_8px_24px_-10px_rgb(0_20_51/0.45)] hover:bg-brand-blue-50 focus-visible:outline-white",
+          "bg-white text-brand-bright shadow-[0_8px_24px_-10px_rgb(0_20_51/0.45)] hover:bg-brand-blue-50 focus-visible:outline-white",
         outline:
-          "border border-brand-blue/30 bg-white text-brand-blue hover:border-brand-blue hover:bg-brand-blue-50 focus-visible:outline-brand-blue",
+          "border border-brand-bright/30 bg-white text-brand-bright hover:border-brand-bright hover:bg-brand-blue-50 focus-visible:outline-brand-bright",
         "outline-inverse":
           "border border-white/50 text-white hover:border-white hover:bg-white/10 focus-visible:outline-white",
-        ghost: "text-ink hover:bg-surface focus-visible:outline-brand-blue",
-        link: "rounded-none px-0 text-brand-blue underline-offset-4 hover:underline focus-visible:outline-brand-blue",
+        ghost: "text-ink hover:bg-surface focus-visible:outline-brand-bright",
+        link: "rounded-none px-0 text-brand-bright underline-offset-4 hover:underline focus-visible:outline-brand-bright",
       },
       size: {
         sm: "h-9 px-4 text-sm",

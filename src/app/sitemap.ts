@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { visibleJobs } from "@/lib/careers";
-import { productHref, products } from "@/lib/content/products";
+import { productHref, visibleProducts } from "@/lib/content/products";
+import { showUnverifiedContent } from "@/lib/site";
 import { solutionHref, solutions } from "@/lib/content/solutions";
 import { publishedRoutes } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -18,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...publishedRoutes.map(({ path, priority }) => entry(path, priority)),
     ...solutions.map((s) => entry(solutionHref(s.slug), 0.9)),
-    ...products.map((p) => entry(productHref(p.slug), 0.6)),
+    ...visibleProducts(showUnverifiedContent()).map((p) => entry(productHref(p.slug), 0.6)),
     // Solo convocatorias reales (las de ejemplo no se indexan)
     ...visibleJobs()
       .filter((j) => !j.example)

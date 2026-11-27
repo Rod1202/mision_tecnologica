@@ -158,8 +158,8 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
                 onClick={() => update({ line: l.id, categories: [], brands: [] })}
                 className={cn(
                   "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap transition-colors sm:px-5",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
-                  active ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]" : "text-ink-soft hover:text-ink",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-bright",
+                  active ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_82_204/0.7)]" : "text-ink-soft hover:text-ink",
                 )}
               >
                 {l.icon ? <Icon name={l.icon} className="size-4" /> : null}
@@ -170,9 +170,9 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      {line ? <LineOverview line={line} count={lineCount(line.id)} /> : null}
+      {line ? line.brandsOnly ? <BrandLine line={line} /> : <LineOverview line={line} count={lineCount(line.id)} /> : null}
 
-      {line && lineCount(line.id) === 0 ? null : (
+      {line && (line.brandsOnly || lineCount(line.id) === 0) ? null : (
         <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Filtros: barra lateral en escritorio */}
           <aside aria-label="Filtros" className="hidden lg:col-span-3 lg:block">
@@ -223,7 +223,7 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
                   </li>
                 ))}
                 <li>
-                  <button type="button" onClick={clearAll} className="px-2 text-sm font-semibold text-ink-soft underline-offset-4 hover:text-brand-blue hover:underline">
+                  <button type="button" onClick={clearAll} className="px-2 text-sm font-semibold text-ink-soft underline-offset-4 hover:text-brand-bright hover:underline">
                     Limpiar todo
                   </button>
                 </li>
@@ -252,6 +252,20 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
         </div>
       )}
 
+      {/* Vista general: las líneas que se presentan por marca */}
+      {!line ? (
+        <div className="mt-14">
+          <p className="text-sm font-bold tracking-[0.06em] text-brand-bright uppercase">También cotizamos</p>
+          <div className="mt-4 grid gap-6 lg:grid-cols-2">
+            {catalogLines
+              .filter((l) => l.brandsOnly)
+              .map((l) => (
+                <BrandLine key={l.id} line={l} compact />
+              ))}
+          </div>
+        </div>
+      ) : null}
+
       {/* Filtros: panel lateral en móvil */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent closeLabel="Cerrar filtros">
@@ -275,11 +289,60 @@ export function CatalogBrowser({ products }: { products: Product[] }) {
 /* Resumen de la línea: qué cotizamos, aunque aún no tenga fichas        */
 /* ------------------------------------------------------------------ */
 
+/** Línea presentada solo por marcas (Cómputo, Audio y video): sin fichas de producto. */
+function BrandLine({ line, compact }: { line: CatalogLine; compact?: boolean }) {
+  return (
+    <div className={cn("rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8", !compact && "mt-8")}>
+      <div className="flex items-start gap-4">
+        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
+          <Icon name={line.icon} className="size-6" />
+        </span>
+        <div className="min-w-0">
+          <h3 className="text-2xl font-bold text-ink">{line.title}</h3>
+          <p className="mt-1 leading-relaxed text-ink-soft">{line.summary}</p>
+        </div>
+      </div>
+
+      <p className="mt-7 text-sm font-bold tracking-[0.06em] text-brand-bright uppercase">Marcas con las que trabajamos</p>
+      <ul aria-label={`Marcas de ${line.title}`} className={cn("mt-3 grid gap-3", line.brands.length > 2 ? "grid-cols-3" : "grid-cols-2")}>
+        {line.brands.map((b) => (
+          <li
+            key={b}
+            className="flex h-20 items-center justify-center rounded-2xl bg-surface text-2xl font-extrabold tracking-tight text-brand-blue ring-1 ring-line ring-inset sm:h-24 sm:text-3xl"
+          >
+            {b}
+          </li>
+        ))}
+      </ul>
+
+      {!compact ? (
+        <ul aria-label={`Categorías de ${line.title}`} className="mt-6 flex flex-wrap gap-2">
+          {line.categories.map((c) => (
+            <li key={c} className="rounded-full bg-surface px-3 py-1 text-sm font-semibold text-ink-soft">
+              {c}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <Button asChild>
+          <Link href={`/cotizador?servicio=${line.quoteService}`}>
+            Cotizar {line.title.toLowerCase()}
+            <ArrowRight aria-hidden />
+          </Link>
+        </Button>
+        <p className="text-sm text-ink-soft">Te enviamos una propuesta con los modelos que mejor se ajustan a tu operación.</p>
+      </div>
+    </div>
+  );
+}
+
 function LineOverview({ line, count }: { line: CatalogLine; count: number }) {
   return (
     <div className="mt-8 grid gap-6 rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8 lg:grid-cols-12 lg:items-center">
       <div className="flex gap-4 lg:col-span-7">
-        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
           <Icon name={line.icon} className="size-6" />
         </span>
         <div className="min-w-0">
@@ -341,7 +404,7 @@ function FilterPanel({
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-ink">Filtrar</h2>
         {hasActive ? (
-          <button type="button" onClick={onClear} className="text-sm font-semibold text-brand-blue hover:underline">
+          <button type="button" onClick={onClear} className="text-sm font-semibold text-brand-bright hover:underline">
             Limpiar
           </button>
         ) : null}
@@ -384,7 +447,7 @@ function CheckboxGroup({
                   checked={checked}
                   disabled={disabled}
                   onChange={() => onToggle(o.value)}
-                  className="size-5 shrink-0 rounded accent-brand-blue"
+                  className="size-5 shrink-0 rounded accent-brand-bright"
                 />
                 <span className="flex-1 font-medium text-ink">{o.value}</span>
                 <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-semibold text-ink-soft tabular-nums">{o.count}</span>

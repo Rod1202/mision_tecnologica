@@ -46,8 +46,7 @@ export function QuoteRequestForm({ className }: { className?: string }) {
       aria-describedby="quote-form-status"
       className={cn("relative rounded-3xl bg-white p-6 text-ink shadow-lift sm:p-8 lg:p-10", className)}
     >
-      <h3 className="text-2xl font-bold">Tus datos</h3>
-      <p className="mt-2 text-ink-soft">Para enviarte la cotización necesitamos los datos de tu empresa. Los campos con * son obligatorios.</p>
+      <p className="text-sm text-ink-soft">Los campos con * son obligatorios.</p>
 
       <div
         id="quote-form-status"
@@ -94,8 +93,8 @@ export function QuoteRequestForm({ className }: { className?: string }) {
         {empty ? (
           <p className="text-sm text-ink-soft">
             Primero{" "}
-            <a href="#servicios" className="font-semibold text-brand-blue hover:underline">
-              elige al menos un servicio
+            <a href="#servicios" className="font-semibold text-brand-bright hover:underline">
+              elige al menos un servicio en el paso 1
             </a>
             .
           </p>

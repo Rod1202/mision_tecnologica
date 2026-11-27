@@ -48,7 +48,7 @@ export function MobileNav() {
                       aria-current={active ? "page" : undefined}
                       className={cn(
                         "flex min-h-12 items-center justify-between rounded-2xl px-4 text-lg font-semibold transition-colors",
-                        active ? "bg-brand-blue-50 text-brand-blue" : "text-ink hover:bg-surface",
+                        active ? "bg-brand-blue-50 text-brand-bright" : "text-ink hover:bg-surface",
                       )}
                     >
                       {item.label}
@@ -63,26 +63,15 @@ export function MobileNav() {
 
         <div className="space-y-3 border-t border-line p-5">
           <SheetClose asChild>
-            <Button asChild variant="outline" size="lg" className="w-full">
-              <Link
-                href="/cotizador"
-                onClick={(e) => {
-                  toTopIfSamePage("/cotizador", 300)(e);
-                  setOpen(false);
-                }}
-              >
+            <Button asChild size="lg" className="w-full">
+              <Link href="/#encuentra-tu-solucion" onClick={() => setOpen(false)}>
                 <Calculator aria-hidden />
                 Cotizar proyecto
               </Link>
             </Button>
           </SheetClose>
-          <SheetClose asChild>
-            <Button asChild size="lg" className="w-full">
-              <Link href="/contacto">Contáctanos</Link>
-            </Button>
-          </SheetClose>
           <div className="flex flex-col gap-1 pt-1 text-sm text-ink-soft">
-            <a href={`mailto:${siteConfig.contact.email}`} className="inline-flex min-h-10 items-center gap-2 hover:text-brand-blue">
+            <a href={`mailto:${siteConfig.contact.email}`} className="inline-flex min-h-10 items-center gap-2 hover:text-brand-bright">
               <Mail aria-hidden className="size-4" />
               {siteConfig.contact.email}
             </a>
@@ -90,7 +79,7 @@ export function MobileNav() {
               href={whatsappLink(siteConfig.contact.whatsapp, siteConfig.contact.whatsappDefaultMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-10 items-center gap-2 hover:text-brand-blue"
+              className="inline-flex min-h-10 items-center gap-2 hover:text-brand-bright"
             >
               <MessageCircle aria-hidden className="size-4" />
               WhatsApp {siteConfig.contact.whatsappDisplay}

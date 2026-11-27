@@ -31,7 +31,7 @@ export function ControlGroup({
   return (
     <fieldset className={cn("min-w-0", className)}>
       {/* La leyenda queda como primer hijo (nombre accesible del grupo); flotar permite alinear el texto auxiliar a la derecha. */}
-      <legend className="float-left mr-4 mb-3 font-semibold text-ink">{legend}</legend>
+      <legend className="float-left mr-4 mb-3 text-sm font-bold tracking-[0.06em] text-brand-bright uppercase">{legend}</legend>
       {aside || hint ? <div className="float-right mb-3 text-sm text-ink-faint">{aside ?? hint}</div> : null}
       <div className="clear-both">{children}</div>
     </fieldset>
@@ -78,8 +78,8 @@ export function Choice<V extends string | number>({
             <span
               className={cn(
                 "flex min-h-10 cursor-pointer items-center justify-center rounded-full px-2 text-center text-sm leading-tight font-semibold text-ink-soft transition-[background-color,color,box-shadow] duration-200 sm:px-3",
-                "hover:text-ink peer-checked:bg-brand-blue peer-checked:text-white peer-checked:shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]",
-                "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-blue",
+                "hover:text-ink peer-checked:bg-brand-blue peer-checked:text-white peer-checked:shadow-[0_8px_20px_-10px_rgb(0_82_204/0.7)]",
+                "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-bright",
               )}
             >
               {o.label}
@@ -99,8 +99,8 @@ export function Choice<V extends string | number>({
             key={o.value}
             className={cn(
               "group relative flex cursor-pointer gap-3 rounded-2xl border bg-white p-4 transition-[border-color,background-color,box-shadow] duration-200",
-              "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-blue",
-              checked ? "border-brand-blue bg-brand-blue-50 shadow-[0_10px_24px_-18px_rgb(0_61_153/0.9)]" : "border-line hover:border-brand-blue/40",
+              "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-bright",
+              checked ? "border-brand-bright bg-brand-blue-50 shadow-[0_10px_24px_-18px_rgb(0_82_204/0.9)]" : "border-line hover:border-brand-bright/40",
             )}
           >
             <input
@@ -115,7 +115,7 @@ export function Choice<V extends string | number>({
               aria-hidden
               className={cn(
                 "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                checked ? "border-brand-blue bg-brand-blue" : "border-input bg-white",
+                checked ? "border-brand-bright bg-brand-blue" : "border-input bg-white",
               )}
             >
               <span className={cn("size-2 rounded-full bg-white transition-transform duration-200", checked ? "scale-100" : "scale-0")} />
@@ -156,8 +156,8 @@ export function ChipGroup<V extends string>({
             key={o.value}
             className={cn(
               "inline-flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full border py-1.5 pr-4 pl-1.5 text-sm font-semibold transition-[border-color,background-color,color] duration-200",
-              "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-blue",
-              checked ? "border-brand-blue bg-brand-blue-50 text-brand-blue-800" : "border-line bg-white text-ink-soft hover:border-brand-blue/40 hover:text-ink",
+              "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-brand-bright",
+              checked ? "border-brand-bright bg-brand-blue-50 text-brand-blue-800" : "border-line bg-white text-ink-soft hover:border-brand-bright/40 hover:text-ink",
             )}
           >
             <input
@@ -260,7 +260,7 @@ export function Stepper({
         aria-label={label}
         {...draft}
         className={cn(
-          "h-10 min-w-0 rounded-lg bg-transparent text-center font-bold text-ink tabular-nums focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-brand-blue",
+          "h-10 min-w-0 rounded-lg bg-transparent text-center font-bold text-ink tabular-nums focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-brand-bright",
           size === "lg" ? "w-16 text-lg" : "w-12",
         )}
       />
@@ -348,7 +348,7 @@ export function RangeField({
             inputMode="numeric"
             aria-label={`${label} (${unit})`}
             {...draft}
-            className="h-10 w-28 rounded-xl border border-input bg-white px-3 text-right text-lg font-bold text-ink tabular-nums outline-none transition-[border-color,box-shadow] focus-visible:border-brand-blue focus-visible:ring-4 focus-visible:ring-brand-blue/15"
+            className="h-10 w-28 rounded-xl border border-input bg-white px-3 text-right text-lg font-bold text-ink tabular-nums outline-none transition-[border-color,box-shadow] focus-visible:border-brand-bright focus-visible:ring-4 focus-visible:ring-brand-blue/15"
           />
           <span className="text-sm font-semibold text-ink-soft">{unit}</span>
         </div>
@@ -382,7 +382,7 @@ export function RangeField({
               aria-pressed={p === value}
               className={cn(
                 "inline-flex min-h-9 items-center rounded-full border px-3.5 text-sm font-semibold tabular-nums transition-colors",
-                p === value ? "border-brand-blue bg-brand-blue text-white" : "border-line bg-white text-ink-soft hover:border-brand-blue/40 hover:text-ink",
+                p === value ? "border-brand-bright bg-brand-blue text-white" : "border-line bg-white text-ink-soft hover:border-brand-bright/40 hover:text-ink",
               )}
             >
               {formatPreset(p)}
@@ -424,7 +424,7 @@ export function NumberField({
       <label htmlFor={id} className="font-semibold text-ink">
         {label}
       </label>
-      <div className="mt-2 flex items-center rounded-xl border border-input bg-white focus-within:border-brand-blue focus-within:ring-4 focus-within:ring-brand-blue/15">
+      <div className="mt-2 flex items-center rounded-xl border border-input bg-white focus-within:border-brand-bright focus-within:ring-4 focus-within:ring-brand-blue/15">
         <input
           id={id}
           type="text"

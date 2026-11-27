@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-export const CV_MAX_BYTES = 5 * 1024 * 1024; // 5 MB
-export const CV_ACCEPT = "application/pdf";
+import { CV_ACCEPT, CV_MAX_BYTES } from "@/lib/validation/application-options";
+
+export { CV_ACCEPT, CV_MAX_BYTES };
 
 export const applicationSchema = z.object({
   job: z.string().trim().min(1).max(120),

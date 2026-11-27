@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/form-controls";
 import { submitApplication } from "@/lib/actions/apply";
 import { cn } from "@/lib/utils";
-import { CV_ACCEPT, type ApplicationField, type ApplicationState } from "@/lib/validation/application";
+import type { ApplicationField, ApplicationState } from "@/lib/validation/application";
+import { CV_ACCEPT } from "@/lib/validation/application-options";
 
 const initialState: ApplicationState = { status: "idle" };
 
@@ -81,11 +82,11 @@ export function ApplicationForm({ job, jobTitle, className }: { job: string; job
           <label
             htmlFor="cv"
             className={cn(
-              "flex cursor-pointer items-center gap-4 rounded-2xl border-2 border-dashed bg-surface p-4 transition-colors hover:border-brand-blue focus-within:border-brand-blue",
+              "flex cursor-pointer items-center gap-4 rounded-2xl border-2 border-dashed bg-surface p-4 transition-colors hover:border-brand-bright focus-within:border-brand-bright",
               err("cv") ? "border-destructive" : "border-input",
             )}
           >
-            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-brand-blue ring-1 ring-line">
+            <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-white text-brand-bright ring-1 ring-line">
               <FileUp aria-hidden className="size-5" />
             </span>
             <input
@@ -118,11 +119,11 @@ export function ApplicationForm({ job, jobTitle, className }: { job: string; job
             defaultChecked={val("consent") === "on"}
             aria-invalid={!!err("consent")}
             aria-describedby={describe("consent")}
-            className="mt-0.5 size-5 shrink-0 rounded accent-brand-blue"
+            className="mt-0.5 size-5 shrink-0 rounded accent-brand-bright"
           />
           <span>
             Autorizo a Misión Tecnológica a tratar mis datos y mi CV para procesos de selección, según la{" "}
-            <Link href="/privacidad" className="font-semibold text-brand-blue hover:underline">
+            <Link href="/privacidad" className="font-semibold text-brand-bright hover:underline">
               política de privacidad
             </Link>
             . *

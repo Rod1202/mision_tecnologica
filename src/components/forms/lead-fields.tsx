@@ -127,11 +127,11 @@ export function ConsentField({
           defaultChecked={defaultChecked}
           aria-invalid={!!error}
           aria-describedby={error ? `${prefix}-consent-error` : undefined}
-          className="mt-0.5 size-5 shrink-0 rounded accent-brand-blue"
+          className="mt-0.5 size-5 shrink-0 rounded accent-brand-bright"
         />
         <span>
           Autorizo a Misión Tecnológica a usar mis datos para responder esta solicitud, según la{" "}
-          <Link href="/privacidad" className="font-semibold text-brand-blue hover:underline">
+          <Link href="/privacidad" className="font-semibold text-brand-bright hover:underline">
             política de privacidad
           </Link>
           . *

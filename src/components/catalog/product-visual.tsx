@@ -1,8 +1,16 @@
-import { Laptop, Printer } from "lucide-react";
+import { Laptop, Printer, ReceiptText, Ruler, ScanBarcode, ScanLine, type LucideIcon } from "lucide-react";
 
 import { IsoStrokes } from "@/components/brand/pills";
 import type { ProductKind } from "@/lib/content/compare";
 import { cn } from "@/lib/utils";
+
+const glyphs: Partial<Record<ProductKind, LucideIcon>> = {
+  laptop: Laptop,
+  ticketera: ReceiptText,
+  plotter: Ruler,
+  lector: ScanBarcode,
+  escaner: ScanLine,
+};
 
 /**
  * Visual de producto mientras no haya fotografías oficiales autorizadas:
@@ -19,7 +27,7 @@ export function ProductVisual({
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
-  const Glyph = kind === "laptop" ? Laptop : Printer;
+  const Glyph = glyphs[kind] ?? Printer;
   return (
     <div
       aria-hidden
@@ -33,7 +41,7 @@ export function ProductVisual({
       <div className="flex flex-col items-center gap-3">
         <span
           className={cn(
-            "inline-flex items-center justify-center rounded-full bg-white text-brand-blue shadow-[0_18px_36px_-16px_rgb(0_20_51/0.7)]",
+            "inline-flex items-center justify-center rounded-full bg-white text-brand-bright shadow-[0_18px_36px_-16px_rgb(0_20_51/0.7)]",
             size === "sm" ? "size-10" : size === "lg" ? "size-28" : "size-20",
           )}
         >

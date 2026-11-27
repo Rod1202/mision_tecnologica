@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Award, Leaf } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Award, Leaf } from "lucide-react";
 
 import { Icon } from "@/components/brand/icon";
 import { SectionHeading } from "@/components/marketing/section-heading";
@@ -11,19 +12,20 @@ import { serviceLayers, sustainability } from "@/lib/content/home";
  */
 export function ServiceLayers() {
   return (
-    <section aria-labelledby="capas-title" className="section-y bg-white">
+    <section aria-labelledby="capas-title" className="section-y bg-smoke">
       <div className="container-mt grid gap-12 lg:grid-cols-12 lg:gap-14">
         <div className="lg:col-span-7">
           <SectionHeading
             id="capas-title"
             eyebrow="Valor agregado"
             title="Servicios adaptables, con capas que suman."
+            highlight="con capas que suman."
             description="Ofrecemos servicios adaptables a los requerimientos de cada cliente y los complementamos con capas de servicio."
           />
           <ul className="mt-10 grid gap-4 sm:grid-cols-2">
             {serviceLayers.map((l) => (
               <li key={l.title} className="flex gap-4 rounded-3xl border border-line bg-white p-5 shadow-soft">
-                <span aria-hidden className="inline-flex h-11 w-14 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+                <span aria-hidden className="inline-flex h-11 w-14 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
                   <Icon name={l.icon} className="size-5" />
                 </span>
                 <div className="min-w-0">
@@ -94,6 +96,14 @@ export function SustainabilityCard({ className }: { className?: string }) {
           ))}
         </ul>
       ) : null}
+
+      <Link
+        href="/asesoria"
+        className="mt-7 inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-6 font-semibold text-[#0b6b58] transition-colors hover:bg-white/90"
+      >
+        Suma sustentabilidad a tu operación
+        <ArrowRight aria-hidden className="size-4" />
+      </Link>
     </article>
   );
 }

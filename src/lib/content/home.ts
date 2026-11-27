@@ -38,9 +38,9 @@ export const serviceLayers: { title: string; description: string; icon: IconName
  * y foto de selva en `background`.
  */
 export const sustainability = {
-  title: "Líderes en sustentabilidad",
+  title: "Líderes en ventas sustentables",
   streak: "3 años consecutivos",
-  text: "Alcanzamos el nivel 5 estrellas en HP Amplify Impact, la máxima distinción en sostenibilidad del programa de socios de HP, y HP nos reconoció como el canal más sustentable de Latinoamérica en 2024.",
+  text: "Reconocidos tres años consecutivos como líderes en ventas sustentables. Contamos con la capacidad y la experiencia para sumar a tus metas de sustentabilidad.",
   /** Reconocimientos destacados. `image` = ruta en /public (opcional). */
   badges: [
     { label: "HP Amplify Impact", detail: "Nivel 5 estrellas" },

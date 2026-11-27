@@ -47,6 +47,8 @@ export type Product = {
   specSources?: { label: string; url: string }[];
   demo: true;
   verified: boolean;
+  /** Producto genérico de demostración (sin modelo real): solo visible en desarrollo/pruebas. */
+  placeholder?: boolean;
   note?: string;
 };
 
@@ -422,8 +424,77 @@ const previousModels: Product[] = [
   },
 ];
 
-/** Catálogo completo: modelos de lanzamiento primero, luego la generación anterior (todos se venden). */
-export const products: Product[] = [...launchModels, ...previousModels];
+/**
+ * Productos GENÉRICOS de demostración para las categorías de impresión sin modelos definidos todavía.
+ * Reemplazar por los modelos reales (con marca, ficha y fotografía) y quitar `placeholder`.
+ */
+const genericDemo = (
+  slug: string,
+  kind: ProductKind,
+  name: string,
+  category: string,
+  summary: string,
+  highlights: string[],
+): Product => ({
+  slug,
+  name,
+  model: "Demo",
+  brand: "Genérico",
+  family: "Producto de demostración",
+  kind,
+  generation: "lanzamiento",
+  category,
+  summary,
+  highlights,
+  specs: [],
+  demo: true,
+  verified: false,
+  placeholder: true,
+  note: "Producto genérico de demostración: reemplazar por el modelo real.",
+});
+
+const demoModels: Product[] = [
+  genericDemo(
+    "ticketera-termica-demo",
+    "ticketera",
+    "Ticketera térmica",
+    "Ticketeras",
+    "Impresora térmica de tickets y comprobantes para puntos de venta y atención al público.",
+    ["Impresión térmica rápida, sin tinta.", "Para cajas, mostradores y módulos de atención.", "Instalación y soporte de Misión Tecnológica."],
+  ),
+  genericDemo(
+    "plotter-gran-formato-demo",
+    "plotter",
+    "Plotter de gran formato",
+    "Plotters",
+    "Impresión de planos y gráficos en gran formato para áreas técnicas, de ingeniería y de diseño.",
+    ["Planos y láminas en A1 y A0.", "Para áreas técnicas y de proyectos.", "Instalación y soporte de Misión Tecnológica."],
+  ),
+  genericDemo(
+    "lector-codigo-barras-demo",
+    "lector",
+    "Lector de códigos de barras",
+    "Lectores",
+    "Lectura de códigos 1D y 2D para almacenes, tiendas y control de inventario.",
+    ["Lectura de códigos 1D y 2D.", "Para almacenes, cajas e inventarios.", "Configuración y soporte de Misión Tecnológica."],
+  ),
+  genericDemo(
+    "escaner-documental-demo",
+    "escaner",
+    "Escáner documental",
+    "Escáneres",
+    "Digitalización de documentos a alta velocidad con alimentador automático, para áreas con mucho archivo.",
+    ["Escaneo dúplex con alimentador automático.", "Ideal para proyectos de digitalización.", "Instalación y soporte de Misión Tecnológica."],
+  ),
+];
+
+/** Catálogo completo: modelos de lanzamiento, generación anterior (todos se venden) y genéricos de demostración. */
+export const products: Product[] = [...launchModels, ...previousModels, ...demoModels];
+
+/** Productos publicables: los genéricos de demostración solo se ven en desarrollo/pruebas. */
+export function visibleProducts(showPlaceholders: boolean) {
+  return products.filter((p) => !p.placeholder || showPlaceholders);
+}
 
 export function getProduct(slug: string) {
   return products.find((p) => p.slug === slug);

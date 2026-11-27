@@ -8,7 +8,7 @@ import type { Verification } from "./types";
 
 export const about = {
   intro:
-    "Misión Tecnológica es una empresa peruana de soluciones TI, cómputo e impresión. Somos Partner Platinum de HP desde 2016 y acompañamos a las organizaciones con outsourcing de impresión, cómputo, digitalización e infraestructura tecnológica.",
+    "Misión Tecnológica es una empresa peruana de soluciones TI, cómputo e impresión. Somos HP Power Services Partner y acompañamos a las organizaciones con outsourcing de impresión, cómputo, digitalización e infraestructura tecnológica.",
   mission:
     "Ser el aliado tecnológico por excelencia, aportando valor a través de soluciones TI y experiencia, para que las organizaciones ganen eficiencia e innovación.",
   vision:
@@ -27,32 +27,24 @@ export const about = {
   ],
 };
 
-/** Alianza con HP (web actual: Inicio, Nosotros y Soluciones). */
+/**
+ * Alianza con HP. Nivel según la página de LinkedIn de la empresa ("Power Services Partner", programa
+ * HP Amplify); historia y datos de servicio según la web actual.
+ */
 export const hpPartnership = {
-  badge: "HP Platinum Partner",
-  title: "Partner Platinum de HP",
+  badge: "HP Power Services Partner",
+  title: "Power Services Partner de HP",
   description:
-    "Desde 2016 mantenemos la condición de Partner Platinum de HP Inc., la categoría más alta que HP otorga a sus canales. En poco tiempo nos convertimos en su principal canal de soluciones de impresión para el segmento corporativo.",
+    "Somos HP Power Services Partner en HP Amplify, el programa de socios de HP. Desde 2016 estamos en la categoría más alta del programa de canales de HP y somos su principal canal de soluciones de impresión para el segmento corporativo.",
   meaning:
-    "Somos el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión, y Centro de Servicio Autorizado HP (CAS): realizamos servicios autorizados por la marca sobre el parque de impresoras de nuestros clientes, con disponibilidad de repuestos, mayor rapidez y gestión de garantías.",
+    "El nivel Power Services distingue a los socios que, además de comercializar equipos HP, prestan servicios gestionados sobre ellos. Somos el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión y Centro de Servicio Autorizado HP (CAS).",
   points: [
-    "Partner Platinum de HP Inc. desde 2016.",
+    "Power Services Partner en HP Amplify.",
+    "En la categoría más alta del programa de canales de HP desde 2016.",
     "Único canal monomarca de HP Inc. en el Perú para outsourcing de impresión corporativo.",
     "Centro de Servicio Autorizado HP (CAS).",
-    "Partner del Año 2017 y partner con mayor crecimiento y cobertura en impresión administrada.",
   ],
 };
-
-/** Premios otorgados (web actual, página Nosotros: imágenes "Premios nacionales" e "internacionales"). */
-export const awards: { group: "HP" | "Candefero"; title: string; detail?: string; year: string }[] = [
-  { group: "HP", title: "Platinum Partner", detail: "HP Partner First", year: "2019" },
-  { group: "HP", title: "Managed Print Services Partner", year: "FY20" },
-  { group: "HP", title: "Managed Print Services Corporate Partner", detail: "HP Amplify Awards", year: "FY21" },
-  { group: "HP", title: "Canal con mayor TCV en cMPS", detail: "HP Partner Awards", year: "FY23" },
-  { group: "Candefero", title: "Innovation and Transformation Partner of the Year", year: "2016" },
-  { group: "Candefero", title: "Infrastructure Growth Partner of the Year", detail: "LATAM", year: "2017" },
-  { group: "Candefero", title: "Innovation and Transformation Partner of the Year", detail: "LATAM", year: "2019" },
-];
 
 export type Certification = {
   code: string;
@@ -80,34 +72,6 @@ export const certifications: Certification[] = [
     name: "Sistema de Gestión Antisoborno",
     description:
       "Norma internacional para prevenir, detectar y enfrentar el soborno, con controles de integridad y transparencia en todas las operaciones.",
-  },
-];
-
-/** Estándares de trabajo que se desprenden de los sistemas de gestión certificados. */
-export const qualityStandards: { title: string; description: string }[] = [
-  {
-    title: "Procesos documentados",
-    description: "Cada servicio sigue procedimientos definidos, desde la implementación hasta el soporte.",
-  },
-  {
-    title: "Orientación al cliente",
-    description: "Medimos la satisfacción y atendemos los requerimientos con seguimiento hasta su cierre.",
-  },
-  {
-    title: "Mejora continua",
-    description: "Revisamos los resultados del servicio para corregir y mejorar de forma permanente.",
-  },
-  {
-    title: "Seguridad de la información",
-    description: "Protegemos la información de nuestros clientes con controles de confidencialidad y acceso.",
-  },
-  {
-    title: "Trazabilidad",
-    description: "Registramos las atenciones, entregas e inventarios para que todo pueda verificarse.",
-  },
-  {
-    title: "Personal capacitado",
-    description: "Nuestro equipo técnico se forma de manera continua en las soluciones que implementa.",
   },
 ];
 
@@ -147,26 +111,10 @@ export type Leader = {
 } & Verification;
 
 /**
- * Equipo directivo. COMPLETAR con nombres, cargos, fotografía y biografía aprobados.
- * Mientras `verified` sea false, la sección solo se ve en desarrollo/pruebas.
+ * Equipo directivo (confirmado por el equipo). Fotografía opcional en /public/equipo/ (`photo`).
  */
 export const leaders: Leader[] = [
-  {
-    name: "Nombre por confirmar",
-    role: "Gerente General",
-    verified: false,
-    note: "Completar nombre, fotografía y biografía aprobada.",
-  },
-  {
-    name: "Nombre por confirmar",
-    role: "Gerente Comercial",
-    verified: false,
-    note: "Completar nombre, fotografía y biografía aprobada.",
-  },
-  {
-    name: "Nombre por confirmar",
-    role: "Gerente de Operaciones",
-    verified: false,
-    note: "Completar nombre, fotografía y biografía aprobada.",
-  },
+  { name: "José Guerra", role: "Presidente Ejecutivo", verified: true },
+  { name: "Percy Guillen", role: "Gerente General", verified: true },
+  { name: "Humberto Northcode", role: "Gerente de Operaciones", verified: true },
 ];

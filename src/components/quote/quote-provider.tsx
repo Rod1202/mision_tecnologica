@@ -4,7 +4,6 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 import { serviceIds, type ServiceId } from "@/lib/content/quote";
 import { defaultQuote, type QuoteState } from "@/lib/quote";
-import { quoteStateSchema } from "@/lib/validation/quote";
 
 /**
  * Estado del cotizador, compartido entre el selector de la cabecera y el área de configuración.
@@ -32,6 +31,35 @@ const ordered = (ids: Iterable<ServiceId>) => {
   return serviceIds.filter((id) => set.has(id));
 };
 
+/**
+ * Borrador guardado + preselección por URL. El esquema (zod, ~90 KB gzip) se importa aquí bajo demanda:
+ * así no forma parte de la carga inicial de la página y se descarga en paralelo, después de mostrarla.
+ */
+async function restoreDraft(): Promise<QuoteState> {
+  let next = defaultQuote;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const { quoteStateSchema } = await import("@/lib/validation/quote");
+      const parsed = quoteStateSchema.safeParse(JSON.parse(raw));
+      if (parsed.success) next = parsed.data;
+    }
+  } catch {
+    /* sin persistencia */
+  }
+  const fromUrl = (new URLSearchParams(window.location.search).get("servicio") ?? "").split(",").filter(isServiceId);
+  if (fromUrl.length) {
+    next = { ...next, services: ordered([...next.services, ...fromUrl]) };
+    // Se aplica una sola vez: si el usuario luego quita el servicio, recargar no debe volver a agregarlo.
+    try {
+      window.history.replaceState(window.history.state, "", window.location.pathname + window.location.hash);
+    } catch {
+      /* ignorar */
+    }
+  }
+  return next;
+}
+
 export function QuoteProvider({ children }: { children: React.ReactNode }) {
   const [quote, setQuote] = useState<QuoteState>(defaultQuote);
   const [hydrated, setHydrated] = useState(false);
@@ -42,28 +70,10 @@ export function QuoteProvider({ children }: { children: React.ReactNode }) {
     // Una sola restauración (el modo estricto ejecuta el efecto dos veces y la URL ya se limpió en la primera).
     if (restored.current) return;
     restored.current = true;
-    let next = defaultQuote;
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = quoteStateSchema.safeParse(JSON.parse(raw));
-        if (parsed.success) next = parsed.data;
-      }
-    } catch {
-      /* sin persistencia */
-    }
-    const fromUrl = (new URLSearchParams(window.location.search).get("servicio") ?? "").split(",").filter(isServiceId);
-    if (fromUrl.length) {
-      next = { ...next, services: ordered([...next.services, ...fromUrl]) };
-      // Se aplica una sola vez: si el usuario luego quita el servicio, recargar no debe volver a agregarlo.
-      try {
-        window.history.replaceState(window.history.state, "", window.location.pathname + window.location.hash);
-      } catch {
-        /* ignorar */
-      }
-    }
-    setQuote(next);
-    setHydrated(true);
+    void restoreDraft().then((next) => {
+      setQuote(next);
+      setHydrated(true);
+    });
   }, []);
 
   useEffect(() => {

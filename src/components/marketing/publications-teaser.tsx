@@ -9,13 +9,14 @@ import { siteConfig } from "@/lib/site";
 /** 07 · Conocimiento: publicaciones recientes de LinkedIn (máximo 3). */
 export function PublicationsTeaser() {
   return (
-    <section aria-labelledby="publicaciones-title" className="section-y bg-white">
+    <section aria-labelledby="publicaciones-title" className="section-y bg-surface">
       <div className="container-mt">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             id="publicaciones-title"
             eyebrow="Publicaciones"
             title="Ideas y novedades para tomar mejores decisiones."
+            highlight="mejores decisiones."
             description="Lo último que compartimos en LinkedIn sobre tecnología, impresión empresarial y operaciones."
           />
           <div className="flex shrink-0 flex-wrap gap-3">

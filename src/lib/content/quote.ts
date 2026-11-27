@@ -59,7 +59,7 @@ export const locationOptions = [
 ] as const satisfies readonly Option[];
 export type Location = (typeof locationOptions)[number]["value"];
 
-/** Plazo del contrato (cómputo, impresión, audio y video). La digitalización usa su propio "plazo del servicio". */
+/** Plazo del contrato: solo cómputo e impresión. La digitalización usa su propio "plazo del servicio"; audio y video no lleva contrato. */
 export const termOptions = [
   { value: 12, label: "12 meses" },
   { value: 24, label: "24 meses" },
@@ -95,14 +95,6 @@ export const computoModeOptions = [
 ] as const satisfies readonly Option[];
 export type ComputoMode = (typeof computoModeOptions)[number]["value"];
 
-export const computoExtraOptions = [
-  { value: "soporte", label: "Mesa de ayuda y soporte en sitio" },
-  { value: "gestion", label: "Gestión remota y antivirus" },
-  { value: "imagen", label: "Imagen y configuración inicial" },
-  { value: "perifericos", label: "Monitor, teclado y mouse" },
-] as const satisfies readonly Option[];
-export type ComputoExtra = (typeof computoExtraOptions)[number]["value"];
-
 // Impresión
 export const printFleetOptions = [
   { value: "actual", label: "Equipos actuales" },
@@ -124,12 +116,6 @@ export const printModeOptions = [
   { value: "venta", label: "Venta de equipo + servicio", hint: "Compras los equipos y contratas consumibles y soporte" },
 ] as const satisfies readonly Option[];
 export type PrintMode = (typeof printModeOptions)[number]["value"];
-
-export const printExtraOptions = [
-  { value: "segura", label: "Impresión segura con PIN o tarjeta" },
-  { value: "monitoreo", label: "Monitoreo y reportes de volumetría" },
-] as const satisfies readonly Option[];
-export type PrintExtra = (typeof printExtraOptions)[number]["value"];
 
 export const printVolumePresets = [2_000, 10_000, 30_000, 80_000];
 

@@ -9,6 +9,7 @@ import { quoteServices } from "@/lib/content/quote";
  * 03 · Encuentra tu solución: segmentación por perfil.
  * - "Sé lo que necesito" → cotizador autoguiado (/cotizador).
  * - "Quiero que me asesoren" → flujo consultivo con reunión exploratoria (/asesoria).
+ * Es el punto de entrada de todos los llamados a cotizar o contactar (encabezado, cierre del inicio).
  * Ambos exigen datos B2B (correo corporativo, empresa, RUC, nombre y apellido) para enviar.
  */
 export function SolutionFinder() {
@@ -16,15 +17,15 @@ export function SolutionFinder() {
     <section
       id="encuentra-tu-solucion"
       aria-labelledby="encuentra-title"
-      className="section-y relative isolate overflow-hidden bg-brand-blue text-white"
+      className="section-y relative isolate overflow-hidden bg-white"
     >
-      <IsoStrokes className="top-[-20%] left-[-30%] -z-10 h-[140%] w-[80%] opacity-[0.07] lg:left-[-6%] lg:w-[38%]" />
+      <IsoStrokes tone="blue" className="top-[-20%] left-[-30%] -z-10 h-[140%] w-[80%] opacity-[0.04] lg:left-[-6%] lg:w-[38%]" />
       <div className="container-mt">
         <SectionHeading
           id="encuentra-title"
-          tone="inverse"
           eyebrow="Encuentra tu solución"
           title="Encuentra tu solución sin perder tiempo."
+          highlight="sin perder tiempo."
           description="Cotiza directamente o recibe una recomendación inicial de un asesor."
         />
 
@@ -32,9 +33,9 @@ export function SolutionFinder() {
           <li>
             <Link
               href="/cotizador"
-              className="group flex h-full flex-col rounded-[2rem] bg-white p-7 text-ink shadow-[0_30px_60px_-30px_rgb(0_20_51/0.7)] transition-transform hover:-translate-y-0.5 sm:p-9"
+              className="group flex h-full flex-col rounded-[2rem] border border-line bg-smoke p-7 text-ink transition-[transform,box-shadow,border-color] hover:-translate-y-0.5 hover:border-brand-bright/40 hover:bg-white hover:shadow-lift sm:p-9"
             >
-              <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue text-white">
+              <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-bright text-white">
                 <Rocket className="size-6" strokeWidth={1.8} />
               </span>
               <h3 className="mt-7 text-2xl font-bold sm:text-3xl">Sé lo que necesito</h3>
@@ -48,7 +49,7 @@ export function SolutionFinder() {
                   </li>
                 ))}
               </ul>
-              <span className="mt-auto inline-flex items-center gap-2 pt-8 font-semibold text-brand-blue">
+              <span className="mt-auto inline-flex items-center gap-2 pt-8 font-semibold text-brand-bright">
                 Cotizar directamente
                 <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
               </span>
@@ -57,7 +58,7 @@ export function SolutionFinder() {
           <li>
             <Link
               href="/asesoria"
-              className="group flex h-full flex-col rounded-[2rem] bg-white p-7 text-ink shadow-[0_30px_60px_-30px_rgb(0_20_51/0.7)] transition-transform hover:-translate-y-0.5 sm:p-9"
+              className="group flex h-full flex-col rounded-[2rem] border border-line bg-smoke p-7 text-ink transition-[transform,box-shadow,border-color] hover:-translate-y-0.5 hover:border-brand-bright/40 hover:bg-white hover:shadow-lift sm:p-9"
             >
               <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-teal-700 text-white">
                 <Compass className="size-6" strokeWidth={1.8} />
@@ -73,7 +74,7 @@ export function SolutionFinder() {
                   </li>
                 ))}
               </ol>
-              <span className="mt-auto inline-flex items-center gap-2 pt-8 font-semibold text-brand-blue">
+              <span className="mt-auto inline-flex items-center gap-2 pt-8 font-semibold text-brand-bright">
                 Iniciar diagnóstico
                 <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
               </span>
@@ -81,7 +82,7 @@ export function SolutionFinder() {
           </li>
         </ul>
 
-        <p className="mt-8 text-sm text-white/85">
+        <p className="mt-8 text-sm text-ink-soft">
           Para enviar una solicitud te pediremos correo corporativo, empresa, RUC, nombre y apellido. El teléfono es opcional.
         </p>
       </div>

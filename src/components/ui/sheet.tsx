@@ -31,7 +31,7 @@ function SheetContent({
       >
         {children}
         <SheetPrimitive.Close
-          className="absolute top-4 right-4 inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-surface focus-visible:outline-2 focus-visible:outline-brand-blue"
+          className="absolute top-4 right-4 inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-surface focus-visible:outline-2 focus-visible:outline-brand-bright"
           aria-label={closeLabel}
         >
           <X className="size-5" aria-hidden />

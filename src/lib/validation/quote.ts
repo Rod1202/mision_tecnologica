@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import {
   avNeedOptions,
-  computoExtraOptions,
   computoModeOptions,
   docTypeOptions,
   headsetFeatureOptions,
@@ -10,7 +9,6 @@ import {
   limits,
   locationOptions,
   platformOptions,
-  printExtraOptions,
   printFleetOptions,
   printModeOptions,
   profileOptions,
@@ -47,7 +45,6 @@ export const quoteStateSchema = z.object({
     }),
     profile: z.enum(values(profileOptions)),
     mode: z.enum(values(computoModeOptions)),
-    extras: unique(z.enum(values(computoExtraOptions))),
   }),
   impresion: z.object({
     fleet: z.enum(values(printFleetOptions)),
@@ -60,7 +57,6 @@ export const quoteStateSchema = z.object({
       a3: int(limits.formatPages.min, limits.formatPages.max),
     }),
     mode: z.enum(values(printModeOptions)),
-    extras: unique(z.enum(values(printExtraOptions))),
   }),
   digitalizacion: z.object({
     unit: z.enum(values(scanUnitOptions)),

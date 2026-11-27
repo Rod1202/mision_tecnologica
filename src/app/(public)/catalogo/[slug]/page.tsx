@@ -10,8 +10,8 @@ import { ProductVisual } from "@/components/catalog/product-visual";
 import { CompareToggle, CompareWithLink } from "@/components/compare/compare-toggle";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
-import { specRows } from "@/lib/content/compare";
-import { getProduct, predecessorsOf, printColorOf, productHref, products, upgradesFor } from "@/lib/content/products";
+import { isComparableKind, specRows } from "@/lib/content/compare";
+import { getProduct, predecessorsOf, printColorOf, productHref, upgradesFor, visibleProducts } from "@/lib/content/products";
 import { showUnverifiedContent } from "@/lib/site";
 import { solutionHref } from "@/lib/content/solutions";
 
@@ -20,7 +20,7 @@ type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return visibleProducts(showUnverifiedContent()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -40,7 +40,7 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) notFound();
-  const others = products.filter((p) => p.slug !== product.slug);
+  const others = visibleProducts(showUnverifiedContent()).filter((p) => p.slug !== product.slug && p.kind === product.kind);
   // Ficha: datos ya validados, o los de la hoja de datos pública mientras se validan (solo donde se permite contenido no validado).
   const showSpecs = product.verified || showUnverifiedContent();
   const specs = [
@@ -87,10 +87,10 @@ export default async function ProductPage({ params }: Props) {
                 </p>
                 <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <AddToQuoteButton slug={product.slug} name={product.name} size="lg" className="flex-1" />
-                  <CompareToggle slug={product.slug} name={product.name} className="h-13 px-5" />
+                  {isComparableKind(product.kind) ? <CompareToggle slug={product.slug} name={product.name} className="h-13 px-5" /> : null}
                   <Link
                     href={solutionHref("outsourcing-de-impresion")}
-                    className="inline-flex h-13 items-center justify-center rounded-full px-6 font-semibold text-brand-blue hover:bg-white"
+                    className="inline-flex h-13 items-center justify-center rounded-full px-6 font-semibold text-brand-bright hover:bg-white"
                   >
                     Servicio de impresión
                   </Link>
@@ -124,14 +124,14 @@ export default async function ProductPage({ params }: Props) {
                   ))}
                 </dl>
                 <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-                  <CompareWithLink slug={product.slug} className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+                  <CompareWithLink slug={product.slug} className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline">
                     Comparar con otros equipos
                     <ArrowRight aria-hidden className="size-4" />
                   </CompareWithLink>
                   {upgradesFor(product.slug).length || printColorOf(product.slug) === "color" ? (
                     <Link
                       href={`/catalogo/comparar?actual=${product.slug}#upgrade`}
-                      className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
+                      className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline"
                     >
                       ¿Ya tienes este equipo? Mira sus opciones de upgrade
                       <ArrowRight aria-hidden className="size-4" />
@@ -143,7 +143,7 @@ export default async function ProductPage({ params }: Props) {
                     <Link
                       key={old.slug}
                       href={`/catalogo/comparar?modelos=${old.slug},${product.slug}`}
-                      className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline"
+                      className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline"
                     >
                       Salto de generación desde el {old.model}
                       <ArrowRight aria-hidden className="size-4" />
@@ -153,7 +153,7 @@ export default async function ProductPage({ params }: Props) {
               </>
             ) : (
               <div className="mt-6 flex items-start gap-4 rounded-3xl border border-dashed border-line bg-surface p-6">
-                <FileSearch aria-hidden className="mt-0.5 size-6 shrink-0 text-brand-blue" />
+                <FileSearch aria-hidden className="mt-0.5 size-6 shrink-0 text-brand-bright" />
                 <p className="leading-relaxed text-ink-soft">
                   Estamos validando la ficha técnica oficial de HP para este modelo. Solicita tu cotización y un asesor te enviará las
                   especificaciones completas.
@@ -171,7 +171,7 @@ export default async function ProductPage({ params }: Props) {
               <h2 id="otros-title" className="text-2xl font-bold text-ink sm:text-3xl">
                 Otros equipos
               </h2>
-              <Link href="/catalogo" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+              <Link href="/catalogo" className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline">
                 Ver catálogo
                 <ArrowRight aria-hidden className="size-4" />
               </Link>

@@ -20,7 +20,7 @@ const nextSteps = [
 export function ContactCta() {
   return (
     // Tarjeta azul sobre fondo gris: así el cierre no se funde con el pie de página (también azul).
-    <section id="contacto" aria-labelledby="contacto-title" className="section-y bg-surface">
+    <section id="contacto" aria-labelledby="contacto-title" className="section-y bg-white">
       <div className="container-mt">
         <div className="relative isolate overflow-hidden rounded-[2rem] bg-brand-gradient-deep px-6 py-12 text-white shadow-lift sm:px-10 lg:px-14 lg:py-16">
           <IsoStrokes className="top-[-10%] left-[-8%] -z-10 h-[120%] w-[40%] opacity-[0.08]" />
@@ -31,11 +31,12 @@ export function ContactCta() {
               tone="inverse"
               eyebrow="Hablemos de tu operación"
               title="¿Qué necesita mejorar tu empresa?"
+            highlight="mejorar"
               description="Cuéntanos qué necesita tu organización y te ayudaremos a identificar el siguiente paso."
             />
             <Button asChild variant="inverse" size="lg" className="self-start lg:self-auto">
-              <Link href="/contacto">
-                Contáctanos
+              <Link href="/#encuentra-tu-solucion">
+                Encuentra tu solución
                 <ArrowRight aria-hidden />
               </Link>
             </Button>
@@ -44,7 +45,7 @@ export function ContactCta() {
           <ol className="mt-12 grid gap-4 md:grid-cols-3 lg:gap-6">
             {nextSteps.map((step, i) => (
               <li key={step.title} className="flex gap-4 rounded-3xl bg-white/10 p-6 ring-1 ring-white/20 ring-inset">
-                <span className="inline-flex h-9 w-12 shrink-0 items-center justify-center rounded-full bg-white font-bold text-brand-blue tabular-nums">
+                <span className="inline-flex h-9 w-12 shrink-0 items-center justify-center rounded-full bg-white font-bold text-brand-bright tabular-nums">
                   {i + 1}
                 </span>
                 <div>

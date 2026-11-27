@@ -15,7 +15,16 @@ import { cn } from "@/lib/utils";
  * - Teclado: flechas izquierda/derecha, Inicio y Fin cambian de pestaña.
  * - La pestaña activa se refleja en la URL (#educacion, #logistica…) para poder enlazarla.
  */
-export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /** Reflejar la pestaña en la URL (#slug). */ syncHash?: boolean }) {
+export function SectorTabs({
+  sectors,
+  syncHash = true,
+  className,
+}: {
+  sectors: Sector[];
+  /** Reflejar la pestaña en la URL (#slug). */
+  syncHash?: boolean;
+  className?: string;
+}) {
   const [active, setActive] = useState(sectors[0]?.slug ?? "");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -55,7 +64,7 @@ export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /*
   };
 
   return (
-    <div className="mt-10">
+    <div className={className ?? "mt-10"}>
       <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div role="tablist" aria-label="Sectores" className="inline-flex min-w-max gap-1 rounded-full bg-white p-1.5 ring-1 ring-line ring-inset">
           {sectors.map((s, i) => (
@@ -75,8 +84,8 @@ export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /*
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
                 "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap text-ink-soft transition-colors sm:px-5",
-                "hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
-                "data-[state=active]:bg-brand-blue data-[state=active]:text-white data-[state=active]:shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]",
+                "hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-bright",
+                "data-[state=active]:bg-brand-blue data-[state=active]:text-white data-[state=active]:shadow-[0_8px_20px_-10px_rgb(0_82_204/0.7)]",
               )}
             >
               <Icon name={s.icon} className="size-4" />
@@ -109,7 +118,7 @@ export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /*
               <ul className="mt-4 space-y-3">
                 {s.howWeHelp.map((h) => (
                   <li key={h} className="flex gap-3">
-                    <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-brand-blue">
+                    <span className="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-brand-bright">
                       <Check aria-hidden className="size-3.5" strokeWidth={3} />
                     </span>
                     <span className="leading-relaxed">{h}</span>
@@ -136,7 +145,7 @@ export function SectorTabs({ sectors, syncHash = true }: { sectors: Sector[]; /*
                 </p>
               )}
 
-              <Link href="/asesoria" className="mt-8 inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+              <Link href="/asesoria" className="mt-8 inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline">
                 Conversemos sobre tu empresa
                 <ArrowRight aria-hidden className="size-4" />
               </Link>

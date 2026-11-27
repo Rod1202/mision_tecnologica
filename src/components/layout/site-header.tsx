@@ -49,7 +49,7 @@ export function SiteHeader() {
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "relative rounded-full px-2.5 py-2 text-[0.95rem] font-semibold whitespace-nowrap transition-colors xl:px-3.5",
-                      active ? "text-brand-blue" : "text-ink hover:text-brand-blue",
+                      active ? "text-brand-bright" : "text-ink hover:text-brand-bright",
                     )}
                   >
                     {item.label}
@@ -65,23 +65,12 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <QuoteCartButton />
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            className={cn(
-              "hidden sm:inline-flex lg:h-11 lg:px-5 lg:text-[0.95rem]",
-              pathname === "/cotizador" && "border-brand-blue bg-brand-blue-50",
-            )}
-          >
-            <Link href="/cotizador" onClick={toTopIfSamePage("/cotizador")} aria-current={pathname === "/cotizador" ? "page" : undefined}>
-              <Calculator aria-hidden />
-              <span className="lg:hidden xl:inline">Cotizar proyecto</span>
-              <span className="hidden lg:inline xl:hidden">Cotizar</span>
-            </Link>
-          </Button>
+          {/* Un solo llamado: lleva a "Encuentra tu solución" (cotizar o asesoría, sin cambiar de página) */}
           <Button asChild size="sm" className="hidden sm:inline-flex lg:h-11 lg:px-5 lg:text-[0.95rem]">
-            <Link href="/contacto">Contáctanos</Link>
+            <Link href="/#encuentra-tu-solucion">
+              <Calculator aria-hidden />
+              Cotizar proyecto
+            </Link>
           </Button>
           <MobileNav />
         </div>

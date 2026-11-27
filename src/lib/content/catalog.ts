@@ -3,6 +3,8 @@ import type { IconName } from "./types";
 
 /**
  * Líneas del catálogo corporativo (sin precios). Futura colección `CatalogLines` de Payload.
+ * Impresión muestra modelos (HP + productos genéricos de demostración para ticketeras, plotters, lectores
+ * y escáneres). Cómputo y Audio y video se presentan solo con las marcas con las que trabajamos.
  * Cada línea agrupa las categorías que Misión Tecnológica cotiza, aunque todavía no tengan fichas publicadas:
  * así el visitante ve el portafolio completo y puede pedir una cotización de cualquiera de ellas.
  */
@@ -17,6 +19,8 @@ export type CatalogLine = {
   icon: IconName;
   /** Marcas con las que trabajamos en esta línea. */
   brands: string[];
+  /** Sin fichas de producto: la línea se presenta solo con sus marcas y categorías. */
+  brandsOnly?: boolean;
   /** Categorías que se cotizan en esta línea (con o sin fichas publicadas). */
   categories: string[];
   /** Servicio del cotizador que corresponde a la línea (para "Cotizar"). */
@@ -39,6 +43,7 @@ export const catalogLines: CatalogLine[] = [
     summary: "Laptops, PC, equipos compactos, workstations, all in one, monitores y periféricos.",
     icon: "laptop",
     brands: ["HP", "ASUS", "Lenovo"],
+    brandsOnly: true,
     categories: ["Laptops", "PC de escritorio", "Small Form Factor (SFF)", "All in One", "Workstations", "Monitores", "Mouse y periféricos"],
     quoteService: "computo",
   },
@@ -47,7 +52,8 @@ export const catalogLines: CatalogLine[] = [
     title: "Audio y video",
     summary: "Cámaras de videoconferencia, micrófonos, audífonos, headsets y proyectores.",
     icon: "video",
-    brands: [],
+    brands: ["Poly", "HP"],
+    brandsOnly: true,
     categories: ["Cámaras de videoconferencia", "Micrófonos", "Audífonos", "Headsets", "Proyectores"],
     quoteService: "audiovideo",
   },
@@ -56,6 +62,10 @@ export const catalogLines: CatalogLine[] = [
 /** Línea del catálogo según el tipo de equipo de la ficha. */
 export const lineOfKind: Record<ProductKind, CatalogLineId> = {
   impresora: "impresion",
+  ticketera: "impresion",
+  plotter: "impresion",
+  lector: "impresion",
+  escaner: "impresion",
   laptop: "computo",
 };
 

@@ -6,7 +6,7 @@ import { Breadcrumbs, type Crumb } from "@/components/layout/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/** Cabecera de páginas interiores (fondo de marca + franjas del isotipo). */
+/** Cabecera de páginas interiores: fondo blanco humo con las franjas del isotipo en azul muy tenue. */
 export function PageIntro({
   eyebrow,
   title,
@@ -21,13 +21,13 @@ export function PageIntro({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-brand-blue text-white">
-      <IsoStrokes className="top-[-30%] right-[-45%] -z-10 h-[170%] w-[95%] opacity-[0.09] sm:right-[-20%] sm:w-[70%] lg:right-[-4%] lg:w-[42%]" />
-      <div className="container-mt py-14 sm:py-20 lg:py-24">
-        {breadcrumbs ? <Breadcrumbs items={breadcrumbs} className="mb-8" /> : null}
-        <Eyebrow tone="inverse">{eyebrow}</Eyebrow>
+    <section className="relative isolate overflow-hidden border-b border-line bg-smoke text-ink">
+      <IsoStrokes tone="blue" className="top-[-30%] right-[-45%] -z-10 h-[170%] w-[95%] opacity-[0.05] sm:right-[-20%] sm:w-[70%] lg:right-[-4%] lg:w-[42%]" />
+      <div className="container-mt py-12 sm:py-16 lg:py-20">
+        {breadcrumbs ? <Breadcrumbs tone="default" items={breadcrumbs} className="mb-8" /> : null}
+        <Eyebrow>{eyebrow}</Eyebrow>
         <h1 className="mt-5 max-w-4xl text-4xl leading-[1.05] font-extrabold sm:text-5xl lg:text-6xl">{title}</h1>
-        {description ? <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">{description}</p> : null}
+        {description ? <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft">{description}</p> : null}
         {children}
       </div>
     </section>
@@ -40,7 +40,7 @@ export function ComingSoon({ text }: { text?: string }) {
     <section className="section-y bg-white">
       <div className="container-mt">
         <div className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-dashed border-line bg-surface px-6 py-12 text-center sm:px-12">
-          <span className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+          <span className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
             <Construction aria-hidden className="size-6" />
           </span>
           <h2 className="mt-6 text-2xl font-bold text-ink">Contenido en preparación</h2>

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 /**
  * 01 · Hero: video de fondo (cuando exista), propuesta de valor, los 3 pilares y un solo botón,
  * "Conoce más", que baja a Soluciones para iniciar el recorrido (storyline) de la página.
- * Sin video: fondo azul de marca #003D99 con las franjas translúcidas del isotipo.
+ * Sin video: fondo azul de marca #0052CC con las franjas translúcidas del isotipo.
  */
 export function Hero() {
   const hasVideo = !!heroVideo.src;

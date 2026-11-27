@@ -131,7 +131,7 @@ function QuoteCartSheet() {
 
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <span className="inline-flex h-14 w-20 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+            <span className="inline-flex h-14 w-20 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
               <ShoppingBag aria-hidden className="size-7" />
             </span>
             <p className="font-semibold text-ink">Aún no agregaste equipos.</p>
@@ -152,7 +152,7 @@ function QuoteCartSheet() {
                       <Link
                         href={productHref(p.slug)}
                         onClick={() => setOpen(false)}
-                        className="line-clamp-2 font-semibold text-ink hover:text-brand-blue"
+                        className="line-clamp-2 font-semibold text-ink hover:text-brand-bright"
                       >
                         {p.name}
                       </Link>

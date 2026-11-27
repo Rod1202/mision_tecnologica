@@ -7,7 +7,6 @@ import { ChipGroup, Choice, ControlGroup, NumberField, RangeField, Stepper } fro
 import { focusSoon, useQuote } from "@/components/quote/quote-provider";
 import {
   avNeedOptions,
-  computoExtraOptions,
   computoModeOptions,
   deviceOptions,
   docTypeOptions,
@@ -18,7 +17,6 @@ import {
   locationOptions,
   paperFormats,
   platformOptions,
-  printExtraOptions,
   printFleetOptions,
   printModeOptions,
   profileOptions,
@@ -65,13 +63,13 @@ function Panel({
       className="animate-panel-in scroll-mt-24 rounded-[2rem] border border-line bg-white p-6 shadow-soft sm:p-8"
     >
       <header className="flex items-start gap-4">
-        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+        <span aria-hidden className="inline-flex h-12 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
           {icon}
         </span>
         <div className="min-w-0 flex-1">
-          <h2 id={`${id}-title`} tabIndex={-1} className="text-2xl font-bold text-ink outline-none">
+          <h3 id={`${id}-title`} tabIndex={-1} className="text-2xl font-bold text-ink outline-none">
             {title}
-          </h2>
+          </h3>
           <p className="mt-1 leading-relaxed text-ink-soft">{description}</p>
         </div>
         {onRemove ? (
@@ -91,10 +89,10 @@ function Panel({
   );
 }
 
-/** Al quitar un servicio, el foco pasa a su botón "Agregar" (o al estado vacío si no queda ninguno). */
-function removeService(quote: { services: ServiceId[] }, toggleService: (id: ServiceId, on?: boolean) => void, id: ServiceId) {
+/** Al quitar un servicio, el foco vuelve a su casilla en el paso 1. */
+function removeService(toggleService: (id: ServiceId, on?: boolean) => void, id: ServiceId) {
   toggleService(id, false);
-  focusSoon(quote.services.length > 1 ? `agregar-${id}` : "cotizador-vacio");
+  focusSoon(`servicio-${id}`);
 }
 
 /** Datos clave del servicio, en una franja (sin montos: la propuesta la prepara un asesor). */
@@ -137,7 +135,7 @@ export function ProjectPanel() {
       </div>
       <div className={cn("grid gap-8 sm:gap-x-10", showTerm && "sm:grid-cols-2")}>
         {showTerm ? (
-          <ControlGroup legend="Plazo del contrato" hint="Cómputo, impresión y audio y video">
+          <ControlGroup legend="Plazo del contrato" hint="Cómputo e impresión">
             <Choice name="plazo" options={termOptions} value={p.term} onChange={(term) => patch("project", { term })} />
           </ControlGroup>
         ) : null}
@@ -167,7 +165,7 @@ export function ComputoPanel() {
       title={svc.title}
       description="Equipos para tus colaboradores, con el perfil y la modalidad que prefieras."
       icon={<Icon name={svc.icon} className="size-6" />}
-      onRemove={() => removeService(quote, toggleService, "computo")}
+      onRemove={() => removeService(toggleService, "computo")}
       aside={
         <Facts
           items={[
@@ -204,10 +202,6 @@ export function ComputoPanel() {
       <ControlGroup legend="Modalidad">
         <Choice name="modalidad-computo" variant="cards" options={computoModeOptions} value={c.mode} onChange={(mode) => patch("computo", { mode })} />
       </ControlGroup>
-
-      <ControlGroup legend="Servicios adicionales" hint="Opcional">
-        <ChipGroup options={computoExtraOptions} values={c.extras} onChange={(extras) => patch("computo", { extras })} />
-      </ControlGroup>
     </Panel>
   );
 }
@@ -230,7 +224,7 @@ export function ImpresionPanel() {
       title={svc.title}
       description="Tu parque de equipos, cuánto imprimes al mes y cómo prefieres el servicio."
       icon={<Icon name={svc.icon} className="size-6" />}
-      onRemove={() => removeService(quote, toggleService, "impresion")}
+      onRemove={() => removeService(toggleService, "impresion")}
       aside={
         <Facts
           items={[
@@ -283,7 +277,7 @@ export function ImpresionPanel() {
             <button
               type="button"
               onClick={() => patch("impresion", { formats: { a4: total, oficio: 0, a3: 0 } })}
-              className="font-semibold text-brand-blue hover:underline"
+              className="font-semibold text-brand-bright hover:underline"
             >
               Usar el total en A4
             </button>
@@ -293,10 +287,6 @@ export function ImpresionPanel() {
 
       <ControlGroup legend="Modalidad">
         <Choice name="modalidad-impresion" variant="cards" columns={3} options={printModeOptions} value={p.mode} onChange={(mode) => patch("impresion", { mode })} />
-      </ControlGroup>
-
-      <ControlGroup legend="Servicios adicionales" hint="Opcional">
-        <ChipGroup options={printExtraOptions} values={p.extras} onChange={(extras) => patch("impresion", { extras })} />
       </ControlGroup>
     </Panel>
   );
@@ -331,7 +321,7 @@ export function DigitalizacionPanel() {
       title={svc.title}
       description="El archivo que quieres digitalizar, en cuánto tiempo y qué necesitas hacer con él después."
       icon={<Icon name={svc.icon} className="size-6" />}
-      onRemove={() => removeService(quote, toggleService, "digitalizacion")}
+      onRemove={() => removeService(toggleService, "digitalizacion")}
       aside={
         <Facts
           items={[
@@ -400,7 +390,7 @@ export function AudioVideoPanel() {
       title={svc.title}
       description="Salas de reuniones para videoconferencia y headsets para tus colaboradores."
       icon={<Icon name={svc.icon} className="size-6" />}
-      onRemove={() => removeService(quote, toggleService, "audiovideo")}
+      onRemove={() => removeService(toggleService, "audiovideo")}
       aside={
         <Facts
           items={[
@@ -442,7 +432,7 @@ export function AudioVideoPanel() {
               <button
                 type="button"
                 onClick={() => patch("audiovideo", { rooms: [...a.rooms, { rooms: 1, users: 4 }] })}
-                className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold text-brand-blue hover:bg-white"
+                className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm font-semibold text-brand-bright hover:bg-white"
               >
                 <Plus aria-hidden className="size-4" />
                 Agregar otro tamaño de sala

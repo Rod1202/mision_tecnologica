@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
   // URLs antiguas → nuevas (301). Documentar aquí cada cambio de URL.
   async redirects() {
     return [
+      // Soluciones es una vista maestro-detalle: la entrada abre la primera solución (redirección temporal)
+      { source: "/soluciones", destination: "/soluciones/outsourcing-de-impresion", permanent: false },
       { source: "/impresion-empresarial", destination: "/soluciones/outsourcing-de-impresion", permanent: true },
       // Nombres anteriores de las soluciones (ronda 2) → 4 líneas de negocio de la web actual
       { source: "/soluciones/impresion-empresarial", destination: "/soluciones/outsourcing-de-impresion", permanent: true },
@@ -25,7 +27,9 @@ const nextConfig: NextConfig = {
       { source: "/tienda/:path*", destination: "/catalogo/:path*", permanent: true },
       // URLs de la web actual (WordPress) para conservar enlaces y posicionamiento al cambiar el dominio
       { source: "/inicio-2", destination: "/nosotros", permanent: true },
-      { source: "/contactanos", destination: "/contacto", permanent: true },
+      { source: "/contactanos", destination: "/#encuentra-tu-solucion", permanent: true },
+      // Contacto: el punto de entrada es "Encuentra tu solución" del inicio (de ahí, /cotizador o /asesoria)
+      { source: "/contacto", destination: "/#encuentra-tu-solucion", permanent: true },
       { source: "/hp-brand-showcase", destination: "/catalogo", permanent: true },
       { source: "/portal-iso-27001", destination: "/portal-iso#iso-27001", permanent: true },
       { source: "/portal-iso-37001", destination: "/portal-iso#iso-37001", permanent: true },

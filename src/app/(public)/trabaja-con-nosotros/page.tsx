@@ -29,8 +29,8 @@ export default function TrabajaConNosotrosPage() {
         title="Trabaja con nosotros."
         description="Buscamos personas que quieran crecer acompañando la operación tecnológica de empresas en todo el Perú."
       >
-        <p className="mt-8 inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 font-semibold ring-1 ring-white/25 ring-inset">
-          <Briefcase aria-hidden className="size-4 text-brand-teal" />
+        <p className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-semibold text-ink shadow-soft ring-1 ring-line ring-inset">
+          <Briefcase aria-hidden className="size-4 text-brand-bright" />
           {openings.length === 0
             ? "Sin convocatorias activas por ahora"
             : `${openings.length} ${openings.length === 1 ? "convocatoria activa" : "convocatorias activas"}`}
@@ -54,7 +54,7 @@ export default function TrabajaConNosotrosPage() {
                         <Badge variant="teal">{job.modality}</Badge>
                       </div>
                       <h3 className="mt-4 text-2xl font-bold text-ink">
-                        <Link href={jobHref(job.slug)} className="hover:text-brand-blue">
+                        <Link href={jobHref(job.slug)} className="hover:text-brand-bright">
                           {job.title}
                         </Link>
                       </h3>

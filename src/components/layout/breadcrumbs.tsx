@@ -20,7 +20,7 @@ export function Breadcrumbs({ items, tone = "inverse", className }: { items: Cru
             return (
               <li key={`${c.label}-${i}`} className="inline-flex items-center gap-1.5">
                 {c.href && !last ? (
-                  <Link href={c.href} className={cn("hover:underline", tone === "inverse" ? "hover:text-white" : "hover:text-brand-blue")}>
+                  <Link href={c.href} className={cn("hover:underline", tone === "inverse" ? "hover:text-white" : "hover:text-brand-bright")}>
                     {c.label}
                   </Link>
                 ) : (

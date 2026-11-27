@@ -2,19 +2,24 @@
 
 /*
  * Sistema de diseño — Misión Tecnológica
- * Basado en el Brandbook 2023. Color principal indicado por el equipo: #003D99, el #0066FF de marca
- * oscurecido al 30 % de luminosidad (mismo tono). Todo el sitio lo toma del token --color-brand-blue.
+ * Basado en el Brandbook 2023. Color principal: #0052CC (token --color-brand-blue), el #0066FF de marca
+ * oscurecido un paso, mismo tono, para que el azul no se vea tan intenso.
+ * Para que el sitio no se vea saturado, el azul se reserva para momentos clave (hero, llamados, tarjetas
+ * destacadas) y el protagonismo lo tienen tres neutros: blanco, blanco humo (--color-smoke) y gris (--color-surface).
  * Los colores complementarios del brandbook (#5D20D1, #FF8721, #EA54D6, #14003B, #BFBF4B)
  * se reservan para casos muy puntuales y no forman parte de la paleta de la web.
  */
 
 @theme {
   /* Marca */
-  --color-brand-blue: #003d99;
-  --color-brand-blue-700: #00317d; /* hover y degradados */
-  --color-brand-blue-800: #002966;
-  --color-brand-blue-100: #ccdcf5;
-  --color-brand-blue-50: #e6eefa;
+  --color-brand-blue: #0052cc;
+  --color-brand-blue-700: #0044aa; /* hover y degradados */
+  --color-brand-blue-800: #003a91;
+  --color-brand-blue-100: #dbe8ff;
+  --color-brand-blue-50: #eef4ff;
+  /* Acento: etiquetas, palabras destacadas de los títulos, enlaces, íconos y opciones seleccionadas.
+     Mismo azul que los fondos; se separan en un token por si se quiere un acento más vivo. */
+  --color-brand-bright: #0052cc;
   --color-brand-teal: #00cdc5;
   --color-brand-teal-700: #00857f; /* turquesa oscurecido: texto pequeño sobre blanco con contraste AA */
   --color-brand-teal-800: #006b66; /* texto pequeño sobre turquesa claro (teal-50) con contraste AA */
@@ -24,7 +29,8 @@
   --color-ink: #0b1a33;
   --color-ink-soft: #4a5873;
   --color-ink-faint: #7a879e;
-  --color-surface: #ebf0f7;
+  --color-surface: #eceff3; /* gris neutro */
+  --color-smoke: #f6f7f9; /* blanco humo */
   --color-line: #e1e7f1;
   --color-deep: #011a47; /* azul muy profundo: solo para la capa oscura del video del hero */
 
@@ -54,7 +60,7 @@
   --radius-4xl: 2.5rem;
 
   --shadow-soft: 0 1px 2px rgb(11 26 51 / 0.04), 0 8px 24px -12px rgb(11 26 51 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 61 153 / 0.35);
+  --shadow-lift: 0 2px 4px rgb(11 26 51 / 0.05), 0 24px 48px -24px rgb(0 82 204 / 0.3);
 
   --animate-pill-in: pill-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-panel-in: panel-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -108,7 +114,7 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand-blue;
+    @apply outline-2 outline-offset-2 outline-brand-bright;
   }
 
   ::selection {
@@ -183,18 +189,18 @@
     background: linear-gradient(90deg, var(--color-brand-teal), var(--color-brand-blue));
   }
   .range-mt::-webkit-slider-thumb {
-    @apply appearance-none rounded-full border-4 border-brand-blue bg-white;
+    @apply appearance-none rounded-full border-4 border-brand-bright bg-white;
     width: 1.5rem;
     height: 1.5rem;
     margin-top: -0.5rem;
-    box-shadow: 0 4px 12px -4px rgb(0 102 255 / 0.6);
+    box-shadow: 0 4px 12px -4px rgb(0 82 204 / 0.6);
     transition: transform 150ms ease-out;
   }
   .range-mt::-moz-range-thumb {
-    @apply rounded-full border-4 border-brand-blue bg-white;
+    @apply rounded-full border-4 border-brand-bright bg-white;
     width: 1rem;
     height: 1rem;
-    box-shadow: 0 4px 12px -4px rgb(0 102 255 / 0.6);
+    box-shadow: 0 4px 12px -4px rgb(0 82 204 / 0.6);
   }
   .range-mt:active::-webkit-slider-thumb {
     transform: scale(1.12);
@@ -203,10 +209,10 @@
     outline: none;
   }
   .range-mt:focus-visible::-webkit-slider-thumb {
-    @apply outline-2 outline-offset-2 outline-brand-blue;
+    @apply outline-2 outline-offset-2 outline-brand-bright;
   }
   .range-mt:focus-visible::-moz-range-thumb {
-    @apply outline-2 outline-offset-2 outline-brand-blue;
+    @apply outline-2 outline-offset-2 outline-brand-bright;
   }
 }
 
@@ -245,9 +251,9 @@
 }
 
 /* Variante para fondos con texto blanco encima: predomina el azul de marca (contraste AA)
-   y solo hacia la esquina inferior derecha aclara hacia #0052CC con un toque de turquesa. */
+   y solo hacia la esquina inferior derecha aclara con un toque de turquesa. */
 @utility bg-brand-gradient-deep {
-  background-image: linear-gradient(150deg, var(--color-brand-blue) 0%, var(--color-brand-blue) 55%, #0052cc 92%, #00857f 135%);
+  background-image: linear-gradient(150deg, var(--color-brand-blue) 0%, var(--color-brand-blue) 50%, #0090c7 85%, var(--color-brand-teal) 130%);
 }
 
 @utility text-brand-gradient {

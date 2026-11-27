@@ -199,7 +199,7 @@ function CompareTray() {
             href={compareHref(slugs)}
             className={cn(
               "inline-flex h-11 items-center gap-2 rounded-full px-4 font-semibold transition-colors sm:px-5",
-              ready ? "bg-brand-blue text-white hover:bg-brand-blue-700" : "bg-brand-blue-50 text-brand-blue hover:bg-brand-blue-100",
+              ready ? "bg-brand-blue text-white hover:bg-brand-blue-700" : "bg-brand-blue-50 text-brand-bright hover:bg-brand-blue-100",
             )}
           >
             <Columns3 aria-hidden className="hidden size-4 sm:block" />

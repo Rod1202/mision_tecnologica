@@ -14,6 +14,7 @@ import { Select } from "@/components/ui/form-controls";
 import {
   COMPARE_MAX,
   getProductKind,
+  isComparableKind,
   productKinds,
   rowNumber,
   specRows,
@@ -171,7 +172,9 @@ export function CompareView({ products, showUnverified }: { products: Product[];
           {/* Barra de herramientas */}
           <div className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div role="group" aria-label="Tipo de equipo" className="inline-flex w-fit gap-1 rounded-full bg-white p-1.5 ring-1 ring-line ring-inset">
-              {productKinds.map((k) => {
+              {productKinds
+                .filter((k) => isComparableKind(k.id) && products.some((p) => p.kind === k.id))
+                .map((k) => {
                 const count = products.filter((p) => p.kind === k.id).length;
                 const on = activeKind === k.id;
                 return (
@@ -182,7 +185,7 @@ export function CompareView({ products, showUnverified }: { products: Product[];
                     onClick={() => setActiveKind(k.id)}
                     className={cn(
                       "inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap transition-colors sm:px-5",
-                      on ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_61_153/0.7)]" : "text-ink-soft hover:text-ink",
+                      on ? "bg-brand-blue text-white shadow-[0_8px_20px_-10px_rgb(0_82_204/0.7)]" : "text-ink-soft hover:text-ink",
                     )}
                   >
                     <Icon name={k.icon} className="size-4" />
@@ -292,7 +295,7 @@ export function CompareView({ products, showUnverified }: { products: Product[];
                     {!anySpecShown && selected.length > 0 ? (
                       <div role="row" className="border-t border-line px-5 py-6 md:px-6">
                         <p role="cell" className="flex items-start gap-3 leading-relaxed text-ink-soft">
-                          <Info aria-hidden className="mt-1 size-4 shrink-0 text-brand-blue" />
+                          <Info aria-hidden className="mt-1 size-4 shrink-0 text-brand-bright" />
                           Estamos validando las fichas técnicas oficiales de estos equipos. Agrégalos a tu cotización y un asesor te enviará las
                           especificaciones completas.
                         </p>
@@ -325,7 +328,7 @@ export function CompareView({ products, showUnverified }: { products: Product[];
                       p.specSources!.map((s) => (
                         <li key={`${p.slug}-${s.url}`}>
                           <span className="font-semibold text-ink">{p.model}:</span>{" "}
-                          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline-offset-4 hover:underline">
+                          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-brand-bright underline-offset-4 hover:underline">
                             {s.label}
                           </a>
                         </li>
@@ -585,7 +588,7 @@ function ProductHeader({
       aria-label={isBase ? `${p.model} (base de comparación)` : p.model}
       className={cn(
         "animate-panel-in relative flex min-w-0 flex-col rounded-3xl border bg-white p-3 shadow-soft md:p-4",
-        isBase ? "border-brand-blue/40 ring-2 ring-brand-blue/15" : "border-line",
+        isBase ? "border-brand-bright/40 ring-2 ring-brand-blue/15" : "border-line",
       )}
     >
       <button
@@ -615,7 +618,7 @@ function ProductHeader({
       <Link
         id={`columna-${p.slug}`}
         href={productHref(p.slug)}
-        className="mt-2 mb-3 line-clamp-3 rounded-md text-sm leading-snug font-bold text-ink outline-none hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-brand-blue md:text-base"
+        className="mt-2 mb-3 line-clamp-3 rounded-md text-sm leading-snug font-bold text-ink outline-none hover:text-brand-bright focus-visible:outline-2 focus-visible:outline-brand-bright md:text-base"
       >
         {p.name}
       </Link>
@@ -633,7 +636,7 @@ function ProductHeader({
           Cotizar
         </Button>
         {successor && !successorShown ? (
-          <button type="button" onClick={onShowSuccessor} className="min-h-9 rounded-full text-sm font-semibold text-brand-blue hover:bg-brand-blue-50">
+          <button type="button" onClick={onShowSuccessor} className="min-h-9 rounded-full text-sm font-semibold text-brand-bright hover:bg-brand-blue-50">
             Ver su sucesor
           </button>
         ) : null}
@@ -741,7 +744,7 @@ function EmptyKind({ kind }: { kind: ProductKind }) {
   const k = getProductKind(kind);
   return (
     <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center rounded-[2rem] border border-dashed border-input bg-white px-6 py-12 text-center sm:px-12">
-      <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue-50 text-brand-blue">
+      <span aria-hidden className="inline-flex h-12 w-16 items-center justify-center rounded-full bg-brand-blue-50 text-brand-bright">
         <Icon name={k.icon} className="size-6" />
       </span>
       <h3 className="mt-6 text-2xl font-bold text-ink">Pronto sumaremos {k.plural.toLowerCase()} al catálogo.</h3>
@@ -832,7 +835,7 @@ function UpgradeAdvisor({
                       onClick={() => choose(slug)}
                       className={cn(
                         "inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm font-semibold transition-colors",
-                        on ? "border-brand-blue bg-brand-blue text-white" : "border-line bg-white text-ink hover:border-brand-blue/40",
+                        on ? "border-brand-bright bg-brand-blue text-white" : "border-line bg-white text-ink hover:border-brand-bright/40",
                       )}
                     >
                       {p.model}
@@ -893,7 +896,7 @@ function UpgradeAdvisor({
                     const wins = specsVisible(current) && specsVisible(o) ? pairImprovements(current, o).slice(0, 3) : [];
                     return (
                       <li key={o.slug} className="flex flex-col rounded-3xl border border-line bg-white p-5 shadow-soft sm:p-6">
-                        <span className="text-xs font-bold text-brand-blue">Opción {n + 1}</span>
+                        <span className="text-xs font-bold text-brand-bright">Opción {n + 1}</span>
                         <p className="mt-1 text-xl font-bold text-ink">{o.name}</p>
                         <span
                           className={cn(

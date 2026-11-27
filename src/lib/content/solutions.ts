@@ -48,12 +48,12 @@ export const solutions: Solution[] = [
     seo: {
       title: "Outsourcing de impresión HP para empresas en Perú",
       description:
-        "Servicio de outsourcing de impresión con equipos HP: evaluación, implementación, consumibles, mantenimiento y monitoreo del parque. Misión Tecnológica, Partner Platinum de HP desde 2016 y Centro de Servicio Autorizado HP.",
+        "Servicio de outsourcing de impresión con equipos HP: evaluación, implementación, consumibles, mantenimiento y monitoreo del parque. Misión Tecnológica, HP Power Services Partner y Centro de Servicio Autorizado HP.",
     },
     hero: {
       title: "Outsourcing de impresión HP: más que equipos, un servicio que funciona.",
       intro:
-        "Desde 2016 somos Partner Platinum de HP y el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión. Nos encargamos de los equipos, los consumibles, el mantenimiento y el seguimiento de tu parque de impresión.",
+        "Somos HP Power Services Partner y el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión. Nos encargamos de los equipos, los consumibles, el mantenimiento y el seguimiento de tu parque de impresión.",
     },
     features: [
       {
@@ -96,7 +96,7 @@ export const solutions: Solution[] = [
       {
         question: "¿Con qué marca de equipos trabajan?",
         answer:
-          "Trabajamos con HP. Somos Partner Platinum de HP Inc. desde 2016 y el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión.",
+          "Trabajamos con HP. Somos HP Power Services Partner y el único canal monomarca de HP Inc. en el Perú para el segmento corporativo de outsourcing de impresión.",
       },
       {
         question: "¿Qué modalidades ofrecen?",

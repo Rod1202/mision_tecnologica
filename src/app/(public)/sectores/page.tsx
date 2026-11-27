@@ -31,7 +31,8 @@ export default function SectoresPage() {
           <SectionHeading
             id="sectores-tabs-title"
             eyebrow="Experiencia por sector"
-            title="Elige un sector."
+            title="Contamos con experiencia en diferentes rubros."
+            highlight="en diferentes rubros."
             description="Selecciona una pestaña para ver cómo ayudamos y qué empresas confían en nosotros."
           />
           <SectorTabs sectors={visible} />

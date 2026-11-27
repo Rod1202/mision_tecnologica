@@ -4,6 +4,7 @@ import { AddToQuoteButton } from "@/components/catalog/add-to-quote";
 import { ProductVisual } from "@/components/catalog/product-visual";
 import { CompareToggle } from "@/components/compare/compare-toggle";
 import { Badge } from "@/components/ui/badge";
+import { isComparableKind } from "@/lib/content/compare";
 import { productHref, type Product } from "@/lib/content/products";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -15,14 +16,16 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="flex flex-1 flex-col px-3 pt-5 pb-3">
         <div className="flex flex-wrap gap-2">
           <Badge>{product.category}</Badge>
-          {product.generation === "lanzamiento" ? (
+          {product.placeholder ? (
+            <Badge variant="teal">Demostración</Badge>
+          ) : product.generation === "lanzamiento" ? (
             <Badge variant="teal">Lanzamiento{product.launchYear ? ` ${product.launchYear}` : ""}</Badge>
           ) : (
             <Badge variant="teal">{product.brand}</Badge>
           )}
         </div>
         <h3 className="mt-4 text-xl leading-snug font-bold text-ink">
-          <Link href={productHref(product.slug)} className="hover:text-brand-blue">
+          <Link href={productHref(product.slug)} className="hover:text-brand-bright">
             {product.name}
           </Link>
         </h3>
@@ -30,10 +33,10 @@ export function ProductCard({ product }: { product: Product }) {
         {/* Acciones apiladas: las tarjetas pueden ser angostas (catálogo con filtros laterales) */}
         <div className="mt-auto flex flex-col gap-1 pt-6">
           <AddToQuoteButton slug={product.slug} name={product.name} className="w-full" />
-          <CompareToggle slug={product.slug} name={product.name} className="w-full" />
+          {isComparableKind(product.kind) ? <CompareToggle slug={product.slug} name={product.name} className="w-full" /> : null}
           <Link
             href={productHref(product.slug)}
-            className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 font-semibold text-brand-blue hover:bg-brand-blue-50"
+            className="inline-flex h-11 w-full items-center justify-center rounded-full px-5 font-semibold text-brand-bright hover:bg-brand-blue-50"
           >
             Ver ficha
           </Link>

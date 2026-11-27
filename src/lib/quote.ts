@@ -1,6 +1,5 @@
 import {
   avNeedOptions,
-  computoExtraOptions,
   computoModeOptions,
   deviceOptions,
   docTypeOptions,
@@ -10,7 +9,6 @@ import {
   locationOptions,
   paperFormats,
   platformOptions,
-  printExtraOptions,
   printFleetOptions,
   printModeOptions,
   profileOptions,
@@ -22,7 +20,6 @@ import {
   startOptions,
   termOptions,
   type AvNeed,
-  type ComputoExtra,
   type ComputoMode,
   type DeviceType,
   type DocType,
@@ -32,7 +29,6 @@ import {
   type Option,
   type PaperFormat,
   type Platform,
-  type PrintExtra,
   type PrintFleet,
   type PrintMode,
   type Profile,
@@ -59,7 +55,7 @@ export type CatalogItem = { slug: string; qty: number };
 export type QuoteState = {
   services: ServiceId[];
   project: { sites: number; location: Location; term: Term; start: Start };
-  computo: { devices: Record<DeviceType, number>; profile: Profile; mode: ComputoMode; extras: ComputoExtra[] };
+  computo: { devices: Record<DeviceType, number>; profile: Profile; mode: ComputoMode };
   impresion: {
     fleet: PrintFleet;
     /** Cantidad de equipos actuales o estimados. */
@@ -70,7 +66,6 @@ export type QuoteState = {
     /** Páginas al mes por formato de papel (0 = no se usa). */
     formats: Record<PaperFormat, number>;
     mode: PrintMode;
-    extras: PrintExtra[];
   };
   digitalizacion: {
     unit: ScanUnit;
@@ -99,7 +94,6 @@ export const defaultQuote: QuoteState = {
     devices: { laptop: 20, desktop: 0, workstation: 0 },
     profile: "estandar",
     mode: "alquiler",
-    extras: ["soporte"],
   },
   impresion: {
     fleet: "estimado",
@@ -108,7 +102,6 @@ export const defaultQuote: QuoteState = {
     colorPages: 1_500,
     formats: { a4: 9_500, oficio: 0, a3: 0 },
     mode: "pagina",
-    extras: ["monitoreo"],
   },
   digitalizacion: {
     unit: "cajas",
@@ -159,9 +152,9 @@ export function scanAmountLabel(d: QuoteState["digitalizacion"]) {
   return `${fmtInt(d.amount)} ${d.amount === 1 ? w.one : w.many}`;
 }
 
-/** Plazo del contrato: aplica a los servicios continuos (no a la digitalización, que tiene plazo propio). */
+/** Plazo del contrato: solo cómputo e impresión (digitalización tiene plazo propio; audio y video no lleva contrato). */
 export function usesContractTerm(services: ServiceId[]) {
-  return services.some((s) => s !== "digitalizacion");
+  return services.includes("computo") || services.includes("impresion");
 }
 
 export function labelOf<V extends string | number>(options: readonly Option<V>[], value: V) {
@@ -182,23 +175,19 @@ export function describeService(q: QuoteState, id: ServiceId): string[] {
       .filter((d) => c.devices[d.value] > 0)
       .map((d) => `${fmtInt(c.devices[d.value])} ${d.label.toLowerCase()}`)
       .join(", ");
-    const extras = labelsOf(computoExtraOptions, c.extras);
     return [
       `${devices || "Cantidad por definir"} · perfil ${labelOf(profileOptions, c.profile).toLowerCase()} · ${labelOf(computoModeOptions, c.mode).toLowerCase()}`,
-      ...(extras.length ? [`Incluye: ${extras.join(", ")}`] : []),
     ];
   }
 
   if (id === "impresion") {
     const p = q.impresion;
     const formats = paperFormats.filter((f) => p.formats[f.value] > 0).map((f) => `${f.label} = ${fmtInt(p.formats[f.value])}`);
-    const extras = labelsOf(printExtraOptions, p.extras);
     return [
       `${fmtInt(p.devices)} ${p.devices === 1 ? "equipo" : "equipos"} (${labelOf(printFleetOptions, p.fleet).toLowerCase()})`,
       `${fmtInt(printTotal(p))} páginas al mes: ${fmtInt(p.bwPages)} B/N y ${fmtInt(p.colorPages)} color`,
       ...(formats.length ? [`Por formato: ${formats.join(" · ")}`] : []),
       `Modalidad: ${labelOf(printModeOptions, p.mode).toLowerCase()}`,
-      ...(extras.length ? [`Incluye: ${extras.join(", ")}`] : []),
     ];
   }
 

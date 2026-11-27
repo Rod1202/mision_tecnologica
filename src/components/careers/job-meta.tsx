@@ -19,7 +19,7 @@ export function JobMeta({ job, tone = "default", showDate = true }: { job: Job; 
     <ul className={cn("flex flex-wrap gap-x-5 gap-y-2 text-sm", tone === "inverse" ? "text-white/85" : "text-ink-soft")}>
       {items.map(({ icon: Ico, text }) => (
         <li key={text} className="inline-flex items-center gap-2">
-          <Ico aria-hidden className={cn("size-4", tone === "inverse" ? "text-brand-teal" : "text-brand-blue")} />
+          <Ico aria-hidden className={cn("size-4", tone === "inverse" ? "text-brand-teal" : "text-brand-bright")} />
           {text}
         </li>
       ))}

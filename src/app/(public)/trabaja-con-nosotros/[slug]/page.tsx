@@ -68,10 +68,10 @@ export default async function JobPage({ params }: Props) {
         description={job.summary}
       >
         <div className="mt-8">
-          <JobMeta job={job} tone="inverse" />
+          <JobMeta job={job} />
         </div>
         <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-          <Button asChild variant="inverse" size="lg">
+          <Button asChild size="lg">
             <a href="#postular">
               Postular ahora
               <ArrowRight aria-hidden />
@@ -86,7 +86,7 @@ export default async function JobPage({ params }: Props) {
             <List title="Responsabilidades" items={job.responsibilities} />
             <List title="Requisitos" items={job.requirements} />
             {job.niceToHave?.length ? <List title="Deseable" items={job.niceToHave} /> : null}
-            <Link href="/trabaja-con-nosotros" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+            <Link href="/trabaja-con-nosotros" className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline">
               <ArrowLeft aria-hidden className="size-4" />
               Ver todas las convocatorias
             </Link>

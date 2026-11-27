@@ -4,11 +4,13 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Icon } from "@/components/brand/icon";
 import { IsoStrokes } from "@/components/brand/pills";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { Button } from "@/components/ui/button";
 import { solutionHref, solutions, type Solution } from "@/lib/content/solutions";
 import { cn } from "@/lib/utils";
 
-/** 03 · La respuesta: líneas de servicio, con el outsourcing como prioridad comercial. */
+/**
+ * 03 · La respuesta: líneas de servicio, con el outsourcing como prioridad comercial (ancho completo).
+ * Sin llamados a asesoría aquí: esa decisión vive en la sección siguiente, "Encuentra tu solución".
+ */
 export function SolutionsGrid() {
   const [featured, ...rest] = [...solutions].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
@@ -19,34 +21,20 @@ export function SolutionsGrid() {
           id="soluciones-title"
           eyebrow="Nuestras soluciones"
           title="Un enfoque especializado para cada necesidad."
+          highlight="para cada necesidad."
           description="Convertimos las necesidades de tu operación en soluciones concretas, desde el servicio continuo hasta la puesta en marcha de nuevos equipos."
         />
 
         <ul className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          <li className="md:col-span-2">
+          <li className="md:col-span-2 lg:col-span-3">
             <FeaturedCard solution={featured} />
           </li>
-          {rest.map((solution) => (
-            <li key={solution.slug}>
+          {rest.map((solution, i) => (
+            // En tableta (2 columnas) la última tarjeta ocupa la fila completa para no quedar huérfana.
+            <li key={solution.slug} className={cn(i === rest.length - 1 && rest.length % 2 === 1 && "md:col-span-2 lg:col-span-1")}>
               <SolutionCard solution={solution} />
             </li>
           ))}
-          <li>
-            <div className="flex h-full flex-col justify-between rounded-3xl border border-dashed border-brand-blue/35 bg-white/70 p-7 lg:p-8">
-              <div>
-                <h3 className="text-xl font-bold text-ink">¿No sabes por dónde empezar?</h3>
-                <p className="mt-3 leading-relaxed text-ink-soft">
-                  Cuéntanos cómo opera tu empresa y te ayudamos a identificar qué solución conviene primero.
-                </p>
-              </div>
-              <Button asChild className="mt-8 self-start">
-                <Link href="/asesoria">
-                  Solicitar asesoría
-                  <ArrowRight aria-hidden />
-                </Link>
-              </Button>
-            </div>
-          </li>
         </ul>
       </div>
     </section>
@@ -91,19 +79,19 @@ function SolutionCard({ solution }: { solution: Solution }) {
         <span
           className={cn(
             "inline-flex h-12 w-16 items-center justify-center rounded-full",
-            isPrinting ? "bg-brand-teal-50 text-brand-teal-700" : "bg-brand-blue-50 text-brand-blue",
+            isPrinting ? "bg-brand-teal-50 text-brand-teal-700" : "bg-brand-blue-50 text-brand-bright",
           )}
         >
           <Icon name={solution.icon} className="size-6" />
         </span>
         <ArrowUpRight
           aria-hidden
-          className="size-5 text-ink-faint transition-[color,transform] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-blue"
+          className="size-5 text-ink-faint transition-[color,transform] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-bright"
         />
       </div>
       <h3 className="mt-7 text-xl font-bold text-ink">{solution.title}</h3>
       <p className="mt-3 leading-relaxed text-ink-soft">{solution.summary}</p>
-      <span className="mt-auto pt-6 text-sm font-semibold text-brand-blue">Conocer más</span>
+      <span className="mt-auto pt-6 text-sm font-semibold text-brand-bright">Conocer más</span>
     </Link>
   );
 }

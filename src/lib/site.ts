@@ -79,9 +79,7 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
     items: [
       { label: "Catálogo", href: "/catalogo" },
       { label: "Comparar equipos", href: "/catalogo/comparar" },
-      { label: "Cotizar proyecto", href: "/cotizador" },
-      { label: "Solicitar asesoría", href: "/asesoria" },
-      { label: "Contacto", href: "/contacto" },
+      { label: "Encuentra tu solución", href: "/#encuentra-tu-solucion" },
       { label: "Outlet (Clicprint)", href: "https://clicprint.pe", external: true },
       { label: "Privacidad", href: "/privacidad" },
       {

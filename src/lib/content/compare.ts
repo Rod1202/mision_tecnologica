@@ -6,13 +6,20 @@ import type { IconName } from "./types";
  * (por ejemplo monitores), basta con agregarlo a `productKinds` y definir sus filas aquí.
  */
 
-export const productKindIds = ["impresora", "laptop"] as const;
+export const productKindIds = ["impresora", "laptop", "ticketera", "plotter", "lector", "escaner"] as const;
 export type ProductKind = (typeof productKindIds)[number];
 
 export const productKinds: { id: ProductKind; label: string; plural: string; icon: IconName }[] = [
   { id: "impresora", label: "Impresora", plural: "Impresoras", icon: "printer" },
   { id: "laptop", label: "Laptop", plural: "Laptops", icon: "laptop" },
+  { id: "ticketera", label: "Ticketera", plural: "Ticketeras", icon: "printer" },
+  { id: "plotter", label: "Plotter", plural: "Plotters", icon: "printer" },
+  { id: "lector", label: "Lector", plural: "Lectores", icon: "scan" },
+  { id: "escaner", label: "Escáner", plural: "Escáneres", icon: "scan" },
 ];
+
+/** Tipos con ficha comparable (los demás se cotizan, pero no entran al comparador). */
+export const isComparableKind = (kind: ProductKind) => specRows[kind].length > 0;
 
 export function getProductKind(id: ProductKind) {
   return productKinds.find((k) => k.id === id)!;
@@ -66,6 +73,10 @@ const laptopRows: SpecRow[] = [
 export const specRows: Record<ProductKind, SpecRow[]> = {
   impresora: printerRows,
   laptop: laptopRows,
+  ticketera: [],
+  plotter: [],
+  lector: [],
+  escaner: [],
 };
 
 /** Máximo de equipos lado a lado. */

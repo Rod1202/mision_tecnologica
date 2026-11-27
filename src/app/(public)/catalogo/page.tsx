@@ -6,7 +6,7 @@ import { CatalogBrowser } from "@/components/catalog/catalog-browser";
 import { DemoNotice } from "@/components/catalog/demo-notice";
 import { ProductCard } from "@/components/catalog/product-card";
 import { CtaBand, PageIntro } from "@/components/layout/page-intro";
-import { products } from "@/lib/content/products";
+import { products, visibleProducts } from "@/lib/content/products";
 import { showUnverifiedContent } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { pageMetadata } from "@/lib/seo";
@@ -31,7 +31,7 @@ function showGenerationLink() {
 function StaticGrid() {
   return (
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {products.map((p) => (
+      {visibleProducts(showUnverifiedContent()).map((p) => (
         <li key={p.slug}>
           <ProductCard product={p} />
         </li>
@@ -66,7 +66,7 @@ export default function CatalogoPage() {
                   </Link>
                 </Button>
                 {showGenerationLink() ? (
-                  <Link href="/catalogo/comparar#upgrade" className="inline-flex items-center gap-2 font-semibold text-brand-blue hover:underline">
+                  <Link href="/catalogo/comparar#upgrade" className="inline-flex items-center gap-2 font-semibold text-brand-bright hover:underline">
                     ¿Ya tienes un equipo? Mira tus opciones de upgrade
                     <ArrowRight aria-hidden className="size-4" />
                   </Link>
@@ -80,7 +80,7 @@ export default function CatalogoPage() {
 
           <div className="mt-10">
             <Suspense fallback={<StaticGrid />}>
-              <CatalogBrowser products={products} />
+              <CatalogBrowser products={visibleProducts(showUnverifiedContent())} />
             </Suspense>
           </div>
         </div>
